@@ -4,10 +4,11 @@ class HorizontAxis extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
-    this.state={left:0, top:0, right:1, bottom:1 };
+    this.state={ xlabels: [] };
 
     this.position = props.position;
     this.height = props.height;
+    this.scalecount = props.scalecount;
     instances.axes.push(this);
   }    
 
@@ -31,52 +32,44 @@ class HorizontAxis extends Component {
   }
 
   setPosition({ left, right, top, bottom }){
-    this.setState({ left, right, top, bottom })
-    this.left = left;
-    this.right = right;
-    this.top = top;
-    this.bottom = bottom;
+    this.svg.setAttribute('x', left);
+    this.svg.setAttribute('y', top);
+    this.svg.setAttribute('width', right-left);
+    this.svg.setAttribute('height', bottom-top);
   }
 
-  calcScale = ({xleft, xright, xstart}) => {
+  calcScale = ({xleft, xright, xstart, dpi_x}) => {
     const { scalecount } = this.props;
-
-    const steps = [];
     const dx = (xright - xleft)/(scalecount);
-
-    let step = Math.floor((xstart - xleft)/dx)*dx;
+    let step = Math.floor((xstart - xleft)/dx)*dx || xstart;
+    const xlabels = [];
 
     while (step < xright){
-      if ((step > xleft) && (step < xright)){
-        steps.push(step);
+      if ((step >= xleft) && (step <= xright)){
+        const xpi = (step-xleft)*dpi_x;
+        xlabels.push(xpi);
       }
       step = step + dx;
     }
-    this.calcAxisLabel({steps, xright, xleft});
+
+    this.setState({xlabels});
   }
 
-  calcAxisLine = ({steps}) => {
+  calcAxisLine = ({xlabels}) => {
 
   }  
 
-  calcAxisLabel = ({steps, xleft, xright}) => {
+  render() {
     const { height } = this.props;
-    const width = this.right - this.left;
-    const dpi = width/(xright-xleft);
+    const { xlabels } = this.state;
 
     let labelPath = '';
-    steps.forEach( step => {
-      const xpi = (step-xleft)*dpi;
-      labelPath = labelPath + `M${xpi} 0 L${xpi} ${height} `;
-    });
-    this.setState({labelPath});
-  }
-
-  render() {
-    const { left, right, top, bottom, labelPath } = this.state;
+    xlabels.forEach( x => {
+      labelPath = labelPath + `M${x} 0 L${x} ${height} `;
+    }); 
 
     return (
-      <svg x={left} y={top} width={right-left} height={bottom-top}>
+      <svg ref={ el => this.svg = el }>
         <path stroke-width="4" stroke="black" d={labelPath} />
       </svg>
     );

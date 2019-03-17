@@ -9,9 +9,14 @@ class Axes extends Component {
     instances.axes = [];
   } 
 
-  calcScale = ({}) => {
+  calcScale = ({width_px, height_px}) => {
     const { instances, xleft, xright, xstart, ytop, ybottom, ystart } = this.props;
-    instances.axes.forEach( axis => axis.calcScale({xleft, xright, xstart, ytop, ybottom, ystart}) );
+
+    const dpi_x = width_px/(xright-xleft);
+    const dpi_y = height_px/(ytop-ybottom);
+
+    const args = {xleft, xright, xstart, ytop, ybottom, ystart, dpi_x, dpi_y, height_px};
+    instances.axes.forEach( axis => axis.calcScale(args) );
   }
 
   render() {

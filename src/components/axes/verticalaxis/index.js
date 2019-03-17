@@ -4,10 +4,11 @@ class VerticalAxis extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
-    this.state={left:0, top:0, right:1, bottom:1 };
+    this.state={ylabels: []};
 
     this.position = props.position;
     this.width = props.width;
+    this.scalecount = props.scalecount;
     instances.axes.push(this);
   }
 
@@ -31,10 +32,27 @@ class VerticalAxis extends Component {
   }
 
   setPosition({ left, right, top, bottom }){
-    this.setState({ left, right, top, bottom })
+    this.svg.setAttribute('x', left);
+    this.svg.setAttribute('y', top);
+    this.svg.setAttribute('width', right-left);
+    this.svg.setAttribute('height', bottom-top);
   }
 
-  calcScale = ({}) => {
+  calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
+    const { scalecount } = this.props;
+    const dy = (ytop - ybottom)/(scalecount);    
+    let step = Math.floor((ystart - ybottom)/dy)*dy || ystart;
+    const ylabels = [];    
+    
+    while (step < ytop){
+      if ((step >= ybottom) && (step <= ytop)){
+        const ypi = height_px - (step-ybottom)*dpi_y;
+        ylabels.push(Math.floor(ypi));
+      }
+      step = step + dy;
+    }
+
+    this.setState({ylabels});
   }  
 
   calcAxisLine = ({}) => {
@@ -44,10 +62,17 @@ class VerticalAxis extends Component {
   }
 
   render() {
-    const { left, right, top, bottom } = this.state;
+    const { width } = this.props;
+    const { ylabels } = this.state;
+
+    let labelPath = '';
+    ylabels.forEach( y => {
+      labelPath = labelPath + `M0 ${y} L${width} ${y} `;
+    }); 
 
     return (
-      <svg x={left} y={top} width={right-left} height={bottom-top}>
+      <svg ref={ el => this.svg = el }>
+        <path stroke-width="4" stroke="black" d={labelPath} />
       </svg>
     );
   }

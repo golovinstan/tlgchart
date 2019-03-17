@@ -64,19 +64,18 @@ class View extends Component {
       left = right;
     });
 
-    left = rightOffset;
+    right = width;
     ra.forEach(axis => {
-      right = left + axis.width;
+      left = right - axis.width;
       axis.setPosition({ left, right, top, bottom });
-      left = right;
+      right = left;
     });
 
     inst.lines.forEach( line => {
       line.calcPath();
     })
 
-    inst.axisView.calcScale({});
-
+    inst.axisView.calcScale({ width_px: (rightOffset-leftOffset), height_px: (bottomOffset-topOffset) });
   }
 
   render() {
