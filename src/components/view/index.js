@@ -71,10 +71,6 @@ class View extends Component {
       right = left;
     });
 
-    inst.lines.forEach( line => {
-      line.calcPath();
-    })
-
     inst.axisView.calcScale({ width_px: (rightOffset-leftOffset), height_px: (bottomOffset-topOffset) });
   }
 

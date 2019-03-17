@@ -23,6 +23,13 @@ import {
 } from '../../components/axes/constants';
 
 class TestPage extends Component {
+
+  getxAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+    const d = new Date(x);
+    d.setTime(x);
+    return <text x={px+axisWidth} y={labelHeight/2} key={key} >{`${d.getDate()+1}.${d.getMonth()+1}.${d.getFullYear()}`}</text>
+  }
+
   render() {
     const data = TestData[0];
 
@@ -37,6 +44,8 @@ class TestPage extends Component {
     const xmin = Math.min(...xvalues);
     const xmax = Math.max(...xvalues);    
 
+    const dx = (xmax-xmin)/2.5;    
+
     return (
         <View width={500} height={500}>
           <Lines>
@@ -44,28 +53,31 @@ class TestPage extends Component {
             <Line xvalues={xvalues} yvalues={line2_yvalues}/>
           </Lines>
           <Axes 
-            xleft={xmin}
-            xright={xmax}
+            xleft={xmin+dx}
+            xright={xmax-dx}
             xstart={xmin}
-            ytop={ymax}
-            ybottom={ymin}
-            ystart={ymin}
+            ytop={150}
+            ybottom={0}
+            ystart={0}
             xformat={ASES_FORMAT_INDEX}
             yformat={ASES_FORMAT_INDEX}
             xonchart={false}
-            yonchart={true}
+            yonchart={false}
           >
             <VericalAxis 
-              scalecount={6} 
+              scalecount={5} 
               position={AXES_POSITION_LEFT} 
               width={50} 
               line={AXES_LINE_LINE}
+              axisWidth={4}
             />
             <HorizontalAxis 
               scalecount={6} 
               position={AXES_POSITION_BOTTOM} 
               height={50}
               line={AXES_LINE_DOT_LINE}
+              axisWidth={4}
+              getAxisLabel={this.getxAxisLabel}
             />
           </Axes>
           <Markers>

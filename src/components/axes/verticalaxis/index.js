@@ -40,14 +40,15 @@ class VerticalAxis extends Component {
 
   calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
     const { scalecount } = this.props;
-    const dy = (ytop - ybottom)/(scalecount);    
+    const dy = (ytop - ybottom)/(scalecount);
+    this.scale_dy = dy;
     let step = Math.floor((ystart - ybottom)/dy)*dy || ystart;
     const ylabels = [];    
     
     while (step < ytop){
       if ((step >= ybottom) && (step <= ytop)){
         const ypi = height_px - (step-ybottom)*dpi_y;
-        ylabels.push(Math.floor(ypi));
+        ylabels.push({py: Math.floor(ypi), y: step});
       }
       step = step + dy;
     }
@@ -55,24 +56,33 @@ class VerticalAxis extends Component {
     this.setState({ylabels});
   }  
 
-  calcAxisLine = ({}) => {
-  }
-
-  calcAxisLabel = ({}) => {
+  getAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom}) => {
+    const { getAxisLabel } = this.props;
+    if (getAxisLabel){
+      return getAxisLabel({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom });
+    }
+    return <text x="0" y={py-axisWidth} key={key} >{`${Math.floor(y)}`}</text>
   }
 
   render() {
-    const { width } = this.props;
+    const { width, axisWidth, ytop, ybottom } = this.props;
     const { ylabels } = this.state;
 
     let labelPath = '';
-    ylabels.forEach( y => {
-      labelPath = labelPath + `M0 ${y} L${width} ${y} `;
+    ylabels.forEach( ({py}) => {
+      labelPath = labelPath + `M0 ${py} L${width} ${py} `;
     }); 
+    let labelHeight = 0;
+    if (ylabels.length>1){
+      labelHeight = ylabels[0].py - ylabels[1].py;
+    }
 
     return (
       <svg ref={ el => this.svg = el }>
-        <path stroke-width="4" stroke="black" d={labelPath} />
+        <path strokeWidth={axisWidth} stroke="black" d={labelPath} />
+        {
+          ylabels.map( ({y, py}, i) => this.getAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
+        }
       </svg>
     );
   }

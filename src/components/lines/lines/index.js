@@ -11,19 +11,26 @@ class Lines extends Component {
   }
 
   setPosition({ left, right, top, bottom }){
-    this.setState({ left, right, top, bottom })
-  }  
+    this.svg.setAttribute('x', left);
+    this.svg.setAttribute('y', top);
+    this.svg.setAttribute('width', right-left);
+    this.svg.setAttribute('height', bottom-top);
+  }
+
+  calcScale = ({dpi_x, dpi_y, xleft, xright, ytop}) => {
+    const { instances } = this.props;
+    instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}) );
+  }
 
   render() {
     const { children, instances } = this.props;
-    const { left, right, top, bottom } = this.state;
     
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, { instances })
     );        
 
     return (
-    <svg x={left} y={top} width={right-left} height={bottom-top}>
+    <svg ref={ el => this.svg = el }>
       {childrenWithProps}
     </svg>);
   }

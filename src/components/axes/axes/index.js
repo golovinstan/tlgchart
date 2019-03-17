@@ -17,13 +17,14 @@ class Axes extends Component {
 
     const args = {xleft, xright, xstart, ytop, ybottom, ystart, dpi_x, dpi_y, height_px};
     instances.axes.forEach( axis => axis.calcScale(args) );
+    instances.linesView.calcScale({dpi_x, dpi_y, xleft, xright, ytop});
   }
 
   render() {
-    const { children, instances, xonchart, yonchart } = this.props;
+    const { children, instances, xonchart, yonchart, xleft, xright, ytop, ybottom } = this.props;
     
     const childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { instances, xonchart, yonchart })
+      React.cloneElement(child, { instances, xonchart, yonchart, xleft, xright, ytop, ybottom })
     );     
 
     return (

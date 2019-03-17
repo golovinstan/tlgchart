@@ -47,30 +47,41 @@ class HorizontAxis extends Component {
     while (step < xright){
       if ((step >= xleft) && (step <= xright)){
         const xpi = (step-xleft)*dpi_x;
-        xlabels.push(xpi);
+        xlabels.push({px: Math.floor(xpi), x: step});
       }
       step = step + dx;
     }
 
     this.setState({xlabels});
+  } 
+
+  getAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+    const { getAxisLabel } = this.props;
+    if (getAxisLabel){
+      return getAxisLabel({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright });
+    }    
+    return <text x={px} y={labelHeight/2} key={key} >{`${Math.floor(x)}`}</text>
   }
 
-  calcAxisLine = ({xlabels}) => {
-
-  }  
-
   render() {
-    const { height } = this.props;
+    const { height, axisWidth, xleft, xright } = this.props;
     const { xlabels } = this.state;
 
     let labelPath = '';
-    xlabels.forEach( x => {
-      labelPath = labelPath + `M${x} 0 L${x} ${height} `;
+    xlabels.forEach( ({px}) => {
+      labelPath = labelPath + `M${px} 0 L${px} ${height} `;
     }); 
+    let labelWidth = 0;
+    if (xlabels.length>1){
+      labelWidth = xlabels[1].px - xlabels[0].px;
+    }    
 
     return (
       <svg ref={ el => this.svg = el }>
-        <path stroke-width="4" stroke="black" d={labelPath} />
+        <path strokeWidth="4" stroke="black" d={labelPath} />
+        {
+          xlabels.map( ({x, px}, i) => this.getAxisLabel({x, px, labelHeight: height, labelWidth, key: i, axisWidth, xleft, xright})  )
+        }        
       </svg>
     );
   }
