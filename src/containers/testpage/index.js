@@ -38,16 +38,13 @@ class TestPage extends Component {
     const line1_yvalues = data.columns[1].filter((e,i) => i !==0 );
     const line2_yvalues = data.columns[2].filter((e,i) => i !==0 );
 
-    const ymin = Math.min(...line1_yvalues, ...line2_yvalues);
-    const ymax = Math.max(...line1_yvalues, ...line2_yvalues);
-
     const xmin = Math.min(...xvalues);
     const xmax = Math.max(...xvalues);    
 
-    const dx = (xmax-xmin)/2.5;    
+    const dx = 0;// (xmax-xmin)/5;    
 
     return (
-        <View width={500} height={500}>
+        <View width={500} height={200}>
           <Lines>
             <Line xvalues={xvalues} yvalues={line1_yvalues}/>
             <Line xvalues={xvalues} yvalues={line2_yvalues}/>
@@ -56,29 +53,28 @@ class TestPage extends Component {
             xleft={xmin+dx}
             xright={xmax-dx}
             xstart={xmin}
-            ytop={150}
+            ytop={300}
             ybottom={0}
             ystart={0}
             xformat={ASES_FORMAT_INDEX}
             yformat={ASES_FORMAT_INDEX}
             xonchart={false}
-            yonchart={false}
+            yonchart={true}
           >
             <VericalAxis 
-              scalecount={5} 
               position={AXES_POSITION_LEFT} 
               width={50} 
               line={AXES_LINE_LINE}
               axisWidth={4}
-            />
+            />  
             <HorizontalAxis 
-              scalecount={6} 
               position={AXES_POSITION_BOTTOM} 
               height={50}
               line={AXES_LINE_DOT_LINE}
               axisWidth={4}
               getAxisLabel={this.getxAxisLabel}
             />
+
           </Axes>
           <Markers>
             <HeaderMarker />
@@ -88,5 +84,12 @@ class TestPage extends Component {
     );
   }
 }
+
+/*
+
+
+
+
+*/            
 
 export default TestPage;

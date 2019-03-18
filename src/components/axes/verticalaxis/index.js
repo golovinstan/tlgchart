@@ -4,7 +4,7 @@ class VerticalAxis extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
-    this.state={ylabels: []};
+    this.state={labels: []};
 
     this.position = props.position;
     this.width = props.width;
@@ -38,22 +38,34 @@ class VerticalAxis extends Component {
     this.svg.setAttribute('height', bottom-top);
   }
 
-  calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
-    const { scalecount } = this.props;
-    const dy = (ytop - ybottom)/(scalecount);
-    this.scale_dy = dy;
-    let step = Math.floor((ystart - ybottom)/dy)*dy || ystart;
-    const ylabels = [];    
-    
-    while (step < ytop){
-      if ((step >= ybottom) && (step <= ytop)){
-        const ypi = height_px - (step-ybottom)*dpi_y;
-        ylabels.push({py: Math.floor(ypi), y: step});
-      }
-      step = step + dy;
+  getYLabels = ({ytop, ybottom, ystart, dpi_y}) => {
+    const { getYLabels } = this.props;
+    if (getYLabels){
+      return getYLabels({ytop, ybottom, ystart, dpi_y});
     }
 
-    this.setState({ylabels});
+    const ylabels = [];
+    const dy = (ytop - ybottom)/(6);
+    let step = Math.floor((ystart - ybottom)/dy)*dy || ystart;
+
+    while (step < ytop){
+      if ((step >= ybottom) && (step <= ytop)){
+        ylabels.push(step);
+      }
+      step = step + dy;
+    }    
+    return ylabels;
+  }
+
+  calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
+    const ylabels = this.getYLabels({ytop, ybottom, ystart, dpi_y});    
+
+    const labels = ylabels.map( y => {
+      const ypi = height_px - (y-ybottom)*dpi_y;
+      return {py: Math.floor(ypi), y};
+    } );
+
+    this.setState({labels});
   }  
 
   getAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom}) => {
@@ -66,22 +78,22 @@ class VerticalAxis extends Component {
 
   render() {
     const { width, axisWidth, ytop, ybottom } = this.props;
-    const { ylabels } = this.state;
+    const { labels } = this.state;
 
     let labelPath = '';
-    ylabels.forEach( ({py}) => {
+    labels.forEach( ({py}) => {
       labelPath = labelPath + `M0 ${py} L${width} ${py} `;
     }); 
     let labelHeight = 0;
-    if (ylabels.length>1){
-      labelHeight = ylabels[0].py - ylabels[1].py;
+    if (labels.length>1){
+      labelHeight = labels[0].py - labels[1].py;
     }
 
     return (
       <svg ref={ el => this.svg = el }>
         <path strokeWidth={axisWidth} stroke="black" d={labelPath} />
         {
-          ylabels.map( ({y, py}, i) => this.getAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
+          labels.map( ({y, py}, i) => this.getAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
         }
       </svg>
     );

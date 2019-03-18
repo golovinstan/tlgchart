@@ -4,7 +4,7 @@ class HorizontAxis extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
-    this.state={ xlabels: [] };
+    this.state={ labels: [] };
 
     this.position = props.position;
     this.height = props.height;
@@ -38,21 +38,33 @@ class HorizontAxis extends Component {
     this.svg.setAttribute('height', bottom-top);
   }
 
-  calcScale = ({xleft, xright, xstart, dpi_x}) => {
-    const { scalecount } = this.props;
-    const dx = (xright - xleft)/(scalecount);
-    let step = Math.floor((xstart - xleft)/dx)*dx || xstart;
-    const xlabels = [];
+  getXLabels = ({xleft, xright, xstart, dpi_x}) => {
+    const { getXLabels } = this.props;
+    if (getXLabels){
+      return getXLabels({xleft, xright, xstart, dpi_x});
+    }
 
+    const dx = (xright - xleft)/(6);
+    let step = Math.floor((xstart - xleft)/dx)*dx || xstart;
+
+    let xlabels = [];
     while (step < xright){
       if ((step >= xleft) && (step <= xright)){
-        const xpi = (step-xleft)*dpi_x;
-        xlabels.push({px: Math.floor(xpi), x: step});
+        xlabels.push(step);
       }
       step = step + dx;
     }
+    return xlabels;
+  }
 
-    this.setState({xlabels});
+  calcScale = ({xleft, xright, xstart, dpi_x}) => {
+    const xlabels = this.getXLabels({xleft, xright, xstart, dpi_x});
+    const labels = xlabels.map( x => {
+      const xpi = (x-xleft)*dpi_x;
+      return {px: Math.floor(xpi), x};
+    });
+
+    this.setState({labels});
   } 
 
   getAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
@@ -65,22 +77,22 @@ class HorizontAxis extends Component {
 
   render() {
     const { height, axisWidth, xleft, xright } = this.props;
-    const { xlabels } = this.state;
+    const { labels } = this.state;
 
     let labelPath = '';
-    xlabels.forEach( ({px}) => {
+    labels.forEach( ({px}) => {
       labelPath = labelPath + `M${px} 0 L${px} ${height} `;
     }); 
     let labelWidth = 0;
-    if (xlabels.length>1){
-      labelWidth = xlabels[1].px - xlabels[0].px;
+    if (labels.length>1){
+      labelWidth = labels[1].px - labels[0].px;
     }    
 
     return (
       <svg ref={ el => this.svg = el }>
         <path strokeWidth="4" stroke="black" d={labelPath} />
         {
-          xlabels.map( ({x, px}, i) => this.getAxisLabel({x, px, labelHeight: height, labelWidth, key: i, axisWidth, xleft, xright})  )
+          labels.map( ({x, px}, i) => this.getAxisLabel({x, px, labelHeight: height, labelWidth, key: i, axisWidth, xleft, xright})  )
         }        
       </svg>
     );
