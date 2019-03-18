@@ -45,7 +45,7 @@ class VerticalAxis extends Component {
     }
 
     const ylabels = [];
-    const dy = (ytop - ybottom)/(6);
+    const dy = (ytop - ybottom)/(5);
     let step = Math.floor((ystart - ybottom)/dy)*dy || ystart;
 
     while (step < ytop){
@@ -77,21 +77,27 @@ class VerticalAxis extends Component {
   }
 
   render() {
-    const { width, axisWidth, ytop, ybottom } = this.props;
+    const { width, axisWidth, ytop, ybottom, debugMode } = this.props;
     const { labels } = this.state;
 
-    let labelPath = '';
-    labels.forEach( ({py}) => {
-      labelPath = labelPath + `M0 ${py} L${width} ${py} `;
-    }); 
     let labelHeight = 0;
     if (labels.length>1){
       labelHeight = labels[0].py - labels[1].py;
+    }  
+
+    let debugComponent = null;
+    if (debugMode) {
+      let labelPath = '';
+      labels.forEach( ({py}) => {
+        labelPath = labelPath + `M0 ${py} L${width} ${py} `;
+      }); 
+    
+      debugComponent = (<path strokeWidth={axisWidth} stroke="black" d={labelPath} />);
     }
 
     return (
       <svg ref={ el => this.svg = el }>
-        <path strokeWidth={axisWidth} stroke="black" d={labelPath} />
+        {debugComponent}
         {
           labels.map( ({y, py}, i) => this.getAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
         }

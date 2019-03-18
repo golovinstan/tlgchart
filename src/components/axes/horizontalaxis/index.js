@@ -44,7 +44,7 @@ class HorizontAxis extends Component {
       return getXLabels({xleft, xright, xstart, dpi_x});
     }
 
-    const dx = (xright - xleft)/(6);
+    const dx = (xright - xleft)/(5);
     let step = Math.floor((xstart - xleft)/dx)*dx || xstart;
 
     let xlabels = [];
@@ -76,21 +76,28 @@ class HorizontAxis extends Component {
   }
 
   render() {
-    const { height, axisWidth, xleft, xright } = this.props;
+    const { height, axisWidth, xleft, xright, debugMode } = this.props;
     const { labels } = this.state;
 
-    let labelPath = '';
-    labels.forEach( ({px}) => {
-      labelPath = labelPath + `M${px} 0 L${px} ${height} `;
-    }); 
     let labelWidth = 0;
     if (labels.length>1){
       labelWidth = labels[1].px - labels[0].px;
     }    
 
+    let debugComponent = null;
+    if (debugMode) {
+      let labelPath = '';
+      labels.forEach( ({px}) => {
+        labelPath = labelPath + `M${px} 0 L${px} ${height} `;
+      }); 
+    
+      debugComponent = (<path strokeWidth={axisWidth} stroke="black" d={labelPath} />);
+    }
+
+
     return (
       <svg ref={ el => this.svg = el }>
-        <path strokeWidth="4" stroke="black" d={labelPath} />
+        {debugComponent}
         {
           labels.map( ({x, px}, i) => this.getAxisLabel({x, px, labelHeight: height, labelWidth, key: i, axisWidth, xleft, xright})  )
         }        

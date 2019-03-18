@@ -66,6 +66,7 @@ class TestPage extends Component {
               width={50} 
               line={AXES_LINE_LINE}
               axisWidth={4}
+              debugMode={true}
             />  
             <HorizontalAxis 
               position={AXES_POSITION_BOTTOM} 
@@ -73,6 +74,7 @@ class TestPage extends Component {
               line={AXES_LINE_DOT_LINE}
               axisWidth={4}
               getAxisLabel={this.getxAxisLabel}
+              debugMode={true}
             />
 
           </Axes>
