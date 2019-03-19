@@ -4,7 +4,8 @@ import TestData from '../../testdata'
 import View from '../../components/view';
 
 import Lines from '../../components/lines/lines';
-import Line from '../../components/lines/line';
+import SimpleLine from '../../components/lines/simpleline';
+import DotsLine from '../../components/lines/dotsline';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
@@ -45,8 +46,11 @@ class TestPage extends Component {
     return (
         <View width={500} height={200}>
           <Lines>
-            <Line xvalues={xvalues} yvalues={line1_yvalues}/>
-            <Line xvalues={xvalues} yvalues={line2_yvalues}/>
+            <SimpleLine xvalues={xvalues} yvalues={line1_yvalues}/>
+            <DotsLine xvalues={xvalues} yvalues={line1_yvalues}/>
+
+            <SimpleLine xvalues={xvalues} yvalues={line2_yvalues}/>
+            <DotsLine xvalues={xvalues} yvalues={line2_yvalues}/>
           </Lines>
           <Axes 
             xleft={xmin+dx}

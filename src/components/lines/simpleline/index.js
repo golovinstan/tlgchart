@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Line extends Component {
+class SimpleLine extends Component {
   constructor(props){
     const { instances, xvalues, yvalues } = props;
     super(props);
@@ -15,9 +15,6 @@ class Line extends Component {
 
   calcPath = ({dpi_x, dpi_y, xleft, xright, ytop}) => {
     const { xvalues, yvalues } = this.props;
-
-    const px_offset = xleft*dpi_x;
-    const py_offset = ytop*dpi_y;
 
     const indxs = xvalues
     .map( (x,i) => ({x,i}) )
@@ -38,7 +35,7 @@ class Line extends Component {
   render() {
     const { xvalues_px, yvalues_px } = this.state;
 
-    if (!xvalues_px || !yvalues_px){
+    if (!xvalues_px || !yvalues_px || (xvalues_px.length !== yvalues_px.length) ){
       return null;
     }
 
@@ -53,4 +50,4 @@ class Line extends Component {
   }
 }
 
-export default Line;
+export default SimpleLine;
