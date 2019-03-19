@@ -6,7 +6,6 @@ export const AXES_POSITION_BOTTOM = {};
 export const AXES_POSITION_LEFT = {};
 export const AXES_POSITION_RIGHT = {};
 
-export const AXES_LINE_DBG = {};
-export const AXES_LINE_LINE = {};
-export const AXES_LINE_DOT_LINE = {};
+export const AXES_LINE_LINE = {strokeDasharray:""};
+export const AXES_LINE_DOT_LINE = {strokeDasharray:"4 4"};
 

@@ -8,7 +8,9 @@ class HorizontAxis extends Component {
 
     this.position = props.position;
     this.height = props.height;
-    this.scalecount = props.scalecount;
+    this.lineType = props.lineType;    
+
+    this.xlabels = [];
     instances.axes.push(this);
   }    
 
@@ -59,6 +61,9 @@ class HorizontAxis extends Component {
 
   calcScale = ({xleft, xright, xstart, dpi_x}) => {
     const xlabels = this.getXLabels({xleft, xright, xstart, dpi_x});
+    this.xlabels.length = 0;
+    this.xlabels.push(...xlabels);
+
     const labels = xlabels.map( x => {
       const xpi = (x-xleft)*dpi_x;
       return {px: Math.floor(xpi), x};

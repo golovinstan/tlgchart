@@ -8,7 +8,9 @@ class VerticalAxis extends Component {
 
     this.position = props.position;
     this.width = props.width;
-    this.scalecount = props.scalecount;
+    this.lineType = props.lineType;    
+    
+    this.ylabels = [];
     instances.axes.push(this);
   }
 
@@ -60,6 +62,8 @@ class VerticalAxis extends Component {
   calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
     const ylabels = this.getYLabels({ytop, ybottom, ystart, dpi_y});    
 
+    this.ylabels.length = 0;
+    this.ylabels.push(...ylabels);
     const labels = ylabels.map( y => {
       const ypi = height_px - (y-ybottom)*dpi_y;
       return {py: Math.floor(ypi), y};

@@ -4,7 +4,9 @@ class Lines extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
-    this.state={left:0, top:0, right:1, bottom:1 };    
+    this.ylabels = [];
+    this.xlabels = [];
+    this.state = { axisDrawCount: 0 };
 
     instances.linesView = this;
     instances.lines = [];
@@ -22,6 +24,25 @@ class Lines extends Component {
     instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}) );
   }
 
+  calcYAxisLine = ({ylabels, lineType, ybottom, dpi_y, key}) => {
+    const labels = ylabels.map( y => {
+      return {ypx: (y-ybottom)*dpi_y, lineType}
+    });
+    this.ylabels[key] = labels;
+  }
+
+  calcXAxisLine = ({xlabels, lineType, xleft, dpi_x, key}) => {
+    const labels = xlabels.map( x => {
+      return {xpx: (x-xleft)*dpi_x, lineType}
+    });
+    this.xlabels[key] = labels;
+  }
+
+  drawAxisLine = () => {
+    const { axisDrawCount } = this.state;
+    this.setState({axisDrawCount: (axisDrawCount+1)});
+  }
+
   render() {
     const { children, instances } = this.props;
     
@@ -32,6 +53,16 @@ class Lines extends Component {
     return (
     <svg ref={ el => this.svg = el }>
       {childrenWithProps}
+      {
+        this.ylabels.filter( lb => !!lb).map( lb => lb.map( ({ypx, lineType}) => {
+          return (<line x1={0} y1={ypx} x2="100%" y2={ypx} stroke="black" strokeDasharray={lineType.strokeDasharray} />);
+        } ) )
+      }
+      {
+        this.xlabels.filter( lb => !!lb).map( lb => lb.map( ({xpx, lineType}) => {
+          return (<line x1={xpx} y1={0} x2={xpx} y2={'100%'} stroke="black" strokeDasharray={lineType.strokeDasharray} />);
+        } ) )
+      }      
     </svg>);
   }
 }

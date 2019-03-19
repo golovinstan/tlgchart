@@ -18,6 +18,14 @@ class Axes extends Component {
     const args = {xleft, xright, xstart, ytop, ybottom, ystart, dpi_x, dpi_y, height_px};
     instances.axes.forEach( axis => axis.calcScale(args) );
     instances.linesView.calcScale({dpi_x, dpi_y, xleft, xright, ytop});
+    instances.axes.forEach( (axis, key) => {
+      if (axis.ylabels){
+        instances.linesView.calcYAxisLine({ylabels: axis.ylabels, lineType: axis.lineType, ybottom, dpi_y, key});
+      } else {
+        instances.linesView.calcXAxisLine({xlabels: axis.xlabels, lineType: axis.lineType, xleft, dpi_x, key});
+      }
+    });
+    instances.linesView.drawAxisLine();
   }
 
   render() {
