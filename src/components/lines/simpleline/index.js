@@ -34,6 +34,7 @@ class SimpleLine extends Component {
 
   render() {
     const { xvalues_px, yvalues_px } = this.state;
+    const { color, width } = this.props;
 
     if (!xvalues_px || !yvalues_px || (xvalues_px.length !== yvalues_px.length) ){
       return null;
@@ -45,7 +46,7 @@ class SimpleLine extends Component {
     }        
 
     return (
-      <path fill="none"  strokeWidth="4" stroke="black" d={pathData} />
+      <path fill="none"  strokeWidth={width} stroke={`${color}`} d={pathData} />
     );
   }
 }

@@ -20,9 +20,9 @@ class Axes extends Component {
     instances.linesView.calcScale({dpi_x, dpi_y, xleft, xright, ytop});
     instances.axes.forEach( (axis, key) => {
       if (axis.ylabels){
-        instances.linesView.calcYAxisLine({ylabels: axis.ylabels, lineType: axis.lineType, ybottom, dpi_y, key});
+        instances.linesView.calcYAxisLine({ylabels: axis.ylabels, lineType: axis.lineType, ybottom, dpi_y, key, axisVisible: axis.axisVisible });
       } else {
-        instances.linesView.calcXAxisLine({xlabels: axis.xlabels, lineType: axis.lineType, xleft, dpi_x, key});
+        instances.linesView.calcXAxisLine({xlabels: axis.xlabels, lineType: axis.lineType, xleft, dpi_x, key, axisVisible: axis.axisVisible});
       }
     });
     instances.linesView.drawAxisLine();

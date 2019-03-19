@@ -34,6 +34,7 @@ class DotsLine extends Component {
 
   render() {
     const { xvalues_px, yvalues_px } = this.state;
+    const { color, width, radius } = this.props;
 
     if (!xvalues_px || !yvalues_px || (xvalues_px.length !== yvalues_px.length) ){
       return null;
@@ -43,7 +44,7 @@ class DotsLine extends Component {
       <svg x={0} y={0} width={'100%'} height={'100%'}>
         {
             xvalues_px.map( (e,i) => {
-                return (<circle cx={xvalues_px[i]} cy={yvalues_px[i]} r={"5"} stroke={"red"} fill={"transparent"} />);
+                return (<circle cx={xvalues_px[i]} cy={yvalues_px[i]} r={radius} strokeWidth={width} stroke={`${color}`} fill={"none"} />);
             } )
 
         }

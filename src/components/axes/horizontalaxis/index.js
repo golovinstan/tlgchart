@@ -8,7 +8,8 @@ class HorizontAxis extends Component {
 
     this.position = props.position;
     this.height = props.height;
-    this.lineType = props.lineType;    
+    this.lineType = props.lineType;
+    this.axisVisible = props.axisVisible;
 
     this.xlabels = [];
     instances.axes.push(this);

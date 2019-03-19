@@ -8,7 +8,8 @@ class VerticalAxis extends Component {
 
     this.position = props.position;
     this.width = props.width;
-    this.lineType = props.lineType;    
+    this.lineType = props.lineType;
+    this.axisVisible = props.axisVisible;
     
     this.ylabels = [];
     instances.axes.push(this);

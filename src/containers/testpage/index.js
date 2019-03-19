@@ -41,16 +41,31 @@ class TestPage extends Component {
     const xmin = Math.min(...xvalues);
     const xmax = Math.max(...xvalues);    
 
-    const dx = 0;// (xmax-xmin)/5;    
+    const dx = 0;
 
     return (
         <View width={500} height={200}>
           <Lines>
-            <SimpleLine xvalues={xvalues} yvalues={line1_yvalues}/>
-            <DotsLine xvalues={xvalues} yvalues={line1_yvalues}/>
+            <SimpleLine 
+              xvalues={xvalues} 
+              yvalues={line1_yvalues}
+              color={'#3DC23F'}
+              width={4}
+            />
+            <DotsLine 
+              xvalues={[xvalues[10], xvalues[11]]} 
+              yvalues={[line1_yvalues[10], line1_yvalues[11]]}
+              color={'#3DC23F'}
+              width={4}
+              radius={5}
+            />
 
-            <SimpleLine xvalues={xvalues} yvalues={line2_yvalues}/>
-            <DotsLine xvalues={xvalues} yvalues={line2_yvalues}/>
+            <SimpleLine 
+              xvalues={xvalues} 
+              yvalues={line2_yvalues}
+              color={'#F34C44'}
+              width={4}
+            />
           </Lines>
           <Axes 
             xleft={xmin+dx}
@@ -67,17 +82,19 @@ class TestPage extends Component {
             <VericalAxis 
               position={AXES_POSITION_LEFT} 
               width={30} 
-              lineType={AXES_LINE_DOT_LINE}
-              axisWidth={4}
+              lineType={AXES_LINE_LINE}
               debugMode={false}
+              axisWidth={4}
+              axisVisible={true}
             />  
             <HorizontalAxis 
               position={AXES_POSITION_BOTTOM} 
               height={20}
               lineType={AXES_LINE_DOT_LINE}
-              axisWidth={4}
               getAxisLabel={this.getxAxisLabel}
               debugMode={false}
+              axisWidth={4}
+              axisVisible={false}
             />
 
           </Axes>
@@ -89,12 +106,5 @@ class TestPage extends Component {
     );
   }
 }
-
-/*
-
-
-
-
-*/            
 
 export default TestPage;

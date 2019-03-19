@@ -24,18 +24,18 @@ class Lines extends Component {
     instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}) );
   }
 
-  calcYAxisLine = ({ylabels, lineType, ybottom, dpi_y, key}) => {
+  calcYAxisLine = ({ylabels, lineType, ybottom, dpi_y, key, axisVisible}) => {
     const labels = ylabels.map( y => {
       return {ypx: (y-ybottom)*dpi_y, lineType}
     });
-    this.ylabels[key] = labels;
+    this.ylabels[key] = axisVisible?labels:[];
   }
 
-  calcXAxisLine = ({xlabels, lineType, xleft, dpi_x, key}) => {
+  calcXAxisLine = ({xlabels, lineType, xleft, dpi_x, key, axisVisible}) => {
     const labels = xlabels.map( x => {
       return {xpx: (x-xleft)*dpi_x, lineType}
     });
-    this.xlabels[key] = labels;
+    this.xlabels[key] = axisVisible?labels:[];
   }
 
   drawAxisLine = () => {
@@ -55,12 +55,34 @@ class Lines extends Component {
       {childrenWithProps}
       {
         this.ylabels.filter( lb => !!lb).map( lb => lb.map( ({ypx, lineType}) => {
-          return (<line x1={0} y1={ypx} x2="100%" y2={ypx} stroke="black" strokeDasharray={lineType.strokeDasharray} />);
+          return (
+            <line 
+              x1={0} 
+              y1={ypx} 
+              x2="100%" 
+              y2={ypx} 
+              stroke="black" 
+              strokeDasharray={lineType.strokeDasharray} 
+              fillOpacity={lineType.fillOpacity} 
+              strokeOpacity={lineType.strokeOpacity} 
+            />
+          );
         } ) )
       }
       {
         this.xlabels.filter( lb => !!lb).map( lb => lb.map( ({xpx, lineType}) => {
-          return (<line x1={xpx} y1={0} x2={xpx} y2={'100%'} stroke="black" strokeDasharray={lineType.strokeDasharray} />);
+          return (
+            <line 
+              x1={xpx} 
+              y1={0} 
+              x2={xpx} 
+              y2={'100%'} 
+              stroke="black" 
+              strokeDasharray={lineType.strokeDasharray} 
+              fillOpacity={lineType.fillOpacity} 
+              strokeOpacity={lineType.strokeOpacity} 
+            />
+          );
         } ) )
       }      
     </svg>);
