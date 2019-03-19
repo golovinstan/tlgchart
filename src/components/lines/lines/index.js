@@ -41,7 +41,7 @@ class Lines extends Component {
   drawAxisLine = () => {
     const { axisDrawCount } = this.state;
     this.setState({axisDrawCount: (axisDrawCount+1)});
-  }
+  } 
 
   render() {
     const { children, instances } = this.props;
@@ -51,7 +51,7 @@ class Lines extends Component {
     );        
 
     return (
-    <svg ref={ el => this.svg = el }>
+    <svg ref={ el => this.svg = el } >
       {childrenWithProps}
       {
         this.ylabels.filter( lb => !!lb).map( lb => lb.map( ({ypx, lineType}) => {

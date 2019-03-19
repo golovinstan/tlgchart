@@ -8,8 +8,16 @@ import {
 
 class View extends Component {
   instances = {
-    view: this
+    view: this,
+    onDragListeners: [],
+    onEndDragListeners: []
   };
+
+  constructor(props){
+    super(props);
+
+    this.dragging = false;
+  }
 
   componentDidMount(){
     this.fullUpdate();
@@ -74,6 +82,30 @@ class View extends Component {
     inst.axisView.calcScale({ width_px: (rightOffset-leftOffset), height_px: (bottomOffset-topOffset) });
   }
 
+  onMouseMove = (e) => {
+    const {movementX, clientX, movementY, clientY} = e;
+    if (this.dragging){
+      this.instances.onDragListeners.forEach( listener => listener({movementX, clientX, movementY, clientY, dragging: this.dragging}) );
+    }
+  }
+
+  endDragListeners = () => {
+    this.dragging = false;
+    this.instances.onEndDragListeners.forEach( listener => listener() );
+  }
+
+  onMouseLeave = (e) => {
+    this.endDragListeners();
+  }
+
+  onMouseUp = (e) => {
+    this.endDragListeners();
+  }     
+
+  onMouseDown = (e) => {
+    this.dragging = true;
+  }
+
   render() {
     const {width, height} = this.props;
     const { children } = this.props;
@@ -83,7 +115,17 @@ class View extends Component {
     );    
 
     return (
-      <svg xmlns={"http://www.w3.org/2000/svg"} width={width} height={height} ref={ el => this.viewSVG = el }>
+      <svg 
+        xmlns={"http://www.w3.org/2000/svg"} 
+        width={width} 
+        height={height} 
+        ref={ el => this.viewSVG = el }
+
+        onMouseMove={ this.onMouseMove  }
+        onMouseLeave={ this.onMouseLeave  }
+        onMouseDown={ this.onMouseDown }
+        onMouseUp={ this.onMouseUp }           
+      >
         {childrenWithProps}
       </svg>
     );

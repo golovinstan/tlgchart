@@ -6,6 +6,7 @@ import View from '../../components/view';
 import Lines from '../../components/lines/lines';
 import SimpleLine from '../../components/lines/simpleline';
 import DotsLine from '../../components/lines/dotsline';
+import VerticalLine from '../../components/lines/verticalline';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
@@ -14,6 +15,7 @@ import HorizontalAxis from '../../components/axes/horizontalaxis';
 import Markers from '../../components/markers/markers';
 import HeaderMarker from '../../components/markers/headermarker';
 import VertLineMarker from '../../components/markers/vertlinemarker';
+
 
 import { 
   ASES_FORMAT_INDEX 
@@ -24,22 +26,39 @@ import {
 } from '../../components/axes/constants';
 
 class TestPage extends Component {
+  constructor(props){
+    super(props);
+
+    const data = TestData[0];
+
+    this.xvalues = data.columns[0].filter((e,i) => i !==0 );
+    this.line1_yvalues = data.columns[1].filter((e,i) => i !==0 );
+    this.line2_yvalues = data.columns[2].filter((e,i) => i !==0 );
+
+    this.xmin = Math.min(...this.xvalues);
+    this.xmax = Math.max(...this.xvalues);        
+
+    this.state = {
+      markerX: this.xvalues[11]
+    };
+  }
 
   getxAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
     const d = new Date(x);
     return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`}</text>
   }
 
+  onDrag = ({x, dx}) => {
+    const newx = x + dx;
+    if ( (this.xmin<newx) && (this.xmax>newx) ){
+      this.setState({markerX: newx});
+    }
+    
+  }
+
   render() {
-    const data = TestData[0];
+    const { markerX } = this.state;
 
-    // const xvalues = data.columns[0].filter((e,i) => i !==0 ).map((e,i) => i-1);
-    const xvalues = data.columns[0].filter((e,i) => i !==0 );
-    const line1_yvalues = data.columns[1].filter((e,i) => i !==0 );
-    const line2_yvalues = data.columns[2].filter((e,i) => i !==0 );
-
-    const xmin = Math.min(...xvalues);
-    const xmax = Math.max(...xvalues);    
 
     const dx = 0;
 
@@ -47,31 +66,37 @@ class TestPage extends Component {
         <View width={500} height={200}>
           <Lines>
             <SimpleLine 
-              xvalues={xvalues} 
-              yvalues={line1_yvalues}
+              xvalues={this.xvalues} 
+              yvalues={this.line1_yvalues}
               color={'#3DC23F'}
               width={4}
             />
             <DotsLine 
-              xvalues={[xvalues[10], xvalues[11]]} 
-              yvalues={[line1_yvalues[10], line1_yvalues[11]]}
+              xvalues={[this.xvalues[10], this.xvalues[11]]} 
+              yvalues={[this.line1_yvalues[10], this.line1_yvalues[11]]}
               color={'#3DC23F'}
               width={4}
               radius={5}
             />
+            <VerticalLine
+              xvalue={markerX} 
+              color={'#3DC23F'}
+              width={4}
+              onDrag={this.onDrag}
+            />
 
             <SimpleLine 
-              xvalues={xvalues} 
-              yvalues={line2_yvalues}
+              xvalues={this.xvalues} 
+              yvalues={this.line2_yvalues}
               color={'#F34C44'}
               width={4}
             />
           </Lines>
           <Axes 
-            xleft={xmin+dx}
-            xright={xmax-dx}
-            xstart={xmin}
-            ytop={150}
+            xleft={this.xmin+dx}
+            xright={this.xmax-dx}
+            xstart={this.xmin}
+            ytop={250}
             ybottom={0}
             ystart={0}
             xformat={ASES_FORMAT_INDEX}

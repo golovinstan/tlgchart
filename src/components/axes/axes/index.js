@@ -28,6 +28,18 @@ class Axes extends Component {
     instances.linesView.drawAxisLine();
   }
 
+  getXValueFromPosition = ({px}) => {
+  }
+
+  getXPositionFromValue = ({x}) => {
+  }  
+
+  getYValueFromPosition = ({py}) => {
+  }  
+
+  getYPositionFromValue = ({y}) => {
+  }    
+
   render() {
     const { children, instances, xonchart, yonchart, xleft, xright, ytop, ybottom } = this.props;
     
