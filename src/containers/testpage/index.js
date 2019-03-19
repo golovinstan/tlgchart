@@ -39,7 +39,8 @@ class TestPage extends Component {
     this.xmax = Math.max(...this.xvalues);        
 
     this.state = {
-      markerX: this.xvalues[11]
+      markerX1: this.xvalues[11],
+      markerX2: this.xvalues[90],
     };
   }
 
@@ -48,18 +49,22 @@ class TestPage extends Component {
     return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`}</text>
   }
 
-  onDrag = ({x, dx}) => {
+  onDragLeft = ({x, dx}) => {
     const newx = x + dx;
     if ( (this.xmin<newx) && (this.xmax>newx) ){
-      this.setState({markerX: newx});
+      this.setState({markerX1: newx});
     }
-    
   }
 
+  onDragRight = ({x, dx}) => {
+    const newx = x + dx;
+    if ( (this.xmin<newx) && (this.xmax>newx) ){
+      this.setState({markerX2: newx});
+    }
+  }  
+
   render() {
-    const { markerX } = this.state;
-
-
+    const { markerX1, markerX2 } = this.state;
     const dx = 0;
 
     return (
@@ -79,11 +84,17 @@ class TestPage extends Component {
               radius={5}
             />
             <VerticalLine
-              xvalue={markerX} 
+              xvalue={markerX1} 
               color={'#3DC23F'}
               width={4}
-              onDrag={this.onDrag}
+              onDrag={this.onDragLeft}
             />
+            <VerticalLine
+              xvalue={markerX2} 
+              color={'#3DC23F'}
+              width={4}
+              onDrag={this.onDragRight}
+            />            
 
             <SimpleLine 
               xvalues={this.xvalues} 
