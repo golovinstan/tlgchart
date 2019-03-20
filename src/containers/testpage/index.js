@@ -62,13 +62,22 @@ class TestPage extends Component {
     if ( (this.xmin<newx) && (this.xmax>newx) ){
       this.setState({markerX2: newx});
     }
-  }  
+  } 
+
+  onDragBox = ({x, dx}) => {
+    const { markerX1, markerX2 } = this.state;
+    const newx1 = markerX1 + dx;
+    const newx2 = markerX2 + dx;
+    if ( (this.xmin<newx1) && (this.xmax>newx2) ){
+      this.setState({markerX1: newx1, markerX2: newx2});
+    }    
+  }
 
   render() {
     const { markerX1, markerX2 } = this.state;
 
     return (
-        <View width={500} height={200}>
+        <View width={500} height={350}>
           <Lines>
             <SimpleLine 
               xvalues={this.xvalues} 
@@ -100,6 +109,7 @@ class TestPage extends Component {
               rightvalue={markerX2}
               color={'grey'}
               opacity={0.1}
+              onDrag={this.onDragBox}
             />            
             <VerticalLine
               xvalue={markerX1} 
@@ -115,7 +125,6 @@ class TestPage extends Component {
             />            
 
 
-
             <SimpleLine 
               xvalues={this.xvalues} 
               yvalues={this.line2_yvalues}
@@ -127,7 +136,7 @@ class TestPage extends Component {
             xleft={this.xmin}
             xright={this.xmax}
             xstart={this.xmin}
-            ytop={250}
+            ytop={300}
             ybottom={0}
             ystart={0}
             xformat={ASES_FORMAT_INDEX}
@@ -135,6 +144,7 @@ class TestPage extends Component {
             xonchart={false}
             yonchart={true}
           >
+
             <VericalAxis 
               position={AXES_POSITION_LEFT} 
               width={30} 
@@ -162,5 +172,11 @@ class TestPage extends Component {
     );
   }
 }
+
+/*
+
+
+
+*/
 
 export default TestPage;

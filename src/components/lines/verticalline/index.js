@@ -5,9 +5,9 @@ class VerticalLine extends Component {
     const { instances } = props;
     super(props);
     instances.lines.push(this)    
+    this.dragging = false;
 
     this.state = {xvalue_px: null};
-    this.dragging = false;
   }
 
   componentDidMount(){
