@@ -7,6 +7,7 @@ import Lines from '../../components/lines/lines';
 import SimpleLine from '../../components/lines/simpleline';
 import DotsLine from '../../components/lines/dotsline';
 import VerticalLine from '../../components/lines/verticalline';
+import VerticalBox from '../../components/lines/verticalbox';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
@@ -65,7 +66,6 @@ class TestPage extends Component {
 
   render() {
     const { markerX1, markerX2 } = this.state;
-    const dx = 0;
 
     return (
         <View width={500} height={200}>
@@ -83,18 +83,38 @@ class TestPage extends Component {
               width={4}
               radius={5}
             />
+            <VerticalBox
+              leftvalue={this.xmin}
+              rightvalue={markerX1}
+              color={'grey'}
+              opacity={0.5}
+            />
+            <VerticalBox
+              leftvalue={markerX2}
+              rightvalue={this.xmax}
+              color={'grey'}
+              opacity={0.5}
+            />
+            <VerticalBox
+              leftvalue={markerX1}
+              rightvalue={markerX2}
+              color={'grey'}
+              opacity={0.1}
+            />            
             <VerticalLine
               xvalue={markerX1} 
               color={'#3DC23F'}
-              width={4}
+              width={12}
               onDrag={this.onDragLeft}
             />
             <VerticalLine
               xvalue={markerX2} 
               color={'#3DC23F'}
-              width={4}
+              width={12}
               onDrag={this.onDragRight}
             />            
+
+
 
             <SimpleLine 
               xvalues={this.xvalues} 
@@ -104,8 +124,8 @@ class TestPage extends Component {
             />
           </Lines>
           <Axes 
-            xleft={this.xmin+dx}
-            xright={this.xmax-dx}
+            xleft={this.xmin}
+            xright={this.xmax}
             xstart={this.xmin}
             ytop={250}
             ybottom={0}
