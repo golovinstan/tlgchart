@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MarkerChart from './marker';
+import DataChart from './data';
 
 const getXValues = ({ columns, types }) => {
     const xname = Object.entries(types).find( ([name,value]) => value == "x")[0];        
@@ -25,12 +26,19 @@ class Chart extends Component {
         this.lines = getLines({ columns, types, names, colors });
 
         this.xmin = Math.min(...this.xvalues);
-        this.xmax = Math.max(...this.xvalues);         
+        this.xmax = Math.max(...this.xvalues);
+
+        this.startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/3)];
+        this.startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/3)*2];
     
         this.state = {
-          markerX1: this.xvalues[Math.floor(this.xvalues.length/3)],
-          markerX2: this.xvalues[Math.floor(this.xvalues.length/3)*2],
+          markerX1: this.startMarkerX1,
+          markerX2: this.startMarkerX2,
         };
+    }
+
+    onChangeMarkers = ({markerX1, markerX2}) => {
+        this.setState({markerX1, markerX2});
     }
 
 
@@ -38,11 +46,18 @@ class Chart extends Component {
         const { markerX1, markerX2 } = this.state;
         return (
             <div>
-                <MarkerChart
+                <DataChart
                     markerX1={markerX1}
                     markerX2={markerX2}
                     xvalues={this.xvalues}
+                    lines={this.lines}                    
+                />
+                <MarkerChart
+                    startMarkerX1={this.startMarkerX1}
+                    startMarkerX2={this.startMarkerX2}
+                    xvalues={this.xvalues}
                     lines={this.lines}
+                    onChangeMarkers={this.onChangeMarkers}
                 />
             </div>
         );

@@ -5,29 +5,21 @@ import View from '../../components/view';
 
 import Lines from '../../components/lines/lines';
 import SimpleLine from '../../components/lines/simpleline';
-import DotsLine from '../../components/lines/dotsline';
 import VerticalLine from '../../components/lines/verticalline';
 import VerticalBox from '../../components/lines/verticalbox';
 
 import Axes from '../../components/axes/axes';
-import VericalAxis from '../../components/axes/verticalaxis';
-import HorizontalAxis from '../../components/axes/horizontalaxis';
 
 
 import { 
   ASES_FORMAT_INDEX 
-  ,AXES_POSITION_LEFT
-  ,AXES_POSITION_BOTTOM
-  ,AXES_LINE_LINE
-  ,AXES_LINE_DOT_LINE
 } from '../../components/axes/constants';
 
 class MarkerChart extends Component {
   constructor(props){
     super(props);
 
-    const {markerX1, markerX2, xvalues, lines} = props;
-    const data = TestData[0];
+    const {startMarkerX1, startMarkerX2, xvalues, lines} = props;
 
     this.xvalues = xvalues;
     this.lines = lines;
@@ -39,9 +31,16 @@ class MarkerChart extends Component {
     this.ymax = Math.max( ...lines.map( line => Math.max(...line.yvalues) ) );
 
     this.state = {
-      markerX1: markerX1,
-      markerX2: markerX2,
+      markerX1: startMarkerX1,
+      markerX2: startMarkerX2,
     };
+  }
+
+  onChangeMarkers = ({markerX1, markerX2}) => {
+    const { onChangeMarkers } = this.props;
+    if (onChangeMarkers){
+      onChangeMarkers({markerX1, markerX2});
+    }
   }
 
   onDragLeft = ({x, dx}) => {
@@ -49,6 +48,7 @@ class MarkerChart extends Component {
     const newx = x + dx;
     if ( (this.xmin<newx) && (this.xmax>newx) && (newx<markerX2) ){
       this.setState({markerX1: newx});
+      this.onChangeMarkers({markerX1: newx, markerX2});
     }
   }
 
@@ -57,6 +57,7 @@ class MarkerChart extends Component {
     const newx = x + dx;
     if ( (this.xmin<newx) && (this.xmax>newx) && (newx>markerX1) ){
       this.setState({markerX2: newx});
+      this.onChangeMarkers({markerX1, markerX2: newx});
     }
   } 
 
@@ -66,6 +67,7 @@ class MarkerChart extends Component {
     const newx2 = markerX2 + dx;
     if ( (this.xmin<newx1) && (this.xmax>newx2) && (newx1<newx2) ){
       this.setState({markerX1: newx1, markerX2: newx2});
+      this.onChangeMarkers({markerX1: newx1, markerX2: newx2});
     }    
   }
 

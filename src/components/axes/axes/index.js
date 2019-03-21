@@ -9,6 +9,12 @@ class Axes extends Component {
     instances.axes = [];
   } 
 
+  componentDidUpdate(){
+    const { instances } = this.props;
+    instances.view.needUpdate();
+
+  }
+
   calcScale = ({width_px, height_px}) => {
     const { instances, xleft, xright, xstart, ytop, ybottom, ystart } = this.props;
 
@@ -28,17 +34,6 @@ class Axes extends Component {
     instances.linesView.drawAxisLine();
   }
 
-  getXValueFromPosition = ({px}) => {
-  }
-
-  getXPositionFromValue = ({x}) => {
-  }  
-
-  getYValueFromPosition = ({py}) => {
-  }  
-
-  getYPositionFromValue = ({y}) => {
-  }    
 
   render() {
     const { children, instances, xonchart, yonchart, xleft, xright, ytop, ybottom } = this.props;

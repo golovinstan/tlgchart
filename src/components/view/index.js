@@ -17,10 +17,25 @@ class View extends Component {
     super(props);
 
     this.dragging = false;
+    this.updateTimer = null;
   }
 
   componentDidMount(){
     this.fullUpdate();
+  }
+
+  needUpdate = () => {
+    if (!this.updateTimer){
+      this.updateTimer = setTimeout(this.onUpdateTimer, 100);
+    }
+  }
+
+  onUpdateTimer = () => {
+    if (this.updateTimer){
+      clearTimeout(this.updateTimer);
+      this.updateTimer = null;
+      this.fullUpdate();
+    }
   }
 
   fullUpdate = () => {
