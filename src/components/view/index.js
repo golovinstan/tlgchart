@@ -50,11 +50,11 @@ class View extends Component {
     const la = inst.axes.filter( axis => axis.position === AXES_POSITION_LEFT );
     const ra = inst.axes.filter( axis => axis.position === AXES_POSITION_RIGHT );
 
-    const topOffset = ta.reduce( (a, axis) => axis.calcOffset({top: a}) , 0 );
-    const bottomOffset = ba.reduce( (a, axis) => axis.calcOffset({bottom: a}), height );
+    const topOffset = ta.filter( a => a.onchart !== true ).reduce( (a, axis) => axis.calcOffset({top: a}) , 0 );
+    const bottomOffset = ba.filter( a => a.onchart !== true ).reduce( (a, axis) => axis.calcOffset({bottom: a}), height );
 
-    const leftOffset = la.reduce( (a, axis) => axis.calcOffset({left: a}), 0 );
-    const rightOffset = ra.reduce( (a, axis) => axis.calcOffset({right: a}), width );
+    const leftOffset = la.filter( a => a.onchart !== true ).reduce( (a, axis) => axis.calcOffset({left: a}), 0 );
+    const rightOffset = ra.filter( a => a.onchart !== true ).reduce( (a, axis) => axis.calcOffset({right: a}), width );
 
     let top = topOffset;
     let bottom = bottomOffset;    
@@ -63,36 +63,57 @@ class View extends Component {
     inst.linesView.setPosition({ left, right, top, bottom });
 
     top = 0;
-    ta.forEach(axis => {
+    ta.filter( a => a.onchart !== true ).forEach(axis => {
       bottom = top + axis.height;
       axis.setPosition({ left, right, top, bottom });
       top = bottom;
     });
+    ta.filter( a => a.onchart !== false ).forEach(axis => {
+      bottom = top + axis.height;
+      axis.setPosition({ left, right, top, bottom });
+      top = bottom;
+    });    
 
     
     bottom = height;
-    ba.reverse().forEach(axis => {
+    ba.reverse().filter( a => a.onchart !== true ).forEach(axis => {
       top = bottom - axis.height;
       axis.setPosition({ left, right, top, bottom });
       top = bottom;
     });
+    ba.reverse().filter( a => a.onchart !== false ).forEach(axis => {
+      top = bottom - axis.height;
+      axis.setPosition({ left, right, top, bottom });
+      top = bottom;
+    });    
 
     top = topOffset;
     bottom = bottomOffset;    
 
     left = 0;    
-    la.forEach(axis => {
+    la.filter( a => a.onchart !== true ).forEach(axis => {
       right = left + axis.width;
       axis.setPosition({ left, right, top, bottom });
       left = right;
     });
+    la.filter( a => a.onchart !== false ).forEach(axis => {
+      right = left + axis.width;
+      axis.setPosition({ left, right, top, bottom });
+      left = right;
+    });    
+
 
     right = width;
-    ra.forEach(axis => {
+    ra.filter( a => a.onchart !== true ).forEach(axis => {
       left = right - axis.width;
       axis.setPosition({ left, right, top, bottom });
       right = left;
     });
+    ra.filter( a => a.onchart !== false ).forEach(axis => {
+      left = right - axis.width;
+      axis.setPosition({ left, right, top, bottom });
+      right = left;
+    });    
 
     inst.axisView.calcScale({ width_px: (rightOffset-leftOffset), height_px: (bottomOffset-topOffset) });
   }
@@ -119,6 +140,7 @@ class View extends Component {
 
   onMouseDown = (e) => {
     this.dragging = true;
+    this.instances.axisView.onMouseDown(e);
   }
 
   render() {

@@ -10,6 +10,7 @@ class HorizontAxis extends Component {
     this.height = props.height;
     this.lineType = props.lineType;
     this.axisVisible = props.axisVisible;
+    this.onchart = props.onchart;
 
     this.xlabels = [];
     instances.axes.push(this);

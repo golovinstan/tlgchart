@@ -3,6 +3,7 @@ import View from '../../components/view';
 
 import Lines from '../../components/lines/lines';
 import SimpleLine from '../../components/lines/simpleline';
+import VerticalLine from '../../components/lines/verticalline';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
@@ -12,6 +13,7 @@ import {
   ASES_FORMAT_INDEX 
   ,AXES_POSITION_LEFT
   ,AXES_POSITION_BOTTOM
+  ,AXES_POSITION_TOP
   ,AXES_LINE_LINE
   ,AXES_LINE_DOT_LINE
 } from '../../components/axes/constants';
@@ -52,6 +54,7 @@ class DataChart extends Component {
     this.state = {
       markerX1,
       markerX2,
+      marker: this.xvalues[Math.floor(this.xvalues.length/2)]
     };
   }
 
@@ -84,11 +87,51 @@ class DataChart extends Component {
     }    
   }
 
+  getXAxisMarker = ({xleft, xright, xstart, dpi_x}) => {
+    const { marker } = this.state;
+
+    if (!((marker>xleft) && (marker<xright))){
+      return [];
+    }
+
+    const xs = this.xvalues;
+    let x1 = 0;
+    let x2 = 1;
+    let complete = false;
+    while ( (x2<xs.length) && !complete) {
+      if ((xs[x1]<marker) && (xs[x2]>marker)){
+        complete = true;
+      } else {
+        x1=x1+1;
+        x2=x2+1;
+      }
+    }
+
+    return [xs[x1], xs[x2]];
+  }
+
+  getXAxisMarkerLabels = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+    return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >Е</text>  
+  }
+
+  onDragMarker = ({x, dx}) => {
+    this.setState({marker: x+dx});
+  }
+
+  viewOnMouseDown = ({dpi_y, dpi_x, clientX, movementX, xleft}) => {
+    const x = clientX/dpi_x+xleft;
+    this.setState({marker: x});
+  }
+
   render() {
     const { markerX1, markerX2 } = this.props;
+    const { marker } = this.state;
 
     return (
-        <View width={500} height={350}>
+        <View 
+          width={500} 
+          height={350}
+        >
           <Lines>
             {
               this.lines.map( line => {
@@ -102,6 +145,14 @@ class DataChart extends Component {
                 );
               } )
             }
+            <VerticalLine
+              xvalue={marker} 
+              color={'grey'}
+              width={12}
+              offset={6}
+              opacity={0.4}
+              onDrag={this.onDragMarker}
+            />
           </Lines>
           <Axes 
             xleft={markerX1}
@@ -112,18 +163,28 @@ class DataChart extends Component {
             ystart={0}
             xformat={ASES_FORMAT_INDEX}
             yformat={ASES_FORMAT_INDEX}
-            xonchart={false}
-            yonchart={true}
+            onMouseDown={this.viewOnMouseDown}
           >
-
+            <HorizontalAxis 
+              position={AXES_POSITION_TOP} 
+              height={20}
+              lineType={AXES_LINE_DOT_LINE}
+              getAxisLabel={this.getXAxisMarkerLabels}
+              getXLabels={this.getXAxisMarker}
+              debugMode={false}
+              axisWidth={4}
+              axisVisible={false}
+              onchart={true}
+            />            
             <VericalAxis 
               position={AXES_POSITION_LEFT} 
-              width={30} 
+              width={120} 
               lineType={AXES_LINE_LINE}
-              debugMode={true}
+              debugMode={false}
               axisWidth={4}
               axisVisible={true}
-            />  
+              onchart={true}
+            />              
             <HorizontalAxis 
               position={AXES_POSITION_BOTTOM} 
               height={20}
@@ -133,6 +194,7 @@ class DataChart extends Component {
               debugMode={false}
               axisWidth={4}
               axisVisible={false}
+              onchart={false}
             />
 
           </Axes>

@@ -21,6 +21,9 @@ class Axes extends Component {
     const dpi_x = width_px/(xright-xleft);
     const dpi_y = height_px/(ytop-ybottom);
 
+    this.dpi_x = dpi_x;
+    this.dpi_y = dpi_y;
+
     const args = {xleft, xright, xstart, ytop, ybottom, ystart, dpi_x, dpi_y, height_px};
     instances.axes.forEach( axis => axis.calcScale(args) );
     instances.linesView.calcScale({dpi_x, dpi_y, xleft, xright, ytop});
@@ -36,6 +39,13 @@ class Axes extends Component {
       }
     });
     instances.linesView.drawAxisLine({xlength: xkey, ylength: ykey});
+  }
+
+  onMouseDown = (e) => {
+    const { onMouseDown, xleft } = this.props;
+    if (onMouseDown) {
+      onMouseDown({...e, dpi_x: this.dpi_x, dpi_y: this.dpi_y, xleft });
+    }
   }
 
 
