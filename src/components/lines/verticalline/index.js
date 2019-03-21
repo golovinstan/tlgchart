@@ -49,7 +49,7 @@ class VerticalLine extends Component {
     const { xvalue } = this.props;
     const { xvalue: oldx } = prevProps;
 
-    if (oldx != xvalue){
+    if (oldx !== xvalue){
         const dpi_x = this.dpi_x;
         const xleft = this.xleft;
         this.setState({ xvalue_px: (xvalue-xleft)*dpi_x });

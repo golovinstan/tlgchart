@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TestData from '../../containers/testpage/testdata'
 
 import View from '../../components/view';
 

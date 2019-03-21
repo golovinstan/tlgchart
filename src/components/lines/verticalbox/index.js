@@ -47,7 +47,7 @@ class VerticalBox extends Component {
     const { leftvalue, rightvalue } = this.props;
     const { leftvalue: leftold, rightvalue: rightold } = prevProps;
 
-    if ((leftold != leftvalue) || (rightvalue != rightold)){
+    if ((leftold !== leftvalue) || (rightvalue !== rightold)){
         const dpi_x = this.dpi_x;
         const xleft = this.xleft;
         this.setState({ leftvalue_px: (leftvalue-xleft)*dpi_x, rightvalue_px: (rightvalue-xleft)*dpi_x });

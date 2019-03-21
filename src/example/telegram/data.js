@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import TestData from './testdata'
-
 import View from '../../components/view';
 
 import Lines from '../../components/lines/lines';
