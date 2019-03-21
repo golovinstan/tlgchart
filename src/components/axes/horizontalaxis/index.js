@@ -52,10 +52,10 @@ class HorizontAxis extends Component {
 
     let xlabels = [];
     while (step < xright){
-      if ((step >= xleft) && (step <= xright)){
+      if ( (step >= xleft) && (step <= xright)  ){
         xlabels.push(step);
       }
-      step = step + dx;
+      step = step + dx;                 
     }
     return xlabels;
   }

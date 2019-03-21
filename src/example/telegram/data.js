@@ -16,6 +16,22 @@ import {
   ,AXES_LINE_DOT_LINE
 } from '../../components/axes/constants';
 
+const monthNames = [
+  "Jan", 
+  "Feb", 
+  "Mar", 
+  "Apr", 
+  "May", 
+  "Jun",
+  "Jul", 
+  "Aug", 
+  "Sep", 
+  "Oct", 
+  "Nov", 
+  "Dec"
+];
+
+
 class DataChart extends Component {
   constructor(props){
     super(props);
@@ -31,37 +47,40 @@ class DataChart extends Component {
     this.ymin = Math.min( ...lines.map( line => Math.min(...line.yvalues) ) );
     this.ymax = Math.max( ...lines.map( line => Math.max(...line.yvalues) ) );
 
+    this.xlabels = [];
+
     this.state = {
       markerX1,
       markerX2,
     };
   }
 
-  getxAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
-    const d = new Date(x);
-    return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`}</text>
+  getXLabels = ({xleft, xright, xstart, dpi_x}) => {
+    const dx = (xright - xleft)/(5);
+    let step = Math.floor((xstart - xleft)/dx)*dx || xstart;
+
+    let xlabels = [];
+    while (step < xright){
+      if ((step >= (xleft-dx/2)) && (step <= (xright+dx/2))){
+        xlabels.push(step);
+      }
+      step = step + dx;
+    }
+    this.xlabels = xlabels;
+    return xlabels;
   }
 
-  onDragLeft = ({x, dx}) => {
-    const newx = x + dx;
-    if ( (this.xmin<newx) && (this.xmax>newx) ){
-      this.setState({markerX1: newx});
-    }
-  }
+  getXAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+    const d1 = new Date(this.xlabels[0]);
+    const d2 = new Date(this.xlabels[this.xlabels.length-1]);
+    const df = Math.abs(d2 - d1);
+    const dd = new Date(df);
+    const d = new Date(x);    
 
-  onDragRight = ({x, dx}) => {
-    const newx = x + dx;
-    if ( (this.xmin<newx) && (this.xmax>newx) ){
-      this.setState({markerX2: newx});
-    }
-  } 
-
-  onDragBox = ({x, dx}) => {
-    const { markerX1, markerX2 } = this.state;
-    const newx1 = markerX1 + dx;
-    const newx2 = markerX2 + dx;
-    if ( (this.xmin<newx1) && (this.xmax>newx2) ){
-      this.setState({markerX1: newx1, markerX2: newx2});
+    if (dd.getFullYear() > 1970){
+      return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${monthNames[d.getMonth()]} ${d.getFullYear()}`}</text>
+    } else {
+      return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${d.getDate()} ${monthNames[d.getMonth()]}`}</text>      
     }    
   }
 
@@ -101,7 +120,7 @@ class DataChart extends Component {
               position={AXES_POSITION_LEFT} 
               width={30} 
               lineType={AXES_LINE_LINE}
-              debugMode={false}
+              debugMode={true}
               axisWidth={4}
               axisVisible={true}
             />  
@@ -109,7 +128,8 @@ class DataChart extends Component {
               position={AXES_POSITION_BOTTOM} 
               height={20}
               lineType={AXES_LINE_DOT_LINE}
-              getAxisLabel={this.getxAxisLabel}
+              getAxisLabel={this.getXAxisLabel}
+              getXLabels={this.getXLabels}
               debugMode={false}
               axisWidth={4}
               axisVisible={false}

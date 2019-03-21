@@ -62,9 +62,9 @@ class VerticalAxis extends Component {
 
   calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
     const ylabels = this.getYLabels({ytop, ybottom, ystart, dpi_y});    
-
     this.ylabels.length = 0;
     this.ylabels.push(...ylabels);
+    
     const labels = ylabels.map( y => {
       const ypi = height_px - (y-ybottom)*dpi_y;
       return {py: Math.floor(ypi), y};
@@ -73,10 +73,10 @@ class VerticalAxis extends Component {
     this.setState({labels});
   }  
 
-  getAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom}) => {
-    const { getAxisLabel } = this.props;
-    if (getAxisLabel){
-      return getAxisLabel({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom });
+  getYAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom}) => {
+    const { getYAxisLabel } = this.props;
+    if (getYAxisLabel){
+      return getYAxisLabel({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom });
     }
     return <text x="0" y={py-axisWidth} key={key} >{`${Math.floor(y)}`}</text>
   }
@@ -104,7 +104,7 @@ class VerticalAxis extends Component {
       <svg ref={ el => this.svg = el }>
         {debugComponent}
         {
-          labels.map( ({y, py}, i) => this.getAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
+          labels.map( ({y, py}, i) => this.getYAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
         }
       </svg>
     );

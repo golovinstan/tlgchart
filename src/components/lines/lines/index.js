@@ -24,9 +24,9 @@ class Lines extends Component {
     instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}) );
   }
 
-  calcYAxisLine = ({ylabels, lineType, ybottom, dpi_y, key, axisVisible}) => {
+  calcYAxisLine = ({ylabels, lineType, ybottom, dpi_y, key, axisVisible, height_px}) => {
     const labels = ylabels.map( y => {
-      return {ypx: (y-ybottom)*dpi_y, lineType}
+      return {ypx: height_px-(y-ybottom)*dpi_y, lineType}
     });
     this.ylabels[key] = axisVisible?labels:[];
   }
@@ -38,8 +38,10 @@ class Lines extends Component {
     this.xlabels[key] = axisVisible?labels:[];
   }
 
-  drawAxisLine = () => {
+  drawAxisLine = ({xlength, ylength}) => {
     const { axisDrawCount } = this.state;
+    this.ylabels.length = ylength;
+    this.xlabels.length = xlength;
     this.setState({axisDrawCount: (axisDrawCount+1)});
   } 
 
@@ -61,7 +63,7 @@ class Lines extends Component {
               y1={ypx} 
               x2="100%" 
               y2={ypx} 
-              stroke="black" 
+              stroke="gray" 
               strokeDasharray={lineType.strokeDasharray} 
               fillOpacity={lineType.fillOpacity} 
               strokeOpacity={lineType.strokeOpacity} 
