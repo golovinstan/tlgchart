@@ -58,7 +58,7 @@ class VerticalLine extends Component {
 
   render() {
     const { xvalue_px } = this.state;
-    const { color, width } = this.props;
+    const { color, width, opacity, offset } = this.props;
 
     if (!xvalue_px){
       return null;
@@ -66,12 +66,13 @@ class VerticalLine extends Component {
 
     return (
         <line 
-            x1={xvalue_px} 
+            x1={xvalue_px+offset} 
             y1={0} 
-            x2={xvalue_px} 
+            x2={xvalue_px+offset} 
             y2={'100%'} 
             stroke={color}
             strokeWidth={width}
+            strokeOpacity={opacity}
 
             onMouseLeave={ this.onMouseLeave  }
             onMouseDown={ this.onMouseDown }
