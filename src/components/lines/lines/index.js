@@ -8,6 +8,8 @@ class Lines extends Component {
     this.xlabels = [];
     this.state = { axisDrawCount: 0 };
 
+    this.childCount = props.children.length;
+
     instances.linesView = this;
     instances.lines = [];
   }
@@ -44,6 +46,16 @@ class Lines extends Component {
     this.xlabels.length = xlength;
     this.setState({axisDrawCount: (axisDrawCount+1)});
   } 
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { instances } = this.props;
+
+    if (this.childCount !== this.props.children.length) {
+      this.childCount = this.props.children.length;
+      instances.view.needUpdate();
+    }
+
+  }
 
   render() {
     const { children, instances } = this.props;

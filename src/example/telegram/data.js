@@ -64,17 +64,16 @@ class DataChart extends Component {
 
     this.xlabels = [];
 
-    const marker = this.xvalues[Math.floor(this.xvalues.length/2)];
-    this.xMarkersIndex = this.getMarkerBound({marker});
-    const [x1,x2] = this.xMarkersIndex;
-
     this.state = {
       markerX1,
       markerX2,
-      marker,
-      dotLines: this.getMarkerBoundDotsLines({x1,x2})
+      dotLines: []
     };
+  }
 
+  componentDidMount(){
+    const marker = this.xvalues[Math.floor(this.xvalues.length/2)];
+    this.updateMarker({marker})
   }
 
   getXLabels = ({xleft, xright, xstart, dpi_x}) => {
@@ -112,7 +111,7 @@ class DataChart extends Component {
     let x2 = 1;
     let complete = false;
     while ( (x2<xs.length) && !complete) {
-      if ((xs[x1]<marker) && (xs[x2]>marker)){
+      if ((xs[x1]<=marker) && (xs[x2]>=marker)){
         complete = true;
       } else {
         x1=x1+1;
@@ -166,27 +165,29 @@ class DataChart extends Component {
     }
   }
 
+  updateMarker = ({marker}) => {
+    const [x1,x2] = this.getMarkerBound({marker});
+    this.xMarkersIndex = [x1,x2];    
+    const dotLines = this.getMarkerBoundDotsLines({x1,x2});
+    
+    this.setState({marker, dotLines});    
+  }
+
 
   onDragMarker = ({x, dx}) => {
     const marker = x+dx;
-
-    const [x1,x2] = this.getMarkerBound({marker});
-    this.xMarkersIndex = [x1,x2];
-    const dotLines = this.getMarkerBoundDotsLines({x1,x2});
-    
-    this.setState({marker, dotLines});
+    this.updateMarker({marker});
   }
 
   viewOnMouseDown = ({dpi_y, dpi_x, clientX, movementX, xleft}) => {
     const x = clientX/dpi_x+xleft;
-    this.setState({marker: x});
+    this.updateMarker({marker: x});
   }
 
   render() {
     const { markerX1, markerX2 } = this.props;
     const { marker, dotLines } = this.state;
 
-    const [x1,x2] = this.xMarkersIndex;
 
     return (
         <View 
@@ -208,6 +209,7 @@ class DataChart extends Component {
             }
             {
               dotLines.map( line => {
+                const [x1,x2] = this.xMarkersIndex;
                 return (
                   <DotsLine
                     xvalues={[this.xvalues[x1], this.xvalues[x2]]}
@@ -223,7 +225,7 @@ class DataChart extends Component {
               xvalue={marker} 
               color={'grey'}
               width={12}
-              offset={6}
+              offset={-6}
               opacity={0.4}
               onDrag={this.onDragMarker}
             />
