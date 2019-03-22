@@ -4,10 +4,13 @@ import View from '../../components/view';
 import Lines from '../../components/lines/lines';
 import SimpleLine from '../../components/lines/simpleline';
 import VerticalLine from '../../components/lines/verticalline';
+import DotsLine from '../../components/lines/dotsline';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
 import HorizontalAxis from '../../components/axes/horizontalaxis';
+import LeftMarkerLabel from './leftlabelmarker';
+import RightMarkerLabel from './rightlabelmarker';
 
 import { 
   ASES_FORMAT_INDEX 
@@ -33,6 +36,16 @@ const monthNames = [
   "Dec"
 ];
 
+const weekday = [
+"Sun",
+"Mon",
+"Tue",
+"Wed",
+"Thu",
+"Fri",
+"Sat"
+];
+
 
 class DataChart extends Component {
   constructor(props){
@@ -51,11 +64,17 @@ class DataChart extends Component {
 
     this.xlabels = [];
 
+    const marker = this.xvalues[Math.floor(this.xvalues.length/2)];
+    this.xMarkersIndex = this.getMarkerBound({marker});
+    const [x1,x2] = this.xMarkersIndex;
+
     this.state = {
       markerX1,
       markerX2,
-      marker: this.xvalues[Math.floor(this.xvalues.length/2)]
+      marker,
+      dotLines: this.getMarkerBoundDotsLines({x1,x2})
     };
+
   }
 
   getXLabels = ({xleft, xright, xstart, dpi_x}) => {
@@ -87,13 +106,7 @@ class DataChart extends Component {
     }    
   }
 
-  getXAxisMarker = ({xleft, xright, xstart, dpi_x}) => {
-    const { marker } = this.state;
-
-    if (!((marker>xleft) && (marker<xright))){
-      return [];
-    }
-
+  getMarkerBound = ({marker}) => {
     const xs = this.xvalues;
     let x1 = 0;
     let x2 = 1;
@@ -107,15 +120,61 @@ class DataChart extends Component {
       }
     }
 
-    return [xs[x1], xs[x2]];
+    return [x1, x2]; 
+  }
+
+  getMarkerBoundDotsLines = ({x1,x2}) => {
+    const { lines } = this.props;
+    return lines.map( line => ({yvalues: [line.yvalues[x1], line.yvalues[x2]], color: line.color }));
+  }
+
+  getXAxisMarker = ({xleft, xright, xstart, dpi_x}) => {
+    const { marker } = this.state;
+
+    if (!((marker>xleft) && (marker<xright))){
+      return [];
+    }
+
+    const [x1,x2] = this.getMarkerBound({marker: marker});
+    this.xMarkersIndex = [x1,x2];
+    return [this.xvalues[x1], this.xvalues[x2]];
   }
 
   getXAxisMarkerLabels = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
-    return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >Е</text>  
+    if (!x) { return null; };
+
+    const xs = this.xvalues;
+    const [x1,x2] = this.xMarkersIndex;
+
+    const dt = new Date(x);
+    const xlabel = `${weekday[dt.getDay()]}, ${monthNames[dt.getMonth()]} ${dt.getDate()} `;
+
+    let labels;
+    if (x===xs[x1]){
+      labels = this.lines.map( line => ({name: line.name, value: line.yvalues[x1], color: line.color}) );
+
+      return (
+        <LeftMarkerLabel key={key} px={px} py={0} labels={labels} xlabel={xlabel} />
+      );
+    } else {
+      labels = this.lines.map( line => ({name: line.name, value: line.yvalues[x2], color: line.color}) );
+
+      return (
+        <RightMarkerLabel key={key} px={px} py={0} labels={labels} xlabel={xlabel}/>
+      );      
+      
+    }
   }
 
+
   onDragMarker = ({x, dx}) => {
-    this.setState({marker: x+dx});
+    const marker = x+dx;
+
+    const [x1,x2] = this.getMarkerBound({marker});
+    this.xMarkersIndex = [x1,x2];
+    const dotLines = this.getMarkerBoundDotsLines({x1,x2});
+    
+    this.setState({marker, dotLines});
   }
 
   viewOnMouseDown = ({dpi_y, dpi_x, clientX, movementX, xleft}) => {
@@ -125,7 +184,9 @@ class DataChart extends Component {
 
   render() {
     const { markerX1, markerX2 } = this.props;
-    const { marker } = this.state;
+    const { marker, dotLines } = this.state;
+
+    const [x1,x2] = this.xMarkersIndex;
 
     return (
         <View 
@@ -144,6 +205,19 @@ class DataChart extends Component {
                   />                  
                 );
               } )
+            }
+            {
+              dotLines.map( line => {
+                return (
+                  <DotsLine
+                    xvalues={[this.xvalues[x1], this.xvalues[x2]]}
+                    yvalues={line.yvalues}
+                    color={line.color} 
+                    width={2}                  
+                    radius={4}
+                  />
+                );
+              })
             }
             <VerticalLine
               xvalue={marker} 
@@ -167,7 +241,7 @@ class DataChart extends Component {
           >
             <HorizontalAxis 
               position={AXES_POSITION_TOP} 
-              height={20}
+              height={120}
               lineType={AXES_LINE_DOT_LINE}
               getAxisLabel={this.getXAxisMarkerLabels}
               getXLabels={this.getXAxisMarker}
