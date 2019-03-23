@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import MarkerChart from './marker';
 import DataChart from './data';
+import ChartLabel from './chartlabel';
+import ChartCaption from './chartcaption';
+
 
 const getXValues = ({ columns, types }) => {
     const xname = Object.entries(types).find( ([name,value]) => value === "x")[0];        
@@ -31,9 +34,13 @@ class Chart extends Component {
         this.startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/3)];
         this.startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/3)*2];
     
+        const labels = this.lines.map( line => ({name: line.name, color: line.color}) );
+
         this.state = {
           markerX1: this.startMarkerX1,
           markerX2: this.startMarkerX2,
+          labels: [...labels, {name: 'Night mode', color: 'black'}],
+          selectedLabels: [...labels]
         };
     }
 
@@ -41,11 +48,30 @@ class Chart extends Component {
         this.setState({markerX1, markerX2});
     }
 
+    onchangeSelected = ({name, selected}) => {
+        const { selectedLabels, labels } = this.state;
+        if (selected !== true){
+            const new_sl = selectedLabels.filter( l => l.name !== name );
+            this.setState({selectedLabels: new_sl});
+        }
+        if (selected !== false){
+            const new_sl = labels.find( lb => lb.name === name );
+            this.setState({selectedLabels: [...selectedLabels, new_sl]});
+        }        
+    }
+
 
     render() {
-        const { markerX1, markerX2 } = this.state;
+        const { markerX1, markerX2, labels, selectedLabels } = this.state;
+        const { caption } = this.props;
+
         return (
             <div>
+                <ChartCaption
+                    width={500}
+                    height={50}
+                    caption={caption}
+                />
                 <DataChart
                     markerX1={markerX1}
                     markerX2={markerX2}
@@ -58,6 +84,13 @@ class Chart extends Component {
                     xvalues={this.xvalues}
                     lines={this.lines}
                     onChangeMarkers={this.onChangeMarkers}
+                />
+                <ChartLabel
+                    width={500}
+                    height={50}
+                    labels={labels}
+                    selectedLabels={selectedLabels}
+                    onSelect={this.onchangeSelected}
                 />
             </div>
         );

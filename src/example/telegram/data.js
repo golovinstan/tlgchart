@@ -37,13 +37,13 @@ const monthNames = [
 ];
 
 const weekday = [
-"Sun",
-"Mon",
-"Tue",
-"Wed",
-"Thu",
-"Fri",
-"Sat"
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat"
 ];
 
 
@@ -272,7 +272,6 @@ class DataChart extends Component {
               axisVisible={false}
               onchart={false}
             />
-
           </Axes>
         </View>
     );
