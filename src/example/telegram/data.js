@@ -87,21 +87,15 @@ class DataChart extends Component {
   animMinMax = ({ymin, ymax, xmin, xmax}) => {
     const {
       ymin: yminPrev, 
-      ymax: ymaxPrev, 
-      xmin: xminPrev, 
-      xmax: xmaxPrev,      
+      ymax: ymaxPrev,     
     } = this.state;
 
     const dymin = (yminPrev - ymin)/10;
     const dymax = (ymaxPrev - ymax)/10;
-    // const dxmin = (xminPrev - xmin)/10;
-    // const dxmax = (xmaxPrev - xmax)/10;
 
     const anim = [1,2,3,4,5,6,7,8,9].map( ind => ({
       ymin: yminPrev-dymin*ind,
       ymax: ymaxPrev-dymax*ind, 
-      // xmin: xminPrev-dxmin*ind,
-      // xmax: xmaxPrev-dxmax*ind
     }) );
     anim.push({ymin, ymax, xmin, xmax});
 
@@ -117,9 +111,13 @@ class DataChart extends Component {
 
     const visLines = lines.filter( line => selected.map(sl=>sl.name).includes(line.name) )
 
+    let ymin = 0;// Math.min( ...visLines.map( line => Math.min(...inds.map( i => line.yvalues[i] )) ) );
+    let ymax = Math.max( ...visLines.map( line => Math.max(...inds.map( i => line.yvalues[i] )) ) );
 
-    const ymin = Math.min( ...visLines.map( line => Math.min(...inds.map( i => line.yvalues[i] )) ) );
-    const ymax = Math.max( ...visLines.map( line => Math.max(...inds.map( i => line.yvalues[i] )) ) );
+    
+    let dy = parseFloat( ((ymax - ymin)/5).toPrecision(1) );
+    ymin = parseFloat(Math.floor(ymin/dy)*dy);
+    ymax = parseFloat(Math.floor(ymax/dy+1)*dy);
 
     return {ymin, ymax, xmin, xmax};
   }  

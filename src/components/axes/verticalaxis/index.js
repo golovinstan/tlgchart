@@ -1,10 +1,54 @@
 import React, { Component } from 'react';
 
+
+
+class DisableLabel extends Component {
+  state = { complete: false }
+
+  componentDidUpdate(prevProps, prevState, snapshot){
+    if (prevProps.old_py !== this.props.old_py){
+      this.setState({complete: false})
+    }
+  }
+
+  render(){
+    const { getYAxisLabel, y, new_py, old_py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom, color } = this.props;
+    const { complete } = this.state;
+
+    if (complete === true){
+      return null;
+    }
+
+    setTimeout(() => this.setState({complete: true}), 400);
+
+    return (
+      <g key={key} >
+
+        {
+          getYAxisLabel({y: y, py: new_py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom, color})
+        }
+
+        <animateTransform attributeName="transform"
+          type="translate"
+          from={`0 `}
+          to={`0 ${(old_py-new_py)*10}`}
+          begin={`0.0s`}
+          dur="0.4s"
+          repeatCount="indefinite"
+        />
+
+    </g>
+    );
+  }
+}
+
+
+
 class VerticalAxis extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
-    this.state={labels: []};
+    this.state={labels: [], ylabels_old: []};
 
     this.position = props.position;
     this.width = props.width;
@@ -13,6 +57,10 @@ class VerticalAxis extends Component {
     this.onchart = props.onchart;
     
     this.ylabels = [];
+    this.oldlabels= [];
+    this.crntlabels= [];
+
+    this.new_render=false;
     instances.axes.push(this);
   }
 
@@ -62,7 +110,14 @@ class VerticalAxis extends Component {
   }
 
   calcScale = ({ytop, ybottom, ystart, dpi_y, height_px}) => {
+    const { labels: labels_old } = this.state;
     const ylabels = this.getYLabels({ytop, ybottom, ystart, dpi_y});    
+
+    const ylabels_old = labels_old.map ( ({y}) => {
+      const ypi = height_px - (y-ybottom)*dpi_y;
+      return {py: Math.floor(ypi), y};      
+    } );
+
     this.ylabels.length = 0;
     this.ylabels.push(...ylabels);
     
@@ -71,7 +126,7 @@ class VerticalAxis extends Component {
       return {py: Math.floor(ypi), y};
     } );
 
-    this.setState({labels});
+    this.setState({labels, ylabels_old});
   }  
 
   getYAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom, color}) => {
@@ -84,7 +139,7 @@ class VerticalAxis extends Component {
 
   render() {
     const { width, axisWidth, ytop, ybottom, debugMode, color } = this.props;
-    const { labels } = this.state;
+    const { labels, ylabels_old } = this.state;
 
     let labelHeight = 0;
     if (labels.length>1){
@@ -101,12 +156,59 @@ class VerticalAxis extends Component {
       debugComponent = (<path strokeWidth={axisWidth} stroke="black" d={labelPath} />);
     }
 
+
+
+    const ind = [];
+    for ( let i=0; i<Math.min(ylabels_old.length, labels.length); i++){
+      ind.push(i);
+    }
+
+
     return (
       <svg ref={ el => this.svg = el }>
         {debugComponent}
         {
-          labels.map( ({y, py}, i) => this.getYAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom, color})  )
+          ind.map( i => {
+            const oldl = ylabels_old[i];
+            const newl = labels[i];
+
+            return (<DisableLabel
+              getYAxisLabel={this.getYAxisLabel}
+              y={oldl.y}
+              new_py={newl.py}
+              old_py={oldl.py}
+              labelWidth={width}
+              labelHeight={labelHeight}
+              key={i}
+              axisWidth={axisWidth}
+              ytop={ytop}
+              ybottom={ybottom}
+              color={color}
+            />);
+
+            return (
+              <g key={i} >
+
+                {
+                  this.getYAxisLabel({y: oldl.y, py: newl.py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom, color})
+                }
+
+                <animateTransform attributeName="transform"
+                  type="translate"
+                  from={`0 `}
+                  to={`0 ${newl.py-oldl.py}`}
+                  begin={`0.00s`}
+                  dur="0.2s"
+                  repeatCount="indefinite"
+                />
+
+              </g>
+            )
+          })
         }
+        {
+          labels.map( ({y, py}, i) => this.getYAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom, color})  )
+        }      
       </svg>
     );
   }
