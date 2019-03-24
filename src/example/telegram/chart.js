@@ -4,7 +4,7 @@ import DataChart from './data';
 import ChartLabel from './chartlabel';
 import ChartCaption from './chartcaption';
 
-import { COLOR_DEFAULT } from '../../components/misc/color';
+import { COLOR_DEFAULT, COLOR_NIGHT } from '../../components/misc/color';
 
 
 const getXValues = ({ columns, types }) => {
@@ -21,6 +21,8 @@ const getLines = ({ columns, types, names: linesName, colors: linesColors }) => 
     return ent_names.map( (e,i) => ({ yvalues: yvalues[i], name: names[i], color: colors[i] }) );
 }
 
+const wmode = {name: 'White mode', color: 'white'};
+const dmode = {name: 'Night mode', color: 'black'};
 
 class Chart extends Component {
     constructor(props){
@@ -38,11 +40,11 @@ class Chart extends Component {
     
         const labels = this.lines.map( line => ({name: line.name, color: line.color}) );
 
-        const wmode = {name: 'White mode', color: 'red'}
+
         this.state = {
           markerX1: this.startMarkerX1,
           markerX2: this.startMarkerX2,
-          labels: [...labels, {name: 'Night mode', color: 'red'}, wmode],
+          labels: [...labels, dmode, wmode],
           selectedLabels: [...labels, wmode]
         };
     }
@@ -63,12 +65,25 @@ class Chart extends Component {
         }
         const wmode = labels[labels.length-1];
         const nmode = labels[labels.length-2];
-        if ( (name === wmode.name) && selected){
-            new_sl = new_sl.filter( sl => sl.name !== nmode.name )
+
+        if (selected === true){
+            if ( (name === wmode.name)){
+                new_sl = new_sl.filter( sl => sl.name !== nmode.name )
+            }
+            if ( (name === nmode.name)){
+                new_sl = new_sl.filter( sl => sl.name !== wmode.name )
+            }   
         }
-        if ( (name === nmode.name) && selected){
-            new_sl = new_sl.filter( sl => sl.name !== wmode.name )
+
+        if (selected === false){
+            if ( (name === nmode.name)){
+                new_sl = [...new_sl, wmode];
+            }
+            if ( (name === wmode.name)){
+                new_sl = [...new_sl, nmode];
+            }   
         }        
+     
         this.setState({selectedLabels: new_sl});
     }
 
@@ -77,13 +92,20 @@ class Chart extends Component {
         const { markerX1, markerX2, labels, selectedLabels } = this.state;
         const { caption } = this.props;
 
+        let color;
+        if (selectedLabels.includes(wmode)) {
+            color = COLOR_DEFAULT;
+        } else {
+            color = COLOR_NIGHT;
+        }
+
         return (
             <div>
                 <ChartCaption
                     width={"100%"}
                     height={50}
                     caption={caption}
-                    color={COLOR_DEFAULT}
+                    color={color}
                 />
                 <DataChart
                     markerX1={markerX1}
@@ -91,7 +113,7 @@ class Chart extends Component {
                     xvalues={this.xvalues}
                     lines={this.lines}
                     selected={selectedLabels}
-                    color={COLOR_DEFAULT}
+                    color={color}
                 />
                 <MarkerChart
                     startMarkerX1={this.startMarkerX1}
@@ -101,7 +123,7 @@ class Chart extends Component {
                     onChangeMarkers={this.onChangeMarkers}
                     selected={selectedLabels}
                     backgroundcolor={'black'}
-                    color={COLOR_DEFAULT}
+                    color={color}
                 />
                 <ChartLabel
                     width={"100%"}
@@ -109,7 +131,7 @@ class Chart extends Component {
                     labels={labels}
                     selectedLabels={selectedLabels}
                     onSelect={this.onchangeSelected}
-                    color={COLOR_DEFAULT}
+                    color={color}
                 />
             </div>
         );
