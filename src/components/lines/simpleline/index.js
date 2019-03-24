@@ -34,7 +34,11 @@ class SimpleLine extends Component {
 
   render() {
     const { xvalues_px, yvalues_px } = this.state;
-    const { color, width } = this.props;
+    const { color, width, visible } = this.props;
+
+    if (visible !== true){
+      return null;
+    }
 
     if (!xvalues_px || !yvalues_px || (xvalues_px.length !== yvalues_px.length) ){
       return null;

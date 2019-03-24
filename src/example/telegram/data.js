@@ -124,7 +124,7 @@ class DataChart extends Component {
 
   getMarkerBoundDotsLines = ({x1,x2}) => {
     const { lines } = this.props;
-    return lines.map( line => ({yvalues: [line.yvalues[x1], line.yvalues[x2]], color: line.color }));
+    return lines.map( line => ({yvalues: [line.yvalues[x1], line.yvalues[x2]], color: line.color, name: line.name }));
   }
 
   getXAxisMarker = ({xleft, xright, xstart, dpi_x}) => {
@@ -185,9 +185,8 @@ class DataChart extends Component {
   }
 
   render() {
-    const { markerX1, markerX2 } = this.props;
+    const { markerX1, markerX2, selected } = this.props;
     const { marker, dotLines } = this.state;
-
 
     return (
         <View 
@@ -203,6 +202,7 @@ class DataChart extends Component {
                     yvalues={line.yvalues}
                     color={line.color}
                     width={4}
+                    visible={selected.map(sl=>sl.name).includes(line.name)}
                   />                  
                 );
               } )
@@ -217,6 +217,7 @@ class DataChart extends Component {
                     color={line.color} 
                     width={2}                  
                     radius={4}
+                    visible={selected.map(sl=>sl.name).includes(line.name)}
                   />
                 );
               })

@@ -50,12 +50,13 @@ class Chart extends Component {
 
     onchangeSelected = ({name, selected}) => {
         const { selectedLabels, labels } = this.state;
+        let new_sl;
         if (selected !== true){
-            const new_sl = selectedLabels.filter( l => l.name !== name );
+            new_sl = selectedLabels.filter( l => l.name !== name );
             this.setState({selectedLabels: new_sl});
         }
         if (selected !== false){
-            const new_sl = labels.find( lb => lb.name === name );
+            new_sl = labels.find( lb => lb.name === name );
             this.setState({selectedLabels: [...selectedLabels, new_sl]});
         }        
     }
@@ -76,7 +77,8 @@ class Chart extends Component {
                     markerX1={markerX1}
                     markerX2={markerX2}
                     xvalues={this.xvalues}
-                    lines={this.lines}                    
+                    lines={this.lines}
+                    selected={selectedLabels}
                 />
                 <MarkerChart
                     startMarkerX1={this.startMarkerX1}
@@ -84,6 +86,7 @@ class Chart extends Component {
                     xvalues={this.xvalues}
                     lines={this.lines}
                     onChangeMarkers={this.onChangeMarkers}
+                    selected={selectedLabels}
                 />
                 <ChartLabel
                     width={500}

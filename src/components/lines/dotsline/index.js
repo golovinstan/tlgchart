@@ -14,7 +14,7 @@ class DotsLine extends Component {
   }
 
   calcPath = ({dpi_x, dpi_y, xleft, xright, ytop}) => {
-    const { xvalues, yvalues } = this.props;
+    const { xvalues, yvalues } = this.props;   
 
     const indxs = xvalues
     .map( (x,i) => ({x,i}) )
@@ -34,7 +34,11 @@ class DotsLine extends Component {
 
   render() {
     const { xvalues_px, yvalues_px } = this.state;
-    const { color, width, radius } = this.props;
+    const { color, width, radius, visible } = this.props;
+
+    if (visible !== true){
+      return null;
+    }     
 
     if (!xvalues_px || !yvalues_px || (xvalues_px.length !== yvalues_px.length) ){
       return null;
