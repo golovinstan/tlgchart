@@ -129,7 +129,7 @@ class MarkerChart extends Component {
     const { selected } = this.props;
 
     return (
-        <View width={500} height={50}>
+        <View width={"100%"} height={50}>
           <Lines>
             {
               this.lines.map( line => {

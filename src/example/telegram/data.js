@@ -254,7 +254,7 @@ class DataChart extends Component {
 
     return (
         <View 
-          width={500} 
+          width={"100%"} 
           height={350}
         >
           <Lines>

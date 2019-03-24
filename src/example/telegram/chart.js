@@ -69,7 +69,7 @@ class Chart extends Component {
         return (
             <div>
                 <ChartCaption
-                    width={500}
+                    width={"100%"}
                     height={50}
                     caption={caption}
                 />
@@ -89,7 +89,7 @@ class Chart extends Component {
                     selected={selectedLabels}
                 />
                 <ChartLabel
-                    width={500}
+                    width={"100%"}
                     height={50}
                     labels={labels}
                     selectedLabels={selectedLabels}
