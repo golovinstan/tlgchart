@@ -94,14 +94,14 @@ class DataChart extends Component {
 
     const dymin = (yminPrev - ymin)/10;
     const dymax = (ymaxPrev - ymax)/10;
-    const dxmin = (xminPrev - xmin)/10;
-    const dxmax = (xmaxPrev - xmax)/10;
+    // const dxmin = (xminPrev - xmin)/10;
+    // const dxmax = (xmaxPrev - xmax)/10;
 
     const anim = [1,2,3,4,5,6,7,8,9].map( ind => ({
       ymin: yminPrev-dymin*ind,
       ymax: ymaxPrev-dymax*ind, 
-      xmin: xminPrev-dxmin*ind,
-      xmax: xmaxPrev-dxmax*ind
+      // xmin: xminPrev-dxmin*ind,
+      // xmax: xmaxPrev-dxmax*ind
     }) );
     anim.push({ymin, ymax, xmin, xmax});
 
@@ -158,7 +158,7 @@ class DataChart extends Component {
     return xlabels;
   }
 
-  getXAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+  getXAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright, color }) => {
     const d1 = new Date(this.xlabels[0]);
     const d2 = new Date(this.xlabels[this.xlabels.length-1]);
     const df = Math.abs(d2 - d1);
@@ -166,9 +166,9 @@ class DataChart extends Component {
     const d = new Date(x);    
 
     if (dd.getFullYear() > 1970){
-      return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${monthNames[d.getMonth()]} ${d.getFullYear()}`}</text>
+      return <text x={px+axisWidth} y={labelHeight/2+5} key={key} fill={color.text} >{`${monthNames[d.getMonth()]} ${d.getFullYear()}`}</text>
     } else {
-      return <text x={px+axisWidth} y={labelHeight/2+5} key={key} >{`${d.getDate()} ${monthNames[d.getMonth()]}`}</text>      
+      return <text x={px+axisWidth} y={labelHeight/2+5} key={key} fill={color.text} >{`${d.getDate()} ${monthNames[d.getMonth()]}`}</text>      
     }    
   }
 
@@ -208,6 +208,7 @@ class DataChart extends Component {
 
   getXAxisMarkerLabels = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
     if (!x) { return null; };
+    const { color } = this.props;
 
     const xs = this.xvalues;
     const [x1,x2] = this.xMarkersIndex;
@@ -220,13 +221,13 @@ class DataChart extends Component {
       labels = this.lines.map( line => ({name: line.name, value: line.yvalues[x1], color: line.color}) );
 
       return (
-        <LeftMarkerLabel key={key} px={px} py={0} labels={labels} xlabel={xlabel} />
+        <LeftMarkerLabel key={key} px={px} py={0} labels={labels} xlabel={xlabel} color={color} />
       );
     } else {
       labels = this.lines.map( line => ({name: line.name, value: line.yvalues[x2], color: line.color}) );
 
       return (
-        <RightMarkerLabel key={key} px={px} py={0} labels={labels} xlabel={xlabel}/>
+        <RightMarkerLabel key={key} px={px} py={0} labels={labels} xlabel={xlabel} color={color}/>
       );      
       
     }
@@ -320,6 +321,7 @@ class DataChart extends Component {
               axisWidth={4}
               axisVisible={false}
               onchart={true}
+              color={color}
             />            
             <VericalAxis 
               position={AXES_POSITION_LEFT} 
@@ -329,6 +331,7 @@ class DataChart extends Component {
               axisWidth={4}
               axisVisible={true}
               onchart={true}
+              color={color}
             />              
             <HorizontalAxis 
               position={AXES_POSITION_BOTTOM} 
@@ -340,6 +343,7 @@ class DataChart extends Component {
               axisWidth={4}
               axisVisible={false}
               onchart={false}
+              color={color}
             />
           </Axes>
         </View>

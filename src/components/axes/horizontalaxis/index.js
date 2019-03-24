@@ -74,16 +74,16 @@ class HorizontAxis extends Component {
     this.setState({labels});
   } 
 
-  getAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+  getAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright, color }) => {
     const { getAxisLabel } = this.props;
     if (getAxisLabel){
-      return getAxisLabel({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright });
+      return getAxisLabel({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright, color });
     }    
-    return <text x={px} y={labelHeight/2} key={key} >{`${Math.floor(x)}`}</text>
+    return <text x={px} y={labelHeight/2} key={key} fill={color.text} >{`${Math.floor(x)}`}</text>
   }
 
   render() {
-    const { height, axisWidth, xleft, xright, debugMode } = this.props;
+    const { height, axisWidth, xleft, xright, debugMode, color } = this.props;
     const { labels } = this.state;
 
     let labelWidth = 0;
@@ -106,7 +106,7 @@ class HorizontAxis extends Component {
       <svg ref={ el => this.svg = el }>
         {debugComponent}
         {
-          labels.map( ({x, px}, i) => this.getAxisLabel({x, px, labelHeight: height, labelWidth, key: i, axisWidth, xleft, xright})  )
+          labels.map( ({x, px}, i) => this.getAxisLabel({x, px, labelHeight: height, labelWidth, key: i, axisWidth, xleft, xright, color})  )
         }        
       </svg>
     );

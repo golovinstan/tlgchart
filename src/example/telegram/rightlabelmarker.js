@@ -16,7 +16,7 @@ class RightMarkerLabel extends Component {
 
 
     render() {
-        const {key, labels, px, xlabel} = this.props;
+        const {key, labels, px, xlabel, color} = this.props;
 
         return (
             <g
@@ -27,6 +27,7 @@ class RightMarkerLabel extends Component {
                     y={0} 
                     key={0}
                     ref={ el => this.onMountText(el, px, 0) }
+                    style={{'fill': `${color.text}`}}
                     
                 >
                     {xlabel}

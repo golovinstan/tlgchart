@@ -73,6 +73,7 @@ class VerticalLine extends Component {
             stroke={color}
             strokeWidth={width}
             strokeOpacity={opacity}
+            color={color}
 
             onMouseLeave={ this.onMouseLeave  }
             onMouseDown={ this.onMouseDown }

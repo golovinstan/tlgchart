@@ -74,16 +74,16 @@ class VerticalAxis extends Component {
     this.setState({labels});
   }  
 
-  getYAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom}) => {
+  getYAxisLabel = ({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom, color}) => {
     const { getYAxisLabel } = this.props;
     if (getYAxisLabel){
       return getYAxisLabel({y, py, labelWidth, labelHeight, key, axisWidth, ytop, ybottom });
     }
-    return <text x="0" y={py-axisWidth} key={key} >{`${Math.floor(y)}`}</text>
+    return <text x="0" y={py-axisWidth} key={key} style={{'fill': `${color.text}`}} >{`${Math.floor(y)}`}</text>
   }
 
   render() {
-    const { width, axisWidth, ytop, ybottom, debugMode } = this.props;
+    const { width, axisWidth, ytop, ybottom, debugMode, color } = this.props;
     const { labels } = this.state;
 
     let labelHeight = 0;
@@ -105,7 +105,7 @@ class VerticalAxis extends Component {
       <svg ref={ el => this.svg = el }>
         {debugComponent}
         {
-          labels.map( ({y, py}, i) => this.getYAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom})  )
+          labels.map( ({y, py}, i) => this.getYAxisLabel({y, py, labelWidth: width, labelHeight, key: i, axisWidth, ytop, ybottom, color})  )
         }
       </svg>
     );
