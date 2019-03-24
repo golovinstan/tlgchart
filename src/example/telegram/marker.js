@@ -64,6 +64,13 @@ class MarkerChart extends Component {
     this.anim.push(...anim);
   }
 
+  componentDidMount(){
+    const {xvalues, lines, selected} = this.props;
+    const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected});
+
+    this.animMinMax({ymin, ymax, xmin, xmax})
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot){
     const {xvalues, lines, selected} = this.props;
     const {selected: selectedPrev} = prevProps;

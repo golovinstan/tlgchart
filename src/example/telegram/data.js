@@ -6,6 +6,9 @@ import SimpleLine from '../../components/lines/simpleline';
 import VerticalLine from '../../components/lines/verticalline';
 import DotsLine from '../../components/lines/dotsline';
 
+import BackgroundColor from '../../components/misc/background';
+
+
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
 import HorizontalAxis from '../../components/axes/horizontalaxis';
@@ -249,7 +252,7 @@ class DataChart extends Component {
   }
 
   render() {
-    const { markerX1, markerX2, selected } = this.props;
+    const { markerX1, markerX2, selected, backgroundcolor } = this.props;
     const { marker, dotLines, xmin, xmax, ymin, ymax } = this.state;
 
     return (

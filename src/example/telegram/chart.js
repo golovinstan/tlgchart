@@ -87,6 +87,7 @@ class Chart extends Component {
                     lines={this.lines}
                     onChangeMarkers={this.onChangeMarkers}
                     selected={selectedLabels}
+                    backgroundcolor={'black'}
                 />
                 <ChartLabel
                     width={"100%"}

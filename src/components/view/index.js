@@ -21,13 +21,13 @@ class View extends Component {
   }
 
   updateDimensions = () => {
-    this.fullUpdate();
+    this.needUpdate();
   }
 
   componentDidMount(){
-    
     window.addEventListener("resize", this.updateDimensions);
   }
+
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions);
@@ -166,7 +166,7 @@ class View extends Component {
         width={width} 
         height={height} 
         ref={ el => this.viewSVG = el }
-        onresize={() => console.log('resize')}
+        onresize={this.updateDimensions}
 
         onMouseMove={ this.onMouseMove  }
         onMouseLeave={ this.onMouseLeave  }
