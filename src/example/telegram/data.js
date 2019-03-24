@@ -51,25 +51,89 @@ class DataChart extends Component {
   constructor(props){
     super(props);
 
-    const { markerX1, markerX2, xvalues, lines} = props;
+    const { markerX1, markerX2, xvalues, lines, selected} = props;
 
     this.xvalues = xvalues;
     this.lines = lines;
 
-    this.xmin = Math.min(...this.xvalues);
-    this.xmax = Math.max(...this.xvalues);    
-    
-    this.ymin = Math.min( ...lines.map( line => Math.min(...line.yvalues) ) );
-    this.ymax = Math.max( ...lines.map( line => Math.max(...line.yvalues) ) );
+    const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected, markerX1, markerX2});
 
     this.xlabels = [];
+    this.anim = [];    
 
     this.state = {
       markerX1,
       markerX2,
-      dotLines: []
+      dotLines: [],
+      ymin, 
+      ymax,
+      xmin,
+      xmax
     };
+
+    setInterval(this.onInterval, 50);
   }
+
+  onInterval = () => {
+    const frame = this.anim.shift();
+    if (frame){
+      this.setState({...frame});
+    }
+  }  
+
+  animMinMax = ({ymin, ymax, xmin, xmax}) => {
+    const {
+      ymin: yminPrev, 
+      ymax: ymaxPrev, 
+      xmin: xminPrev, 
+      xmax: xmaxPrev,      
+    } = this.state;
+
+    const dymin = (yminPrev - ymin)/10;
+    const dymax = (ymaxPrev - ymax)/10;
+    const dxmin = (xminPrev - xmin)/10;
+    const dxmax = (xmaxPrev - xmax)/10;
+
+    const anim = [1,2,3,4,5,6,7,8,9].map( ind => ({
+      ymin: yminPrev-dymin*ind,
+      ymax: ymaxPrev-dymax*ind, 
+      xmin: xminPrev-dxmin*ind,
+      xmax: xmaxPrev-dxmax*ind
+    }) );
+    anim.push({ymin, ymax, xmin, xmax});
+
+    this.anim.length = 0;
+    this.anim.push(...anim);
+  }
+
+  calcMinMax = ({xvalues, lines, selected, markerX1, markerX2}) => {
+    const inds = xvalues.map( (v,i) => ({value: v, ind: i}) ).filter( ({value}) => value>markerX1 && value<markerX2).map( ({ind}) => ind );
+
+    const xmin = Math.min(...inds.map( i => xvalues[i] ));
+    const xmax = Math.max(...inds.map( i => xvalues[i] ));    
+
+    const visLines = lines.filter( line => selected.map(sl=>sl.name).includes(line.name) )
+
+
+    const ymin = Math.min( ...visLines.map( line => Math.min(...inds.map( i => line.yvalues[i] )) ) );
+    const ymax = Math.max( ...visLines.map( line => Math.max(...inds.map( i => line.yvalues[i] )) ) );
+
+    return {ymin, ymax, xmin, xmax};
+  }  
+  
+  componentDidUpdate(prevProps, prevState, snapshot){
+    const {xvalues, lines, selected, markerX1, markerX2} = this.props;
+    const {selected: selectedPrev, markerX1: markerX1Prev , markerX2: markerX2Prev} = prevProps;
+
+    const names = selectedPrev.map( sel => sel.name );
+    const equal = (selected.length === selectedPrev.length) && selected.reduce( (a, sel) => a && names.includes( sel.name ), true );
+
+    if ((equal !== true) || (markerX1 !== markerX1Prev) || (markerX2 !== markerX2Prev) ) {
+      const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected, markerX1, markerX2 });
+      this.animMinMax({ymin, ymax, xmin, xmax});
+    }
+  }  
+
 
   componentDidMount(){
     const marker = this.xvalues[Math.floor(this.xvalues.length/2)];
@@ -186,7 +250,7 @@ class DataChart extends Component {
 
   render() {
     const { markerX1, markerX2, selected } = this.props;
-    const { marker, dotLines } = this.state;
+    const { marker, dotLines, xmin, xmax, ymin, ymax } = this.state;
 
     return (
         <View 
@@ -234,9 +298,9 @@ class DataChart extends Component {
           <Axes 
             xleft={markerX1}
             xright={markerX2}
-            xstart={this.xmin}
-            ytop={this.ymax}
-            ybottom={this.ymin}
+            xstart={xmin}
+            ytop={ymax}
+            ybottom={ymin}
             ystart={0}
             xformat={ASES_FORMAT_INDEX}
             yformat={ASES_FORMAT_INDEX}
