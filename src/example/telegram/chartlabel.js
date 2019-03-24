@@ -38,18 +38,15 @@ class LabelItem extends Component {
     }    
 
     onSelect = () => {
-        const { onSelect, label } = this.props;
-        const { selected } = this.state;
+        const { onSelect, label, selected } = this.props;
 
         if (onSelect){
             onSelect({name: label, selected: !selected});
-        }
-        this.setState({selected: !selected});
+        } 
     }
 
     render() {
-        const { height, label, color } = this.props;
-        const { selected } = this.state;
+        const { height, label, color, textColor, selected } = this.props;
 
         return (
             <g
@@ -78,7 +75,7 @@ class LabelItem extends Component {
                 <text 
                     x={parseFloat(this.offset||0)+parseFloat(height/2) }
                     y={height/2+6}
-                    fill={'black'}
+                    fill={textColor.text}
                     
                 >
                     {label}
@@ -94,15 +91,26 @@ class ChartLabel extends Component {
     list = [];
 
     render() {
-        const {width, height, labels, selectedLabels, onSelect} = this.props;
+        const {width, height, labels, selectedLabels, onSelect, color} = this.props;
 
         return (
             <svg
                 width={width}
                 height={height}
+                style={{'background-color': `${color?color.background:''}`}}
             >
                 {
-                    labels.map( label => ( <LabelItem height={height} label={label.name} color={label.color} selected={selectedLabels.includes(label)} list={this.list} onSelect={onSelect} /> ) )
+                    labels.map( label => ( 
+                        <LabelItem 
+                            height={height} 
+                            label={label.name} 
+                            color={label.color} 
+                            selected={selectedLabels.reduce( (a,v) => a || v.name === label.name, false  ) } 
+                            list={this.list} 
+                            onSelect={onSelect}
+                            textColor={color}
+                        /> 
+                    ) )
                 }
             </svg>
         );

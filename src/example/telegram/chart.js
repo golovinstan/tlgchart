@@ -4,6 +4,8 @@ import DataChart from './data';
 import ChartLabel from './chartlabel';
 import ChartCaption from './chartcaption';
 
+import { COLOR_DEFAULT } from '../../components/misc/color';
+
 
 const getXValues = ({ columns, types }) => {
     const xname = Object.entries(types).find( ([name,value]) => value === "x")[0];        
@@ -36,11 +38,12 @@ class Chart extends Component {
     
         const labels = this.lines.map( line => ({name: line.name, color: line.color}) );
 
+        const wmode = {name: 'White mode', color: 'red'}
         this.state = {
           markerX1: this.startMarkerX1,
           markerX2: this.startMarkerX2,
-          labels: [...labels, {name: 'Night mode', color: 'black'}],
-          selectedLabels: [...labels]
+          labels: [...labels, {name: 'Night mode', color: 'red'}, wmode],
+          selectedLabels: [...labels, wmode]
         };
     }
 
@@ -53,12 +56,20 @@ class Chart extends Component {
         let new_sl;
         if (selected !== true){
             new_sl = selectedLabels.filter( l => l.name !== name );
-            this.setState({selectedLabels: new_sl});
         }
         if (selected !== false){
             new_sl = labels.find( lb => lb.name === name );
-            this.setState({selectedLabels: [...selectedLabels, new_sl]});
+            new_sl = [...selectedLabels, new_sl];
+        }
+        const wmode = labels[labels.length-1];
+        const nmode = labels[labels.length-2];
+        if ( (name === wmode.name) && selected){
+            new_sl = new_sl.filter( sl => sl.name !== nmode.name )
+        }
+        if ( (name === nmode.name) && selected){
+            new_sl = new_sl.filter( sl => sl.name !== wmode.name )
         }        
+        this.setState({selectedLabels: new_sl});
     }
 
 
@@ -72,6 +83,7 @@ class Chart extends Component {
                     width={"100%"}
                     height={50}
                     caption={caption}
+                    color={COLOR_DEFAULT}
                 />
                 <DataChart
                     markerX1={markerX1}
@@ -79,6 +91,7 @@ class Chart extends Component {
                     xvalues={this.xvalues}
                     lines={this.lines}
                     selected={selectedLabels}
+                    color={COLOR_DEFAULT}
                 />
                 <MarkerChart
                     startMarkerX1={this.startMarkerX1}
@@ -88,6 +101,7 @@ class Chart extends Component {
                     onChangeMarkers={this.onChangeMarkers}
                     selected={selectedLabels}
                     backgroundcolor={'black'}
+                    color={COLOR_DEFAULT}
                 />
                 <ChartLabel
                     width={"100%"}
@@ -95,6 +109,7 @@ class Chart extends Component {
                     labels={labels}
                     selectedLabels={selectedLabels}
                     onSelect={this.onchangeSelected}
+                    color={COLOR_DEFAULT}
                 />
             </div>
         );

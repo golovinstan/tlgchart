@@ -133,10 +133,10 @@ class MarkerChart extends Component {
 
   render() {
     const { markerX1, markerX2, ymin, ymax, xmax, xmin } = this.state;
-    const { selected } = this.props;
+    const { selected, color } = this.props;
 
     return (
-        <View width={"100%"} height={50}>
+        <View width={"100%"} height={50} color={color}>
           <Lines>
             {
               this.lines.map( line => {

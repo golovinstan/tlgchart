@@ -153,7 +153,7 @@ class View extends Component {
   }
 
   render() {
-    const {width, height} = this.props;
+    const {width, height, color} = this.props;
     const { children } = this.props;
 
     const childrenWithProps = React.Children.map(children, child =>
@@ -162,16 +162,16 @@ class View extends Component {
 
     return (
       <svg 
-        xmlns={"http://www.w3.org/2000/svg"} 
         width={width} 
         height={height} 
+        style={{'background-color': `${color?color.background:''}`}}
         ref={ el => this.viewSVG = el }
         onresize={this.updateDimensions}
 
         onMouseMove={ this.onMouseMove  }
         onMouseLeave={ this.onMouseLeave  }
         onMouseDown={ this.onMouseDown }
-        onMouseUp={ this.onMouseUp }           
+        onMouseUp={ this.onMouseUp }  
       >
         {childrenWithProps}
       </svg>

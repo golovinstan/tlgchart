@@ -252,13 +252,14 @@ class DataChart extends Component {
   }
 
   render() {
-    const { markerX1, markerX2, selected, backgroundcolor } = this.props;
+    const { markerX1, markerX2, selected, color } = this.props;
     const { marker, dotLines, xmin, xmax, ymin, ymax } = this.state;
 
     return (
         <View 
           width={"100%"} 
           height={350}
+          color={color}
         >
           <Lines>
             {
