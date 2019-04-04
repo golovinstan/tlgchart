@@ -7,6 +7,7 @@ import ChartCaption from './chartcaption';
 import { COLOR_DEFAULT, COLOR_NIGHT } from '../../components/misc/color';
 
 
+
 const getXValues = ({ columns, types }) => {
     const xname = Object.entries(types).find( ([name,value]) => value === "x")[0];        
     return columns.find( itm => itm[0] === types[xname] ).filter((e,i) => i !==0 );
