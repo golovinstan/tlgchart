@@ -19,17 +19,23 @@ class CommonSVG extends PureComponent{
         this.onMouseLeave = this.onMouseLeave.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.onRef = this.onRef.bind(this);
     }
 
 
     onTouchStart(e){
+        const { onTouchStart } = this.props;
         this.dragging = true;
         if (this.tlgOnDragStart){
             this.tlgOnDragStart();
         }
+        if (onTouchStart){
+            onTouchStart(e);
+        }
     }
 
     onTouchMove(e){
+        const {onTouchMove} = this.props;
 
         if (this.dragging !== true && !this.tlgOnDragMove ){
             return;
@@ -53,53 +59,95 @@ class CommonSVG extends PureComponent{
         this.prevTouch.clientY = clientY;
 
         this.tlgOnDragMove({movementX, movementY, clientX, clientY});
+        if (onTouchMove){
+            onTouchMove(e);
+        }
     }
 
     onTouchEnd(e){
+        const { onTouchEnd } = this.props;
         this.dragging = false;
         if (this.tlgOnDragEnd){
             this.tlgOnDragEnd();
+        }
+        if (onTouchEnd){
+            onTouchEnd(e);
         }
     }
 
 
     onMouseMove(e){
+        const { onMouseMove } = this.props;
         const {movementX, clientX, movementY, clientY} = e;
         if (this.dragging){
             this.tlgOnDragMove({movementX, movementY, clientX, clientY});
-        }        
+        }
+        if (onMouseMove){
+            onMouseMove(e);
+        }
     }
 
     onMouseLeave(e){
+        const {onMouseLeave} = this.props;
         e.preventDefault();
         this.dragging = false;
         if (this.tlgOnDragEnd){
             this.tlgOnDragEnd();
-        }                
+        }
+        if (onMouseLeave) {
+            onMouseLeave(e);
+        }
     }
 
     onMouseUp(e){
+        const { onMouseUp } = this.props;
         e.preventDefault();
         this.dragging = false;
         if (this.tlgOnDragEnd){
             this.tlgOnDragEnd();
-        }                
+        }       
+        if (onMouseUp){
+            onMouseUp(e);
+        }
     }    
 
     onMouseDown(e){
+        const { onMouseDown } = this.props;
         e.preventDefault();
         this.dragging = true;
         if (this.tlgOnDragStart){
             this.tlgOnDragStart();
+        }
+        if (onMouseDown){
+            onMouseDown(e);
+        }
+    }
+
+    onRef(el){
+        const { ref } = this.props;
+        this.SVG = el;
+        if ( ref ){
+            ref(el);
         }
     }
 
 
     render(){
         const { children } = this.props;
+        const props = {...this.props}
+
+        delete props.ref;
+        delete props.onTouchMove;
+        delete props.onTouchStart;
+        delete props.onTouchEnd;
+        delete props.onMouseMove;
+        delete props.onMouseLeave;
+        delete props.onMouseDown;
+        delete props.onMouseUp;
+
         return (
             <svg
-                ref={ el => this.SVG = el }
+                ref={ this.onRef }
                 onTouchMove={ this.onTouchMove  } 
                 onTouchStart={ this.onTouchStart }
                 onTouchEnd={ this.onTouchEnd }
@@ -107,7 +155,8 @@ class CommonSVG extends PureComponent{
                 onMouseMove={ this.onMouseMove  }
                 onMouseLeave={ this.onMouseLeave  }
                 onMouseDown={ this.onMouseDown }
-                onMouseUp={ this.onMouseUp }                  
+                onMouseUp={ this.onMouseUp }
+                {...props}
             >
                 {children}
             </svg>

@@ -44,6 +44,8 @@ export default class CommonSVGDraw extends PureComponent{
         return (
             <CommonSVG
                 tlgOnDragMove={this.onDragMove}
+                width={'100%'}
+                height={'100%'}
             >
                 {points}
             </CommonSVG>
