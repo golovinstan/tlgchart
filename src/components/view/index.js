@@ -164,9 +164,8 @@ class View extends Component {
       <svg 
         width={width} 
         height={height} 
-        style={{'background-color': `${color?color.background:''}`}}
+        style={{'backgroundColor': `${color?color.background:''}`}}
         ref={ el => this.viewSVG = el }
-        onresize={this.updateDimensions}
 
         onMouseMove={ this.onMouseMove  }
         onMouseLeave={ this.onMouseLeave  }

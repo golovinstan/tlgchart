@@ -8,7 +8,6 @@ import DotsLine from '../../components/lines/dotsline';
 
 import BackgroundColor from '../../components/misc/background';
 
-
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
 import HorizontalAxis from '../../components/axes/horizontalaxis';
