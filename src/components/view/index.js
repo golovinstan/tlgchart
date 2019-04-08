@@ -51,8 +51,9 @@ class View extends Component {
     const inst = this.instances;
     const svg = this.viewSVG;
 
-    const width = svg.clientWidth;
-    const height = svg.clientHeight;
+    const bcr = svg.getBoundingClientRect();
+    const width = bcr.width;
+    const height = bcr.height;
 
     const ta = inst.axes.filter( axis => axis.position === AXES_POSITION_TOP );
     const ba = inst.axes.filter( axis => axis.position === AXES_POSITION_BOTTOM );

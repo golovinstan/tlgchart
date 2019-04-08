@@ -56,11 +56,12 @@ class TwoAxisChart extends Component {
     }
 
     render(){
+        const color = COLOR_DEFAULT;
         return (
             <View 
               width={"100%"} 
               height={350}
-              color={COLOR_DEFAULT}
+              color={color}
             >
                 <Lines>
                 {
@@ -97,7 +98,7 @@ class TwoAxisChart extends Component {
                         axisWidth={4}
                         axisVisible={false}
                         onchart={true}
-                        color={COLOR_DEFAULT}
+                        color={color}
                     />            
                     <VericalAxis 
                         position={AXES_POSITION_LEFT} 
@@ -107,7 +108,7 @@ class TwoAxisChart extends Component {
                         axisWidth={4}
                         axisVisible={true}
                         onchart={true}
-                        color={COLOR_DEFAULT}
+                        color={color}
                     />                   
                 </Axes>            
             </View>
