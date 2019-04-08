@@ -38,14 +38,17 @@ class VerticalLine extends Component {
   }
 
   onDrag = ({movementX, clientX}) => {
+    /*
     const { onDrag } = this.props;      
     if (onDrag && this.dragging){
         onDrag({x: clientX/this.dpi_x+this.xleft , dx: movementX/this.dpi_x });
-    }    
+    } 
+    */   
   }
 
 
   componentDidUpdate(prevProps, prevState, snapshot){
+    /*
     const { xvalue } = this.props;
     const { xvalue: oldx } = prevProps;
 
@@ -54,6 +57,7 @@ class VerticalLine extends Component {
         const xleft = this.xleft;
         this.setState({ xvalue_px: (xvalue-xleft)*dpi_x });
     }
+    */
   }
 
   render() {

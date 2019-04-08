@@ -11,4 +11,3 @@ storiesOf('Examples', module)
   .add('Telegramm contest (stage1)', () => (
     <TelegramContest/>
   ));
-  

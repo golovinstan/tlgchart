@@ -18,6 +18,7 @@ class View extends Component {
 
     this.dragging = false;
     this.updateTimer = null;
+    this.prevTouch = {};
   }
 
   updateDimensions = () => {
@@ -136,6 +137,38 @@ class View extends Component {
     }
   }
 
+  onTouchMove = (e) => {
+    let movementX = 0;
+    let movementY = 0;
+    if (this.prevTouch){
+      movementX = (this.prevTouch.clientX || 0) - e.changedTouches[0].clientX;
+      movementY = (this.prevTouch.clientY || 0) - e.changedTouches[0].clientY;
+    } else {
+      this.prevTouch = {};
+    }
+    let clientX = 0;
+    let clientY = 0;
+    if (e.changedTouches[0]){
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    }
+    this.prevTouch.clientX = clientX;
+    this.prevTouch.clientY = clientY;
+
+    if (this.dragging){
+      this.instances.onDragListeners.forEach( listener => listener({movementX, clientX, movementY, clientY, dragging: this.dragging}) );
+    }   
+  }
+
+  onTouchStart = () => {
+    this.dragging = true;
+    this.instances.axisView.onMouseDown();
+  }
+
+  onTouchEnd = () => {
+    this.endDragListeners();
+  }
+
   endDragListeners = () => {
     this.dragging = false;
     this.instances.onEndDragListeners.forEach( listener => listener() );
@@ -168,6 +201,10 @@ class View extends Component {
         height={height} 
         style={{'backgroundColor': `${color?color.background:''}`}}
         ref={ el => this.viewSVG = el }
+
+        onTouchMove={ this.onTouchMove  } 
+        onTouchStart={ this.onTouchStart }
+        onTouchEnd={ this.onTouchEnd }
 
         onMouseMove={ this.onMouseMove  }
         onMouseLeave={ this.onMouseLeave  }
