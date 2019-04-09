@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import withDragSVG from '../../hoc/withdragsvg';
+
+const LineComponent = React.forwardRef((props, ref) => (
+  <line {...props} ref={ref} />
+));
+const LineSVG = withDragSVG(LineComponent);
 
 class VerticalLine extends Component {
   constructor(props){
@@ -25,30 +31,20 @@ class VerticalLine extends Component {
     this.xleft = xleft;
   }
 
-  onMouseDown = (e) => {
-    this.dragging = true;
-  }
-
-  onMouseUp = (e) => {
-    this.dragging = false;
-  }
 
   onEndDrag = () => {
     this.dragging = false;
   }
 
   onDrag = ({movementX, clientX}) => {
-    /*
     const { onDrag } = this.props;      
     if (onDrag && this.dragging){
         onDrag({x: clientX/this.dpi_x+this.xleft , dx: movementX/this.dpi_x });
     } 
-    */   
   }
 
 
   componentDidUpdate(prevProps, prevState, snapshot){
-    /*
     const { xvalue } = this.props;
     const { xvalue: oldx } = prevProps;
 
@@ -57,7 +53,14 @@ class VerticalLine extends Component {
         const xleft = this.xleft;
         this.setState({ xvalue_px: (xvalue-xleft)*dpi_x });
     }
-    */
+  }
+
+  tlgOnDragStart = () => {
+    this.dragging = true;
+  }
+
+  tlgOnDragEnd = () => {
+    this.dragging = false;
   }
 
   render() {
@@ -69,7 +72,7 @@ class VerticalLine extends Component {
     }
 
     return (
-        <line 
+        <LineSVG 
             x1={xvalue_px+offset} 
             y1={0} 
             x2={xvalue_px+offset} 
@@ -79,9 +82,8 @@ class VerticalLine extends Component {
             strokeOpacity={opacity}
             color={color}
 
-            onMouseLeave={ this.onMouseLeave  }
-            onMouseDown={ this.onMouseDown }
-            onMouseUp={ this.onMouseUp }             
+            tlgOnDragStart={ this.tlgOnDragStart }
+            tlgOnDragEnd={ this.tlgOnDragEnd }              
         />
     );
   }

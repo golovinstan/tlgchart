@@ -244,7 +244,7 @@ class DataChart extends Component {
     this.updateMarker({marker});
   }
 
-  viewOnMouseDown = ({dpi_y, dpi_x, clientX, movementX, xleft}) => {
+  onDragStart = ({dpi_y, dpi_x, clientX, movementX, xleft}) => {
     const x = clientX/dpi_x+xleft;
     this.updateMarker({marker: x});
   }
@@ -306,7 +306,7 @@ class DataChart extends Component {
             ystart={0}
             xformat={ASES_FORMAT_INDEX}
             yformat={ASES_FORMAT_INDEX}
-            onMouseDown={this.viewOnMouseDown}
+            onDragStart={this.onDragStart}
           >
             <HorizontalAxis 
               position={AXES_POSITION_TOP} 

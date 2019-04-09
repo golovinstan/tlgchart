@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
-import CommonSVG from '../components/commonsvg';
+import withDragSVG from '../components/hoc/withdragsvg';
+
+const SVGComponent = (props) => (<svg {...props} />);
+const CommonSVG = withDragSVG(SVGComponent);
 
 
-export default class CommonSVGDraw extends PureComponent{
+export default class DrawMousePath extends PureComponent{
     constructor(props){
         super(props);
 		this.state = {

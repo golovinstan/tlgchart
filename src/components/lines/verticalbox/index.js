@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import withDragSVG from '../../hoc/withdragsvg';
+
+const RectComponent = React.forwardRef((props, ref) => (
+  <rect {...props} ref={ref} />
+));
+const RectSVG = withDragSVG(RectComponent);
 
 class VerticalBox extends Component {
   constructor(props){
@@ -16,11 +22,11 @@ class VerticalBox extends Component {
     instances.onEndDragListeners.push(this.onEndDrag);
   }  
 
-  onMouseDown = (e) => {
+  tlgOnDragStart = (e) => {
     this.dragging = true;
   }
 
-  onMouseUp = (e) => {
+  tlgOnDragEnd = (e) => {
     this.dragging = false;
   }
 
@@ -63,7 +69,7 @@ class VerticalBox extends Component {
     }
 
     return (
-        <rect 
+        <RectSVG 
             x={leftvalue_px}
             width={rightvalue_px-leftvalue_px}
             y={0}
@@ -72,9 +78,8 @@ class VerticalBox extends Component {
             fill={color}
             fillOpacity={opacity}
 
-            onMouseLeave={ this.onMouseLeave  }
-            onMouseDown={ this.onMouseDown }
-            onMouseUp={ this.onMouseUp }                
+            tlgOnDragStart={ this.tlgOnDragStart }
+            tlgOnDragEnd={ this.tlgOnDragEnd }              
         />
     );
   }

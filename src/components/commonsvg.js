@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 
-
 class CommonSVG extends PureComponent{
     constructor(props){
         super(props);

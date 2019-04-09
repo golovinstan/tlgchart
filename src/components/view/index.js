@@ -6,6 +6,15 @@ import {
   ,AXES_POSITION_RIGHT
 } from '../axes/constants';
 
+import withDragSVG from '../hoc/withdragsvg';
+
+
+const SVGComponent = React.forwardRef((props, ref) => (
+  <svg {...props} ref={ref} />
+));
+const DragSVG = withDragSVG(SVGComponent);
+
+
 class View extends Component {
   instances = {
     view: this,
@@ -51,7 +60,10 @@ class View extends Component {
 
   fullUpdate = () => {
     const inst = this.instances;
-    const svg = this.viewSVG;
+    if (!this.viewSVG){
+      return;
+    }
+    const svg = this.viewSVG.SVG;
 
     const bcr = svg.getBoundingClientRect();
     const width = bcr.width;
@@ -130,61 +142,21 @@ class View extends Component {
     inst.axisView.calcScale({ width_px: (rightOffset-leftOffset), height_px: (bottomOffset-topOffset) });
   }
 
-  onMouseMove = (e) => {
-    const {movementX, clientX, movementY, clientY} = e;
-    if (this.dragging){
-      this.instances.onDragListeners.forEach( listener => listener({movementX, clientX, movementY, clientY, dragging: this.dragging}) );
-    }
-  }
 
-  onTouchMove = (e) => {
-    let movementX = 0;
-    let movementY = 0;
-    if (this.prevTouch){
-      movementX = (this.prevTouch.clientX || 0) - e.changedTouches[0].clientX;
-      movementY = (this.prevTouch.clientY || 0) - e.changedTouches[0].clientY;
-    } else {
-      this.prevTouch = {};
-    }
-    let clientX = 0;
-    let clientY = 0;
-    if (e.changedTouches[0]){
-      clientX = e.changedTouches[0].clientX;
-      clientY = e.changedTouches[0].clientY;
-    }
-    this.prevTouch.clientX = clientX;
-    this.prevTouch.clientY = clientY;
-
-    if (this.dragging){
-      this.instances.onDragListeners.forEach( listener => listener({movementX, clientX, movementY, clientY, dragging: this.dragging}) );
-    }   
-  }
-
-  onTouchStart = () => {
+  onDragStart = ({clientX, clientY, movementX, movementY}) => {
     this.dragging = true;
-    this.instances.axisView.onMouseDown();
+    this.instances.axisView.onDragStart({clientX, clientY, movementX, movementY});
   }
 
-  onTouchEnd = () => {
-    this.endDragListeners();
+  onDragMove = ({movementX, clientX, movementY, clientY}) => {
+    if (this.dragging){
+      this.instances.onDragListeners.forEach( listener => listener({movementX, clientX, movementY, clientY, dragging: this.dragging}) );
+    }
   }
 
-  endDragListeners = () => {
+  onDragEnd = ({}) => {
     this.dragging = false;
     this.instances.onEndDragListeners.forEach( listener => listener() );
-  }
-
-  onMouseLeave = (e) => {
-    this.endDragListeners();
-  }
-
-  onMouseUp = (e) => {
-    this.endDragListeners();
-  }     
-
-  onMouseDown = (e) => {
-    this.dragging = true;
-    this.instances.axisView.onMouseDown(e);
   }
 
   render() {
@@ -196,23 +168,18 @@ class View extends Component {
     );    
 
     return (
-      <svg 
+      <DragSVG 
         width={width} 
         height={height} 
         style={{'backgroundColor': `${color?color.background:''}`}}
         ref={ el => this.viewSVG = el }
 
-        onTouchMove={ this.onTouchMove  } 
-        onTouchStart={ this.onTouchStart }
-        onTouchEnd={ this.onTouchEnd }
-
-        onMouseMove={ this.onMouseMove  }
-        onMouseLeave={ this.onMouseLeave  }
-        onMouseDown={ this.onMouseDown }
-        onMouseUp={ this.onMouseUp }  
+        tlgOnDragStart={ this.onDragStart }
+        tlgOnDragMove={ this.onDragMove }
+        tlgOnDragEnd={ this.onDragEnd }
       >
         {childrenWithProps}
-      </svg>
+      </DragSVG>
     );
   }
 }
