@@ -161,6 +161,14 @@ class View extends Component {
     }
   }
 
+  exportToString = () => {
+    if (!this.viewSVG){
+      return '';
+    }
+    const svg = this.viewSVG.SVG;
+    return svg.outerHTML;
+  }
+
   render() {
     const {width, height, color} = this.props;
     const { children } = this.props;
@@ -171,6 +179,7 @@ class View extends Component {
 
     return (
       <DragSVG 
+        className={'tlgChartViewSVG'}
         width={width} 
         height={height} 
         style={{'backgroundColor': `${color?color.background:''}`}}

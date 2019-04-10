@@ -4,6 +4,8 @@ class Lines extends Component {
   constructor(props){
     super(props);
     const { instances } = props;
+
+    this.animVB = {ytop:0, ybottom:0};
     this.ylabels = [];
     this.xlabels = [];
     this.state = { axisDrawCount: 0 };
@@ -21,9 +23,31 @@ class Lines extends Component {
     this.svg.setAttribute('height', bottom-top);
   }
 
-  calcScale = ({dpi_x, dpi_y, xleft, xright, ytop}) => {
+  animViewBox = ({height_px, width_px, ytop, ybottom, dpi_y}) => {
+    const ytop_prev = this.animVB.ytop;
+    const ybottom_prev = this.animVB.ybottom;
+    this.animVB.ytop = ytop;
+    this.animVB.ybottom = ybottom;
+
+    const dytop = Math.floor((ytop_prev-ytop)*dpi_y);
+    const dybottom = Math.floor((ybottom_prev-ybottom)*dpi_y);
+
+    const w = Math.floor(width_px);
+    const vb = `0 ${-dytop} ${w} ${height_px+dybottom+dytop}`;
+    const new_vb = `${vb}; 0 0 ${w} ${height_px}`;
+    this.svg.setAttribute("viewBox", vb);
+    this.svg_anim.setAttribute("values", new_vb);
+    this.svg_anim.beginElement();
+    //this.svg.forceRedraw();
+  }
+
+  calcScale = ({dpi_x, dpi_y, xleft, xright, ytop, ybottom, height_px, width_px}) => {
     const { instances } = this.props;
-    instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}) );
+    
+    this.animViewBox({height_px, width_px, ytop, ybottom, dpi_y });
+    setTimeout( () => instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}) ), 1);
+    // instances.lines.forEach( line => line.calcPath({dpi_x, dpi_y, xleft, xright, ytop}));
+    
   }
 
   calcYAxisLine = ({ylabels, lineType, ybottom, dpi_y, key, axisVisible, height_px}) => {
@@ -65,7 +89,13 @@ class Lines extends Component {
     );        
 
     return (
-    <svg ref={ el => this.svg = el } >
+    <svg 
+      className={'tlgChartLinesSVG'}
+      ref={ el => this.svg = el }
+      viewBox={"0 0 1 1"}
+      preserveAspectRatio="none"
+    >
+      <animate ref={ el => this.svg_anim = el } values={""} attributeName="viewBox" begin="0s" dur="0.5s" fill="freeze"/>
       {childrenWithProps}
       {
         this.ylabels.filter( lb => !!lb).map( lb => lb.map( ({ypx, lineType}) => {

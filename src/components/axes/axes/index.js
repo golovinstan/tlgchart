@@ -15,7 +15,6 @@ class Axes extends Component {
   componentDidUpdate(){
     const { instances } = this.props;
     instances.view.needUpdate();
-
   }
 
   calcScale = ({width_px, height_px}) => {
@@ -29,7 +28,7 @@ class Axes extends Component {
 
     const args = {xleft, xright, xstart, ytop, ybottom, ystart, dpi_x, dpi_y, height_px};
     instances.axes.forEach( axis => axis.calcScale(args) );
-    instances.linesView.calcScale({dpi_x, dpi_y, xleft, xright, ytop});
+    instances.linesView.calcScale({dpi_x, dpi_y, xleft, xright, ytop, ybottom, height_px, width_px});
     let ykey = 0;
     let xkey = 0;
     instances.axes.forEach( (axis) => {
@@ -53,7 +52,11 @@ class Axes extends Component {
     );     
 
     return (
-      <svg width={"100%"} height={"100%"}>
+      <svg 
+        className={'tlgChartAxisSVG'}
+        width={"100%"} 
+        height={"100%"}
+      >
         {childrenWithProps}
       </svg>
     );
