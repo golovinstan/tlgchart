@@ -11,50 +11,35 @@ class VerticalBox extends Component {
     const { instances } = props;
     super(props);
     instances.lines.push(this);
-    this.dragging = false;    
 
     this.state = {leftvalue_px: null, rightvalue_px: null};
   }
 
-  componentDidMount(){
-    const { instances } = this.props;
-    instances.onDragListeners.push(this.onDrag);
-    instances.onEndDragListeners.push(this.onEndDrag);
-  }  
 
-  tlgOnDragStart = (e) => {
-    this.dragging = true;
-  }
+  onDragMove = ({movementX, clientX}) => {
+    const { onDrag, instances } = this.props;    
+    const dpi_x = instances.axisView.dpi_x;
 
-  tlgOnDragEnd = (e) => {
-    this.dragging = false;
-  }
-
-  onEndDrag = () => {
-    this.dragging = false;
-  }  
-
-  onDrag = ({movementX, clientX}) => {
-    const { onDrag } = this.props;      
-    if (onDrag && this.dragging){
-      onDrag({x: clientX/this.dpi_x+this.xleft , dx: movementX/this.dpi_x });
+    if (onDrag){
+      onDrag({x: clientX/dpi_x+this.xleft , dx: movementX/dpi_x });
     }   
   }  
 
-  calcPath = ({dpi_x, dpi_y, xleft, xright, ytop}) => {
-    const { leftvalue, rightvalue } = this.props;
+  calcPath = ({xleft, xright, ytop}) => {
+    const { leftvalue, rightvalue, instances } = this.props;
+    const dpi_x = instances.axisView.dpi_x;
     this.setState({ leftvalue_px: (leftvalue-xleft)*dpi_x, rightvalue_px: (rightvalue-xleft)*dpi_x });
 
-    this.dpi_x = dpi_x;
     this.xleft = xleft;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot){
-    const { leftvalue, rightvalue } = this.props;
+    const { leftvalue, rightvalue, instances } = this.props;
     const { leftvalue: leftold, rightvalue: rightold } = prevProps;
 
     if ((leftold !== leftvalue) || (rightvalue !== rightold)){
-        const dpi_x = this.dpi_x;
+        const dpi_x = instances.axisView.dpi_x;
+
         const xleft = this.xleft;
         this.setState({ leftvalue_px: (leftvalue-xleft)*dpi_x, rightvalue_px: (rightvalue-xleft)*dpi_x });
     }
@@ -78,8 +63,7 @@ class VerticalBox extends Component {
             fill={color}
             fillOpacity={opacity}
 
-            tlgOnDragStart={ this.tlgOnDragStart }
-            tlgOnDragEnd={ this.tlgOnDragEnd }              
+            tlgOnDragMove={ this.onDragMove }            
         />
     );
   }

@@ -18,14 +18,11 @@ const DragSVG = withDragSVG(SVGComponent);
 class View extends Component {
   instances = {
     view: this,
-    onDragListeners: [],
-    onEndDragListeners: []
   };
 
   constructor(props){
     super(props);
 
-    this.dragging = false;
     this.updateTimer = null;
     this.prevTouch = {};
   }
@@ -144,19 +141,24 @@ class View extends Component {
 
 
   onDragStart = ({clientX, clientY, movementX, movementY}) => {
-    this.dragging = true;
-    this.instances.axisView.onDragStart({clientX, clientY, movementX, movementY});
-  }
-
-  onDragMove = ({movementX, clientX, movementY, clientY}) => {
-    if (this.dragging){
-      this.instances.onDragListeners.forEach( listener => listener({movementX, clientX, movementY, clientY, dragging: this.dragging}) );
+    const { onDragStart } = this.props;
+    if (onDragStart){
+      onDragStart({clientX, clientY, movementX, movementY});
     }
   }
 
-  onDragEnd = ({}) => {
-    this.dragging = false;
-    this.instances.onEndDragListeners.forEach( listener => listener() );
+  tlgOnDragMove = ({clientX, clientY, movementX, movementY}) => {
+    const { OnDragMove } = this.props;
+    if (OnDragMove){
+      OnDragMove({clientX, clientY, movementX, movementY});
+    }    
+  }
+
+  onDragEnd = ({clientX, clientY, movementX, movementY}) => {
+    const { onDragEnd } = this.props;
+    if (onDragEnd){
+      onDragEnd({clientX, clientY, movementX, movementY});
+    }
   }
 
   render() {
@@ -175,7 +177,7 @@ class View extends Component {
         ref={ el => this.viewSVG = el }
 
         tlgOnDragStart={ this.onDragStart }
-        tlgOnDragMove={ this.onDragMove }
+        tlgOnDragMove={this.tlgOnDragMove}
         tlgOnDragEnd={ this.onDragEnd }
       >
         {childrenWithProps}

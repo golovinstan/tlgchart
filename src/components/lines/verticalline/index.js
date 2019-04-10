@@ -11,16 +11,10 @@ class VerticalLine extends Component {
     const { instances } = props;
     super(props);
     instances.lines.push(this)    
-    this.dragging = false;
 
     this.state = {xvalue_px: null};
   }
 
-  componentDidMount(){
-    const { instances } = this.props;
-    instances.onDragListeners.push(this.onDrag);
-    instances.onEndDragListeners.push(this.onEndDrag);
-  }
 
 
   calcPath = ({dpi_x, dpi_y, xleft, xright, ytop}) => {
@@ -29,18 +23,6 @@ class VerticalLine extends Component {
 
     this.dpi_x = dpi_x;
     this.xleft = xleft;
-  }
-
-
-  onEndDrag = () => {
-    this.dragging = false;
-  }
-
-  onDrag = ({movementX, clientX}) => {
-    const { onDrag } = this.props;      
-    if (onDrag && this.dragging){
-        onDrag({x: clientX/this.dpi_x+this.xleft , dx: movementX/this.dpi_x });
-    } 
   }
 
 
@@ -55,17 +37,18 @@ class VerticalLine extends Component {
     }
   }
 
-  tlgOnDragStart = () => {
-    this.dragging = true;
-  }
+  tlgOnDragMove = ({movementX, clientX}) => {
+    const { onDrag, instances } = this.props;      
+    const dpi_x = instances.axisView.dpi_x;
 
-  tlgOnDragEnd = () => {
-    this.dragging = false;
+    if (onDrag){
+        onDrag({x: clientX/dpi_x+this.xleft , dx: movementX/dpi_x });
+    } 
   }
 
   render() {
     const { xvalue_px } = this.state;
-    const { color, width, opacity, offset } = this.props;
+    const { color, width, opacity } = this.props;
 
     if (!xvalue_px){
       return null;
@@ -73,17 +56,16 @@ class VerticalLine extends Component {
 
     return (
         <LineSVG 
-            x1={xvalue_px+offset} 
+            x1={xvalue_px} 
             y1={0} 
-            x2={xvalue_px+offset} 
+            x2={xvalue_px} 
             y2={'100%'} 
             stroke={color}
             strokeWidth={width}
             strokeOpacity={opacity}
             color={color}
 
-            tlgOnDragStart={ this.tlgOnDragStart }
-            tlgOnDragEnd={ this.tlgOnDragEnd }              
+            tlgOnDragMove={ this.tlgOnDragMove }                        
         />
     );
   }

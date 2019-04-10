@@ -55,6 +55,7 @@ class DataChart extends Component {
 
     const { markerX1, markerX2, xvalues, lines, selected} = props;
 
+    this.view = null;
     this.xvalues = xvalues;
     this.lines = lines;
 
@@ -244,9 +245,11 @@ class DataChart extends Component {
     this.updateMarker({marker});
   }
 
-  onDragStart = ({dpi_y, dpi_x, clientX, movementX, xleft}) => {
-    const x = clientX/dpi_x+xleft;
-    this.updateMarker({marker: x});
+  onDragStart = ({clientX}) => {
+    const { markerX1 } = this.props;
+    const dpi_x = this.view.instances.axisView.dpi_x;
+    const x = clientX/dpi_x+markerX1;
+    this.updateMarker({marker: x });
   }
 
   render() {
@@ -258,6 +261,8 @@ class DataChart extends Component {
           width={"100%"} 
           height={350}
           color={color}
+          ref={ el => this.view = el }
+          onDragStart={this.onDragStart}
         >
           <Lines>
             {
@@ -292,7 +297,6 @@ class DataChart extends Component {
               xvalue={marker} 
               color={'grey'}
               width={12}
-              offset={-6}
               opacity={0.4}
               onDrag={this.onDragMarker}
             />
@@ -306,7 +310,7 @@ class DataChart extends Component {
             ystart={0}
             xformat={ASES_FORMAT_INDEX}
             yformat={ASES_FORMAT_INDEX}
-            onDragStart={this.onDragStart}
+            
           >
             <HorizontalAxis 
               position={AXES_POSITION_TOP} 

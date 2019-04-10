@@ -5,6 +5,9 @@ class Axes extends Component {
     super(props);
     const { instances } = props;
 
+    this.dpi_x = 0;
+    this.dpi_y = 0;    
+
     instances.axisView = this;
     instances.axes = [];
   } 
@@ -40,14 +43,6 @@ class Axes extends Component {
     });
     instances.linesView.drawAxisLine({xlength: xkey, ylength: ykey});
   }
-
-  onDragStart = ({clientX, clientY, movementX, movementY}) => {
-    const { onDragStart, xleft } = this.props;    
-    if (onDragStart) {
-      onDragStart({dpi_x: this.dpi_x, dpi_y: this.dpi_y, xleft, clientX, clientY, movementX, movementY });
-    }    
-  }
-
 
 
   render() {

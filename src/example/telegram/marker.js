@@ -20,6 +20,7 @@ class MarkerChart extends Component {
 
     const {startMarkerX1, startMarkerX2, xvalues, lines, selected} = props;
 
+    this.view = null;
     this.xvalues = xvalues;
     this.lines = lines;
 
@@ -135,8 +136,14 @@ class MarkerChart extends Component {
     const { markerX1, markerX2, ymin, ymax, xmax, xmin } = this.state;
     const { selected, color } = this.props;
 
+    let dx = 0;
+    if (this.view){
+      const dpi_x = this.view.instances.axisView.dpi_x;
+      dx = 6/dpi_x;
+    }
+
     return (
-        <View width={"100%"} height={50} color={color}>
+        <View width={"100%"} height={50} color={color} ref={ el => this.view = el } >
           <Lines>
             {
               this.lines.map( line => {
@@ -152,15 +159,30 @@ class MarkerChart extends Component {
               } )
             }
 
+            <VerticalLine
+              xvalue={markerX1} 
+              color={'grey'}
+              width={12}
+              opacity={0.6}
+              onDrag={this.onDragLeft}
+            />
+            <VerticalLine
+              xvalue={markerX2} 
+              color={'grey'}
+              width={12}
+              opacity={0.6}
+              onDrag={this.onDragRight}
+            />      
+
             <VerticalBox
               leftvalue={xmin}
-              rightvalue={markerX1}
+              rightvalue={markerX1-dx}
               color={'grey'}
               opacity={0.5}
             />
             <VerticalBox
-              leftvalue={markerX1}
-              rightvalue={markerX2}
+              leftvalue={markerX1+dx}
+              rightvalue={markerX2-dx}
               color={'grey'}
               opacity={0.1}
               borderwidth={6}
@@ -169,28 +191,13 @@ class MarkerChart extends Component {
               onDrag={this.onDragBox}
             />                        
             <VerticalBox
-              leftvalue={markerX2}
+              leftvalue={markerX2+dx}
               rightvalue={xmax}
               color={'grey'}
               opacity={0.5}
             />
 
-            <VerticalLine
-              xvalue={markerX1} 
-              color={'grey'}
-              width={6}
-              offset={-3}
-              opacity={0.6}
-              onDrag={this.onDragLeft}
-            />
-            <VerticalLine
-              xvalue={markerX2} 
-              color={'grey'}
-              width={6}
-              offset={3}
-              opacity={0.6}
-              onDrag={this.onDragRight}
-            />            
+      
           </Lines>
           <Axes 
             xleft={xmin}
