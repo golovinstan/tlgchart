@@ -9,10 +9,13 @@ import VerticalBox from '../../components/lines/verticalbox';
 
 import Axes from '../../components/axes/axes';
 
-
 import { 
   ASES_FORMAT_INDEX 
 } from '../../components/axes/constants';
+
+const DRAG_MARKER1 = {};
+const DRAG_MARKER2 = {};
+const NO_MARKER_DRAG = {};
 
 class MarkerChart extends Component {
   constructor(props){
@@ -20,6 +23,7 @@ class MarkerChart extends Component {
 
     const {startMarkerX1, startMarkerX2, xvalues, lines, selected} = props;
 
+    this.dragtype = NO_MARKER_DRAG;
     this.view = null;
     this.xvalues = xvalues;
     this.lines = lines;
@@ -35,41 +39,14 @@ class MarkerChart extends Component {
       xmin,
       xmax
     };
-
-    setInterval(this.onInterval, 50);
-  }
-
-  onInterval = () => {
-    const frame = this.anim.shift();
-    if (frame){
-      this.setState({...frame});
-    }
-  }
-
-  animMinMax = ({ymin, ymax, xmin, xmax}) => {
-    const {ymin: yminPrev, ymax: ymaxPrev, xmin: xminPrev, xmax: xmaxPrev} = this.state;
-
-    const dymin = (yminPrev - ymin)/10;
-    const dymax = (ymaxPrev - ymax)/10;
-    const dxmin = (xminPrev - xmin)/10;
-    const dxmax = (xmaxPrev - xmax)/10;
-
-    const anim = [1,2,3,4,5,6,7,8,9].map( ind => ({
-      ymin: yminPrev-dymin*ind,
-      ymax: ymaxPrev-dymax*ind, 
-      xmin: xminPrev-dxmin*ind,
-      xmax: xmaxPrev-dxmax*ind
-    }) );
-    anim.push({ymin, ymax, xmin, xmax});
-
-    this.anim.push(...anim);
   }
 
   componentDidMount(){
     const {xvalues, lines, selected} = this.props;
+    const { markerX1, markerX2 } = this.state;
     const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected});
-
-    this.animMinMax({ymin, ymax, xmin, xmax})
+    this.setState({ymin, ymax, xmin, xmax});
+    this.onChangeMarkers({markerX1, markerX2});    
   }
 
   componentDidUpdate(prevProps, prevState, snapshot){
@@ -81,7 +58,7 @@ class MarkerChart extends Component {
 
     if (equal !== true) {
       const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected});
-      this.animMinMax({ymin, ymax, xmin, xmax});
+      this.setState({ymin, ymax, xmin, xmax});
     }
   }
 
@@ -132,6 +109,47 @@ class MarkerChart extends Component {
     }    
   }
 
+  onDragEnd = ({}) => {
+    this.dragtype = NO_MARKER_DRAG;
+  }
+    
+
+  OnViewDragMove = ({clientX, clientY, movementX, movementY}) => {
+    const { markerX1, markerX2, xmin, xmax } = this.state;
+
+    let dx = 0;
+    let dpi_x = 1;
+    if (this.view){
+      dpi_x = this.view.instances.axisView.dpi_x;
+      dx = 6/dpi_x;
+    }    
+
+    if (this.dragtype === DRAG_MARKER1){
+      this.onDragLeft({x: clientX/dpi_x+xmin , dx: movementX/dpi_x });
+    }
+
+    if (this.dragtype === DRAG_MARKER2){
+      this.onDragRight({x: clientX/dpi_x+xmin , dx: movementX/dpi_x });
+    }    
+  }
+
+  onViewDragStart = ({clientX}) => {
+    const { markerX1, markerX2, xmin, xmax } = this.state;
+    if (this.view){
+      const dpi_x = this.view.instances.axisView.dpi_x;
+      const px1 = (markerX1-xmin)*dpi_x;
+      const px2 = (markerX2-xmin)*dpi_x;
+      const dx = 6;
+
+      if ( (clientX>(px1-dx)) && (clientX<(px1+dx)) ){
+        this.dragtype = DRAG_MARKER1;
+      }
+      if ( (clientX>(px2-dx)) && (clientX<(px2+dx)) ){
+        this.dragtype = DRAG_MARKER2;
+      }      
+    }
+  }
+
   render() {
     const { markerX1, markerX2, ymin, ymax, xmax, xmin } = this.state;
     const { selected, color } = this.props;
@@ -143,7 +161,15 @@ class MarkerChart extends Component {
     }
 
     return (
-        <View width={"100%"} height={50} color={color} ref={ el => this.view = el } >
+        <View 
+          width={"100%"} 
+          height={50} 
+          color={color} 
+          ref={ el => this.view = el } 
+          onDragStart={this.onViewDragStart}
+          OnDragMove={this.OnViewDragMove}
+          onDragEnd={this.onDragEnd}
+        >
           <Lines>
             {
               this.lines.map( line => {
@@ -164,14 +190,12 @@ class MarkerChart extends Component {
               color={'grey'}
               width={12}
               opacity={0.6}
-              onDrag={this.onDragLeft}
             />
             <VerticalLine
               xvalue={markerX2} 
               color={'grey'}
               width={12}
               opacity={0.6}
-              onDrag={this.onDragRight}
             />      
 
             <VerticalBox

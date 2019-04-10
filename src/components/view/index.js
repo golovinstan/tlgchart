@@ -33,7 +33,7 @@ class View extends Component {
 
   componentDidMount(){
     window.addEventListener("resize", this.updateDimensions);
-    this.needUpdate();
+    this.fullUpdate();
   }
 
 

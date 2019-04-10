@@ -74,33 +74,6 @@ class DataChart extends Component {
       xmax
     };
 
-    setInterval(this.onInterval, 50);
-  }
-
-  onInterval = () => {
-    const frame = this.anim.shift();
-    if (frame){
-      this.setState({...frame});
-    }
-  }  
-
-  animMinMax = ({ymin, ymax, xmin, xmax}) => {
-    const {
-      ymin: yminPrev, 
-      ymax: ymaxPrev,     
-    } = this.state;
-
-    const dymin = (yminPrev - ymin)/10;
-    const dymax = (ymaxPrev - ymax)/10;
-
-    const anim = [1,2,3,4,5,6,7,8,9].map( ind => ({
-      ymin: yminPrev-dymin*ind,
-      ymax: ymaxPrev-dymax*ind, 
-    }) );
-    anim.push({ymin, ymax, xmin, xmax});
-
-    this.anim.length = 0;
-    this.anim.push(...anim);
   }
 
   calcMinMax = ({xvalues, lines, selected, markerX1, markerX2}) => {
@@ -119,6 +92,7 @@ class DataChart extends Component {
     ymin = parseFloat(Math.floor(ymin/dy)*dy);
     ymax = parseFloat(Math.floor(ymax/dy+1)*dy);
 
+
     return {ymin, ymax, xmin, xmax};
   }  
   
@@ -131,7 +105,7 @@ class DataChart extends Component {
 
     if ((equal !== true) || (markerX1 !== markerX1Prev) || (markerX2 !== markerX2Prev) ) {
       const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected, markerX1, markerX2 });
-      this.animMinMax({ymin, ymax, xmin, xmax});
+      this.setState({ymin, ymax, xmin, xmax});      
     }
   }  
 
