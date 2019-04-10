@@ -8,8 +8,6 @@ function withDragSVG(WrappedComponent){
     return class extends PureComponent{
         constructor(props, ref){
             super(props, ref);
-
-            console.log(ref);
     
             this.dragging = false;
     
