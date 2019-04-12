@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
+import withDragSVG from '../../components/hoc/withdragsvg';
 
+const SVGComponent = React.forwardRef((props, ref) => (
+    <svg {...props} ref={ref} />
+  ));
+const DragSVG = withDragSVG(SVGComponent);
 
 class ChartCaption extends Component {
     render() {
-        const {width, height, caption, color} = this.props;
+        const {width, height, caption, color, onDragStart} = this.props;
 
         return (
-            <svg
+            <DragSVG
                 width={width}
                 height={height}
+                tlgOnDragStart={onDragStart}
             >
                 <BackgroundAnimateColor color={color.background} />
                 <text 
@@ -20,7 +26,7 @@ class ChartCaption extends Component {
                     {caption}
                 </text>
                 <BackgroundAnimateTransparent color={color.background}/>        
-            </svg>
+            </DragSVG>
         );
     }
 }
