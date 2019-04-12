@@ -165,8 +165,23 @@ class View extends Component {
     if (!this.viewSVG){
       return '';
     }
-    const svg = this.viewSVG.SVG;
-    return svg.outerHTML;
+
+    const svg = this.viewSVG.SVG.cloneNode(true);
+    const list = svg.getElementsByTagName("animate");
+
+    
+    for (let i = 0; i < list.length; i++) {
+      list[i].setAttribute('dur', '0.01s');
+
+    }
+
+    const bcr = this.viewSVG.SVG.getBoundingClientRect();
+    const width = bcr.width;
+    const height = bcr.height;
+    const outerHTML = svg.outerHTML;
+    svg.remove();
+    
+    return `<svg preserveAspectRatio="none" viewBox='0 0 ${width} ${height}'><svg width='${width}' height='${height}'>`+outerHTML+'</svg></svg>';
   }
 
   render() {
