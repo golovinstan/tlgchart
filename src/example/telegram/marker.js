@@ -7,6 +7,8 @@ import SimpleLine from '../../components/lines/simpleline';
 import VerticalLine from '../../components/lines/verticalline';
 import VerticalBox from '../../components/lines/verticalbox';
 
+import { BackgroundAnimateColor } from '../../components/misc/background';
+
 import Axes from '../../components/axes/axes';
 
 import { 
@@ -164,12 +166,12 @@ class MarkerChart extends Component {
         <View 
           width={"100%"} 
           height={50} 
-          color={color} 
           ref={ el => this.view = el } 
           onDragStart={this.onViewDragStart}
           OnDragMove={this.OnViewDragMove}
           onDragEnd={this.onDragEnd}
         >
+          <BackgroundAnimateColor color={color.background} />
           <Lines>
             {
               this.lines.map( line => {

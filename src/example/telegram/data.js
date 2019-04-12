@@ -6,7 +6,7 @@ import SimpleLine from '../../components/lines/simpleline';
 import VerticalLine from '../../components/lines/verticalline';
 import DotsLine from '../../components/lines/dotsline';
 
-import BackgroundColor from '../../components/misc/background';
+import { BackgroundAnimateColor } from '../../components/misc/background';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
@@ -230,14 +230,15 @@ class DataChart extends Component {
     const { markerX1, markerX2, selected, color } = this.props;
     const { marker, dotLines, xmin, xmax, ymin, ymax } = this.state;
 
+
     return (
         <View 
           width={"100%"} 
           height={350}
-          color={color}
           ref={ el => this.view = el }
           onDragStart={this.onDragStart}
         >
+          <BackgroundAnimateColor color={color.background} />
           <Lines>
             {
               this.lines.map( line => {

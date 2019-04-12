@@ -182,13 +182,12 @@ class View extends Component {
         className={'tlgChartViewSVG'}
         width={width} 
         height={height} 
-        style={{'backgroundColor': `${color?color.background:''}`}}
         ref={ el => this.viewSVG = el }
 
         tlgOnDragStart={ this.onDragStart }
         tlgOnDragMove={this.tlgOnDragMove}
         tlgOnDragEnd={ this.onDragEnd }
-      >
+      >  
         {childrenWithProps}
       </DragSVG>
     );

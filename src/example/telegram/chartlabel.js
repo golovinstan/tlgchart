@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { BackgroundAnimateColor } from '../../components/misc/background';
 
 
 class LabelItem extends Component {
@@ -97,8 +97,8 @@ class ChartLabel extends Component {
             <svg
                 width={width}
                 height={height}
-                style={{'background-color': `${color?color.background:''}`}}
             >
+                <BackgroundAnimateColor color={color.background} />
                 {
                     labels.map( label => ( 
                         <LabelItem 
