@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackgroundAnimateColor } from '../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
 
 
 class ChartCaption extends Component {
@@ -18,7 +18,8 @@ class ChartCaption extends Component {
                     style={{'fill': `${color.text}`}}
                 >
                     {caption}
-                </text>            
+                </text>
+                <BackgroundAnimateTransparent color={color.background}/>        
             </svg>
         );
     }

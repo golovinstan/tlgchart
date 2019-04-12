@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackgroundAnimateColor } from '../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
 
 
 class LabelItem extends Component {
@@ -112,6 +112,7 @@ class ChartLabel extends Component {
                         /> 
                     ) )
                 }
+                <BackgroundAnimateTransparent color={color.background}/>        
             </svg>
         );
     }

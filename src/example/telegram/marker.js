@@ -7,7 +7,7 @@ import SimpleLine from '../../components/lines/simpleline';
 import VerticalLine from '../../components/lines/verticalline';
 import VerticalBox from '../../components/lines/verticalbox';
 
-import { BackgroundAnimateColor } from '../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
 
 import Axes from '../../components/axes/axes';
 
@@ -222,7 +222,6 @@ class MarkerChart extends Component {
               color={'grey'}
               opacity={0.5}
             />
-
       
           </Lines>
           <Axes 
@@ -237,6 +236,7 @@ class MarkerChart extends Component {
             xonchart={true}
             yonchart={true}
           />
+          <BackgroundAnimateTransparent color={color.background}/>
         </View>
     );
   }

@@ -33,11 +33,9 @@ class BackgroundAnimateColor extends Component {
     const {color} = this.props;
 
     return (
-      <g>
-        <rect ref={ el => this.svg_src = el } x={0} y={0} width={"100%"} height={"100%"}  >
-          <animate ref={ el => this.svg_anim = el } attributeName={"fill"} values={`white;${color}`} dur={"0.5s"} fill={"freeze"} />        
-        </rect>
-      </g>
+      <rect pointerEvents={"none"} ref={ el => this.svg_src = el } x={0} y={0} width={"100%"} height={"100%"}  >
+        <animate ref={ el => this.svg_anim = el } attributeName={"fill"} values={`white;${color}`} dur={"0.5s"} fill={"freeze"} />        
+      </rect>
     );
   }
 }

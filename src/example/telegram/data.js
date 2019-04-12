@@ -6,7 +6,7 @@ import SimpleLine from '../../components/lines/simpleline';
 import VerticalLine from '../../components/lines/verticalline';
 import DotsLine from '../../components/lines/dotsline';
 
-import { BackgroundAnimateColor } from '../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
 
 import Axes from '../../components/axes/axes';
 import VericalAxis from '../../components/axes/verticalaxis';
@@ -322,6 +322,7 @@ class DataChart extends Component {
               color={color}
             />
           </Axes>
+          <BackgroundAnimateTransparent color={color.background}/>
         </View>
     );
   }
