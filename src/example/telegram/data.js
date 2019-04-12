@@ -226,6 +226,13 @@ class DataChart extends Component {
     this.updateMarker({marker: x });
   }
 
+  exportToString = () => {
+    if (this.view){
+      return this.view.exportToString();
+    }
+    return '';
+  }
+
   render() {
     const { markerX1, markerX2, selected, color } = this.props;
     const { marker, dotLines, xmin, xmax, ymin, ymax } = this.state;

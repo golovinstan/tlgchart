@@ -88,6 +88,12 @@ class Chart extends Component {
         this.setState({selectedLabels: new_sl});
     }
 
+    onCaptionDragStart = () => {
+        if (this.dataChart){
+            console.log( this.dataChart.exportToString() );
+        }
+    }
+
 
     render() {
         const { markerX1, markerX2, labels, selectedLabels } = this.state;
@@ -107,8 +113,10 @@ class Chart extends Component {
                     height={50}
                     caption={caption}
                     color={color}
+                    onDragStart={this.onCaptionDragStart}
                 />
                 <DataChart
+                    ref={ el => this.dataChart = el }
                     markerX1={markerX1}
                     markerX2={markerX2}
                     xvalues={this.xvalues}
