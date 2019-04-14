@@ -62,7 +62,6 @@ class DataChart extends Component {
     const {ymin, ymax, xmin, xmax} = this.calcMinMax({xvalues, lines, selected, markerX1, markerX2});
 
     this.xlabels = [];
-    this.anim = [];    
 
     this.state = {
       markerX1,
@@ -91,7 +90,6 @@ class DataChart extends Component {
     let dy = parseFloat( ((ymax - ymin)/5).toPrecision(1) );
     ymin = parseFloat(Math.floor(ymin/dy)*dy);
     ymax = parseFloat(Math.floor(ymax/dy+1)*dy);
-
 
     return {ymin, ymax, xmin, xmax};
   }  
