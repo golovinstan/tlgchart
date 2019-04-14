@@ -9,6 +9,8 @@ import HorizontalAxis from '../../../components/axes/horizontalaxis';
 
 import Lines from '../../../components/lines/lines';
 import AreaLine from '../../../components/lines/arealine';
+import LeftCaptionLabel from '../leftcaptionlabel';
+import RightCaptionLabel from '../rightcaptionlabel';
 import VerticalLine from '../../../components/lines/verticalline';
 import DotsLine from '../../../components/lines/dotsline';
 
@@ -67,6 +69,16 @@ class Chart5 extends PureComponent {
 
     }
 
+    getColor = () => {
+      const { selectedLabels } = this.state;
+
+      if (selectedLabels.includes(wmode)) {
+          return COLOR_DEFAULT;
+      } else {
+          return COLOR_NIGHT;
+      }  
+    }
+
     calcMinMax = ({xvalues, lines, selected, markerX1, markerX2}) => {
         const inds = xvalues.map( (v,i) => ({value: v, ind: i}) ).filter( ({value}) => value>markerX1 && value<markerX2).map( ({ind}) => ind );
 
@@ -81,7 +93,23 @@ class Chart5 extends PureComponent {
         return {ymin, ymax, xmin, xmax};
     }     
 
+    onCaptionDragStart = () => {
+      console.log('onCaptionDragStart');
+    }
 
+    getCaptionLabels = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
+      const color = this.getColor();
+      if (x === xleft){
+        return <LeftCaptionLabel onDragStart={this.onCaptionDragStart} px={px+50} y={labelHeight/2} xlabel={'left'} color={color.text} />
+      }
+      if (x === xright){
+        return <RightCaptionLabel px={px-50} y={labelHeight/2} xlabel={'right'} color={color.text} />
+      }      
+    }
+
+    getXCaption = ({xleft, xright, xstart, dpi_x}) => {
+      return [xleft, xright];
+    }
 
     render(){
         const { markerX1, markerX2, labels, selectedLabels, ymin, ymax, xmin, xmax } = this.state;
@@ -126,10 +154,22 @@ class Chart5 extends PureComponent {
               xformat={ASES_FORMAT_INDEX}
               yformat={ASES_FORMAT_INDEX}
             >       
+              <HorizontalAxis 
+                position={AXES_POSITION_TOP} 
+                height={40}
+                lineType={AXES_LINE_DOT_LINE}
+                getAxisLabel={this.getCaptionLabels}
+                getXLabels={this.getXCaption}                    
+                debugMode={false}
+                axisWidth={4}
+                axisVisible={false}
+                onchart={false}
+                color={color}
+              />
               <VericalAxis 
                 position={AXES_POSITION_LEFT} 
                 width={120} 
-                lineType={AXES_LINE_LINE}
+                lineType={AXES_LINE_LINE}            
                 debugMode={false}
                 axisWidth={4}
                 axisVisible={true}
