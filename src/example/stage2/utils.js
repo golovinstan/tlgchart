@@ -12,6 +12,41 @@ export const getLines = ({ columns, types, names: linesName, colors: linesColors
     return ent_names.map( (e,i) => ({ yvalues: yvalues[i], name: names[i], color: colors[i] }) );
 }
 
+export const getPercentageStakedLines = ({xvalues, lines}) => {
+
+  const yvalues_sum = [];
+  const yvalues_val = [];
+  const yvalues_prv = [];
+  let cnct = 0;
+  xvalues.map( (e,i) => {
+    cnct = 0;
+    lines.forEach( line => {
+      cnct = cnct + line.yvalues[i];
+    } );
+    yvalues_sum.push(cnct);
+    yvalues_val.push(0);
+    yvalues_prv.push(0);
+  } );
+
+
+  return lines.reverse().map( line => {
+    const yvls = line.yvalues.map( (e,i) => {
+      yvalues_prv[i] = yvalues_val[i];
+      yvalues_val[i] = yvalues_val[i] + e;
+      const v1 = yvalues_prv[i]/yvalues_sum[i];
+      const v2 = yvalues_val[i]/yvalues_sum[i];
+      return {v1: v1*100, v2: v2*100};
+    } );
+
+    return {
+      yvalues1: yvls.map( v => v.v1 ),
+      yvalues2: yvls.map( v => v.v2 ),
+      name: line.name,
+      color: line.color
+    }
+  } );
+}
+
 export const monthNames = [
     "Jan", 
     "Feb", 

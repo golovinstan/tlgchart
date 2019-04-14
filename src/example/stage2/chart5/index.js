@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import data from '../contest/alldata'
-import {getXValues, getLines, monthNames, weekday} from '../utils';
+import {getXValues, getLines, monthNames, weekday, getPercentageStakedLines} from '../utils';
 
 import View from '../../../components/view';
 import Axes from '../../../components/axes/axes';
@@ -8,7 +8,7 @@ import VericalAxis from '../../../components/axes/verticalaxis';
 import HorizontalAxis from '../../../components/axes/horizontalaxis';
 
 import Lines from '../../../components/lines/lines';
-import SimpleLine from '../../../components/lines/simpleline';
+import AreaLine from '../../../components/lines/arealine';
 import VerticalLine from '../../../components/lines/verticalline';
 import DotsLine from '../../../components/lines/dotsline';
 
@@ -38,6 +38,7 @@ class Chart5 extends PureComponent {
     
         this.xvalues = getXValues({ columns, types });
         this.lines = getLines({ columns, types, names, colors });
+        this.percentageStackedlines = getPercentageStakedLines({xvalues: this.xvalues, lines: this.lines});
 
         const startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/3)];
         const startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/3)*2];        
@@ -75,15 +76,12 @@ class Chart5 extends PureComponent {
         const visLines = lines.filter( line => selected.map(sl=>sl.name).includes(line.name) )
 
         let ymin = 0;// Math.min( ...visLines.map( line => Math.min(...inds.map( i => line.yvalues[i] )) ) );
-        let ymax = Math.max( ...visLines.map( line => Math.max(...inds.map( i => line.yvalues[i] )) ) );
-
-        
-        let dy = parseFloat( ((ymax - ymin)/5).toPrecision(1) );
-        ymin = parseFloat(Math.floor(ymin/dy)*dy);
-        ymax = parseFloat(Math.floor(ymax/dy+1)*dy);
+        let ymax = 100;// Math.max( ...visLines.map( line => Math.max(...inds.map( i => line.yvalues[i] )) ) );
 
         return {ymin, ymax, xmin, xmax};
     }     
+
+
 
     render(){
         const { markerX1, markerX2, labels, selectedLabels, ymin, ymax, xmin, xmax } = this.state;
@@ -104,11 +102,12 @@ class Chart5 extends PureComponent {
             <BackgroundAnimateColor color={color.background} />
             <Lines>
               {
-                this.lines.map( line => {
+                this.percentageStackedlines.map( line => {
                   return (
-                    <SimpleLine 
+                    <AreaLine 
                       xvalues={this.xvalues} 
-                      yvalues={line.yvalues}
+                      yvalues1={line.yvalues1}
+                      yvalues2={line.yvalues2}
                       color={line.color}
                       width={4}
                       visible={selectedLabels.map(sl=>sl.name).includes(line.name)}
@@ -131,7 +130,7 @@ class Chart5 extends PureComponent {
                 position={AXES_POSITION_LEFT} 
                 width={120} 
                 lineType={AXES_LINE_LINE}
-                debugMode={true}
+                debugMode={false}
                 axisWidth={4}
                 axisVisible={true}
                 onchart={true}
@@ -141,7 +140,7 @@ class Chart5 extends PureComponent {
                 position={AXES_POSITION_BOTTOM} 
                 height={20}
                 lineType={AXES_LINE_DOT_LINE}
-                debugMode={true}
+                debugMode={false}
                 axisWidth={4}
                 axisVisible={false}
                 onchart={false}
