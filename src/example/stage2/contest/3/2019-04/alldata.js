@@ -1,0 +1,1 @@
+import d1 from './01.js';import d2 from './02.js';import d3 from './03.js';import d4 from './04.js';import d5 from './05.js';import d6 from './06.js';export default {    1: d1,    2: d2,	    3: d3,	    4: d4,	    5: d5,	    6: d6}
