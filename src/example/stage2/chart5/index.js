@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import PercentageStackedAreaChart from './percentagestackedareachart';
+import PercentageStackedAreaBarMarker from './percentagestackedareabarmarker';
+import PercentageStackedAreaMarker from './percentagestackedareamarker';
 import PieChart from './pieline'
 
 import data from '../contest/alldata';
@@ -38,8 +40,9 @@ class Chart5 extends PureComponent {
         });
 
         this.state = {
-            charttype:'pie',
+            charttype:'notpie',
             backimage: null,
+            backimageMarker: null,
             markerX1: startMarkerX1,
             markerX2: startMarkerX2,
             labels: [...labels, dmode, wmode],
@@ -83,45 +86,71 @@ class Chart5 extends PureComponent {
     onChangeChartType = () => {
       const { charttype } = this.state;
       const chart = this.chart;
-      let backimage = '';
+      const marker = this.marker;
+      let backimage = null;
+      let backimageMarker = null;
       if (chart) {
         backimage = chart.exportLinesToString();
       }
+      if (marker){
+        backimageMarker = marker.exportLinesToString();
+      }
 
       if ( charttype == 'pie' ){
-        this.setState({charttype: 'percentagestackedareachart', backimage});
+        this.setState({charttype: 'percentagestackedareachart', backimage, backimageMarker});
       } else {
-        this.setState({charttype: 'pie', backimage});
+        this.setState({charttype: 'pie', backimage, backimageMarker});
       }
     }
 
     render(){            
-      const { charttype, backimage, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax } = this.state;
+      const { charttype, backimage, backimageMarker, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax } = this.state;
       const color = this.getColor();
 
       let Chart = PercentageStackedAreaChart;
+      let Marker = PercentageStackedAreaMarker;      
       if (charttype == 'pie'){
         Chart = PieChart;
+        Marker = PercentageStackedAreaBarMarker;        
       }
 
       return (
-        <Chart
-          ref={ el => this.chart = el }
-          onChangeChartType={this.onChangeChartType}
-          backimage={backimage}
-          markerX1={markerX1}
-          markerX2={markerX2}
-          selectedLabels={selectedLabels}
-          labels={labels}
-          ymin={ymin}
-          ymax={ymax}
-          xmin={xmin}
-          xmax={xmax}
-          color={color}
-          xvalues={this.xvalues}
-          lines={this.lines}
-          percentageStackedlines={this.percentageStackedlines}
-        />
+        <div>
+          <Chart
+            ref={ el => this.chart = el }
+            onChangeChartType={this.onChangeChartType}
+            backimage={backimage}
+            markerX1={markerX1}
+            markerX2={markerX2}
+            selectedLabels={selectedLabels}
+            labels={labels}
+            ymin={ymin}
+            ymax={ymax}
+            xmin={xmin}
+            xmax={xmax}
+            color={color}
+            xvalues={this.xvalues}
+            lines={this.lines}
+            percentageStackedlines={this.percentageStackedlines}
+          />
+          <Marker
+            ref={ el => this.marker = el }
+            onChangeChartType={this.onChangeChartType}
+            backimage={backimageMarker}
+            markerX1={markerX1}
+            markerX2={markerX2}
+            selectedLabels={selectedLabels}
+            labels={labels}
+            ymin={ymin}
+            ymax={ymax}
+            xmin={xmin}
+            xmax={xmax}
+            color={color}
+            xvalues={this.xvalues}
+            lines={this.lines}
+            percentageStackedlines={this.percentageStackedlines}
+          />          
+        </div>
       )
     }
 }

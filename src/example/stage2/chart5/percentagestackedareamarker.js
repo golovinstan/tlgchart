@@ -7,7 +7,7 @@ import VericalAxis from '../../../components/axes/verticalaxis';
 import HorizontalAxis from '../../../components/axes/horizontalaxis';
 
 import Lines from '../../../components/lines/lines';
-import BarAreaLine from '../../../components/lines/bararealine';
+import AreaLine from '../../../components/lines/arealine';
 import VerticalLine from '../../../components/lines/verticalline';
 import DotsLine from '../../../components/lines/dotsline';
 
@@ -24,7 +24,7 @@ import {
     ,AXES_LINE_DOT_LINE
   } from '../../../components/axes/constants';
 
-class PercentageStackedAreaChart extends PureComponent {
+class PercentageStackedAreaMarker extends PureComponent {
     constructor(props){
         super(props);
     }
@@ -51,15 +51,17 @@ class PercentageStackedAreaChart extends PureComponent {
         return (
         <View 
             width={"100%"} 
-            height={350}
+            height={50}
             ref={ el => this.view = el }
         >
             <BackgroundAnimateColor color={color.background} />
-            <Lines>
+            <Lines
+                animtime={"0.01s"}
+            >
               {
                 percentageStackedlines.map( line => {
                   return (
-                    <BarAreaLine 
+                    <AreaLine 
                       xvalues={xvalues} 
                       yvalues1={line.yvalues1}
                       yvalues2={line.yvalues2}
@@ -81,33 +83,6 @@ class PercentageStackedAreaChart extends PureComponent {
               xformat={ASES_FORMAT_INDEX}
               yformat={ASES_FORMAT_INDEX}
             >       
-              <HorizontalCaptionAxis
-                leftText={'left'}
-                rightText={'right'}
-                color={color}
-                onDragStart={this.onCaptionDragStart}
-              />
-
-              <VericalAxis 
-                position={AXES_POSITION_LEFT} 
-                width={120} 
-                lineType={AXES_LINE_LINE}            
-                debugMode={false}
-                axisWidth={4}
-                axisVisible={true}
-                onchart={true}
-                color={color}
-              />              
-              <HorizontalAxis 
-                position={AXES_POSITION_BOTTOM} 
-                height={20}
-                lineType={AXES_LINE_DOT_LINE}
-                debugMode={false}
-                axisWidth={4}
-                axisVisible={false}
-                onchart={false}
-                color={color}
-              />
             </Axes>
             <BackgroundAnimateImage image={backimage} />
         </View>
@@ -115,4 +90,4 @@ class PercentageStackedAreaChart extends PureComponent {
     }
 }
 
-export default PercentageStackedAreaChart;
+export default PercentageStackedAreaMarker;

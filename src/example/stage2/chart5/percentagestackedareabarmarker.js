@@ -24,12 +24,10 @@ import {
     ,AXES_LINE_DOT_LINE
   } from '../../../components/axes/constants';
 
-class PercentageStackedAreaChart extends PureComponent {
+class PercentageStackedAreaBarMarker extends PureComponent {
     constructor(props){
         super(props);
     }
-
-   
 
     onCaptionDragStart = () => {
         const { onChangeChartType } = this.props;
@@ -51,11 +49,13 @@ class PercentageStackedAreaChart extends PureComponent {
         return (
         <View 
             width={"100%"} 
-            height={350}
+            height={50}
             ref={ el => this.view = el }
         >
             <BackgroundAnimateColor color={color.background} />
-            <Lines>
+            <Lines
+              animtime={"0.01s"}
+            >
               {
                 percentageStackedlines.map( line => {
                   return (
@@ -81,33 +81,6 @@ class PercentageStackedAreaChart extends PureComponent {
               xformat={ASES_FORMAT_INDEX}
               yformat={ASES_FORMAT_INDEX}
             >       
-              <HorizontalCaptionAxis
-                leftText={'left'}
-                rightText={'right'}
-                color={color}
-                onDragStart={this.onCaptionDragStart}
-              />
-
-              <VericalAxis 
-                position={AXES_POSITION_LEFT} 
-                width={120} 
-                lineType={AXES_LINE_LINE}            
-                debugMode={false}
-                axisWidth={4}
-                axisVisible={true}
-                onchart={true}
-                color={color}
-              />              
-              <HorizontalAxis 
-                position={AXES_POSITION_BOTTOM} 
-                height={20}
-                lineType={AXES_LINE_DOT_LINE}
-                debugMode={false}
-                axisWidth={4}
-                axisVisible={false}
-                onchart={false}
-                color={color}
-              />
             </Axes>
             <BackgroundAnimateImage image={backimage} />
         </View>
@@ -115,4 +88,4 @@ class PercentageStackedAreaChart extends PureComponent {
     }
 }
 
-export default PercentageStackedAreaChart;
+export default PercentageStackedAreaBarMarker;
