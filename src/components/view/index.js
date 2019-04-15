@@ -184,6 +184,27 @@ class View extends Component {
     return `<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox='0 0 ${width} ${height}' width='100%' height='100%'><svg width='${width}' height='${height}'>`+outerHTML+'</svg></svg>';
   }
 
+  exportLinesToString = () => {
+    if (!this.instances.linesView){
+      return '';
+    }    
+
+    const svg = this.instances.linesView.svg.cloneNode(true);
+    const list = svg.getElementsByTagName("animate");
+    
+    for (let i = 0; i < list.length; i++) {
+      list[i].setAttribute('dur', '0.01s');
+    }
+
+    const bcr = this.viewSVG.SVG.getBoundingClientRect();
+    const width = bcr.width;
+    const height = bcr.height;
+    const outerHTML = svg.outerHTML;
+    svg.remove();
+    
+    return `<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox='0 0 ${width} ${height}' width='100%' height='100%'><svg width='${width}' height='${height}'>`+outerHTML+'</svg></svg>';
+  }  
+
   render() {
     const {width, height, color} = this.props;
     const { children } = this.props;

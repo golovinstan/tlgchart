@@ -14,7 +14,7 @@ import DotsLine from '../../../components/lines/dotsline';
 
 import HorizontalCaptionAxis from '../captionaxis';
 
-import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent, BackgroundAnimateImage } from '../../../components/misc/background';
 import { COLOR_DEFAULT, COLOR_NIGHT } from '../../../components/misc/color';
 
 import { 
@@ -98,14 +98,15 @@ class PercentageStackedAreaChart extends PureComponent {
         }
     }
 
-    exportToString = () => {
+    exportLinesToString = () => {
         if (this.view){
-            return this.view.exportToString();
+            return this.view.exportLinesToString();
         }
         return '';
     }    
 
     render(){
+        const { backimage } = this.props;
         const { markerX1, markerX2, labels, selectedLabels, ymin, ymax, xmin, xmax } = this.state;
 
         let color;
@@ -176,7 +177,7 @@ class PercentageStackedAreaChart extends PureComponent {
                 color={color}
               />
             </Axes>
-            <BackgroundAnimateTransparent color={color.background}/>
+            <BackgroundAnimateImage image={backimage} />
         </View>
         )
     }

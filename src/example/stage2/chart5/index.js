@@ -17,7 +17,7 @@ class Chart5 extends PureComponent {
       const chart = this.chart;
       let backimage = '';
       if (chart) {
-        backimage = chart.exportToString();
+        backimage = chart.exportLinesToString();
       }
 
       if ( charttype == 'pie' ){

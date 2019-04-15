@@ -106,9 +106,9 @@ class PieChart extends PureComponent {
         }
     }
 
-    exportToString = () => {
+    exportLinesToString = () => {
         if (this.view){
-            return this.view.exportToString();
+            return this.view.exportLinesToString();
         }
         return '';
     }
