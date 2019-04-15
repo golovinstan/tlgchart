@@ -8,7 +8,7 @@ class Chart5 extends PureComponent {
         super(props);
         this.state={
           charttype:'pie',
-          backimage: ''
+          backimage: null
         }
     }
 
@@ -25,7 +25,6 @@ class Chart5 extends PureComponent {
       } else {
         this.setState({charttype: 'pie', backimage});
       }
-
     }
 
     render(){            

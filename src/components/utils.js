@@ -1,6 +1,6 @@
 
 
-function generateUUID() { // Public Domain/MIT
+export const generateUUID = () => { // Public Domain/MIT
     var d = new Date().getTime();
     if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
         d += performance.now(); 

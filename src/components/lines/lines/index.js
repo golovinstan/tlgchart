@@ -82,7 +82,7 @@ class Lines extends Component {
   }
 
   render() {
-    const { children, instances } = this.props;
+    const { children, instances, animtime } = this.props;
     
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, { instances })
@@ -95,7 +95,7 @@ class Lines extends Component {
       viewBox={"0 0 1 1"}
       preserveAspectRatio="none"
     >
-      <animate ref={ el => this.svg_anim = el } values={""} attributeName={"viewBox"} begin={"0s"} dur={"0.5s"} fill={"freeze"}/>
+      <animate ref={ el => this.svg_anim = el } values={""} attributeName={"viewBox"} begin={"0s"} dur={animtime?animtime:"0.5s"} fill={"freeze"}/>
       {childrenWithProps}
       {
         this.ylabels.filter( lb => !!lb).map( lb => lb.map( ({ypx, lineType}) => {

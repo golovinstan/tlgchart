@@ -15,7 +15,7 @@ import PieLine from '../../../components/lines/pieline';
 
 import HorizontalCaptionAxis from '../captionaxis';
 
-import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent, BackgroundAnimateImage } from '../../../components/misc/background';
 import { COLOR_DEFAULT, COLOR_NIGHT } from '../../../components/misc/color';
 
 import { 
@@ -115,7 +115,7 @@ class PieChart extends PureComponent {
 
     render(){
         const { markerX1, markerX2, labels, selectedLabels, ymin, ymax, xmin, xmax } = this.state;
-
+        const { backimage } = this.props;
         const pieData = getPieData({markerX1, markerX2, xvalues: this.xvalues, lines: this.lines });
 
         let color;
@@ -132,7 +132,9 @@ class PieChart extends PureComponent {
             ref={ el => this.view = el }
         >
             <BackgroundAnimateColor color={color.background} />
-            <Lines>
+            <Lines
+                animtime={"0.01s"}
+            >
               <PieLine data={pieData}/>
             </Lines>
             <Axes 
@@ -153,6 +155,7 @@ class PieChart extends PureComponent {
               />
 
             </Axes>
+            <BackgroundAnimateImage image={backimage} />
         </View>
         )
     }

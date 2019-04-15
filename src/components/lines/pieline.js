@@ -48,7 +48,7 @@ class PieLine extends Component {
 
             const cmpnt = (
               <text
-                x={`${2*radius}`} 
+                x={`${2*radius-10}`} 
                 y={`${radius/4}`} 
                 stroke={'white'} 
                 strokeWidth={"2"} 

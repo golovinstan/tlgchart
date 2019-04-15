@@ -181,7 +181,7 @@ class View extends Component {
     const outerHTML = svg.outerHTML;
     svg.remove();
     
-    return `<svg preserveAspectRatio="none" viewBox='0 0 ${width} ${height}'><svg width='${width}' height='${height}'>`+outerHTML+'</svg></svg>';
+    return `<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox='0 0 ${width} ${height}' width='100%' height='100%'><svg width='${width}' height='${height}'>`+outerHTML+'</svg></svg>';
   }
 
   render() {
