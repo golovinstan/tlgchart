@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import data from '../contest/alldata'
-import {getXValues, getLines, monthNames, weekday, getPercentageStakedLines, getMarkerXMinIndex, getPieData} from '../utils';
+
+import {getPieData} from '../utils';
 
 import View from '../../../components/view';
 import Axes from '../../../components/axes/axes';
@@ -16,7 +16,7 @@ import PieLine from '../../../components/lines/pieline';
 import HorizontalCaptionAxis from '../captionaxis';
 
 import { BackgroundAnimateColor, BackgroundAnimateTransparent, BackgroundAnimateImage } from '../../../components/misc/background';
-import { COLOR_DEFAULT, COLOR_NIGHT } from '../../../components/misc/color';
+
 
 import { 
     ASES_FORMAT_INDEX 
@@ -28,76 +28,14 @@ import {
   } from '../../../components/axes/constants';
 
 
-const wmode = {name: 'White mode', color: 'white'};
-const dmode = {name: 'Night mode', color: 'black'};
 
 
 
 class PieChart extends PureComponent {
     constructor(props){
         super(props);
-
-        const { columns, types, names, colors } = data["5"].overview;
+    }
     
-        this.xvalues = getXValues({ columns, types });
-        this.lines = getLines({ columns, types, names, colors });
-        this.percentageStackedlines = getPercentageStakedLines({xvalues: this.xvalues, lines: this.lines});
-
-        const startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/3)];
-        const startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/3)*2];        
-
-        const labels = this.lines.map( line => ({name: line.name, color: line.color}) );
-
-        const {ymin, ymax, xmin, xmax} = this.calcMinMax({
-            xvalues: this.xvalues, 
-            lines: this.lines, 
-            selected: labels, 
-            markerX1: startMarkerX1, 
-            markerX2: startMarkerX2
-        });
-
-        this.state = {
-            markerX1: startMarkerX1,
-            markerX2: startMarkerX2,
-            labels: [...labels, dmode, wmode],
-            selectedLabels: [...labels, wmode],
-            dotLines: [],
-            ymin, 
-            ymax,
-            xmin,
-            xmax            
-          };        
-
-    }
-
-    getColor = () => {
-      const { selectedLabels } = this.state;
-
-      if (selectedLabels.includes(wmode)) {
-          return COLOR_DEFAULT;
-      } else {
-          return COLOR_NIGHT;
-      }  
-    }
-
-    calcMinMax = ({xvalues, lines, selected, markerX1, markerX2}) => {
-        // const inds = xvalues.map( (v,i) => ({value: v, ind: i}) ).filter( ({value}) => value>markerX1 && value<markerX2).map( ({ind}) => ind );
-        const indX1 = getMarkerXMinIndex({xvalues, marker: markerX1});
-        const indX2 = getMarkerXMinIndex({xvalues, marker: markerX2})+1;
-
-        let xmin = xvalues[indX1];
-        let xmax = xvalues[indX2];
-
-        for (let i=indX1; i!=indX2; i++){
-            if (xvalues[i]<xmin){ xmin = xvalues[i] };
-            if (xvalues[i]>xmax){ xmax = xvalues[i] };
-        }
-
-        let ymin = 0;
-        let ymax = 100;
-
-        return {ymin, ymax, xmin, xmax};
-    }     
 
     onCaptionDragStart = () => {
         const { onChangeChartType } = this.props;
@@ -114,16 +52,8 @@ class PieChart extends PureComponent {
     }
 
     render(){
-        const { markerX1, markerX2, labels, selectedLabels, ymin, ymax, xmin, xmax } = this.state;
-        const { backimage } = this.props;
-        const pieData = getPieData({markerX1, markerX2, xvalues: this.xvalues, lines: this.lines });
-
-        let color;
-        if (selectedLabels.includes(wmode)) {
-            color = COLOR_DEFAULT;
-        } else {
-            color = COLOR_NIGHT;
-        }                
+        const { backimage, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax, color, xvalues, lines } = this.props;
+        const pieData = getPieData({markerX1, markerX2, xvalues, lines });               
 
         return (
         <View 
