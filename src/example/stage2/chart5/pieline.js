@@ -53,7 +53,7 @@ class PieChart extends PureComponent {
 
     render(){
         const { backimage, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax, color, xvalues, lines } = this.props;
-        const pieData = getPieData({markerX1, markerX2, xvalues, lines });               
+        const pieData = getPieData({markerX1, markerX2, xvalues, lines, selectedLabels });               
 
         return (
         <View 

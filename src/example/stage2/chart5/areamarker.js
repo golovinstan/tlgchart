@@ -28,7 +28,7 @@ const DRAG_MARKER1 = {};
 const DRAG_MARKER2 = {};
 const NO_MARKER_DRAG = {};
 
-class PercentageStackedAreaMarker extends PureComponent {
+class AreaMarker extends PureComponent {
     constructor(props){
         super(props);
 
@@ -216,4 +216,4 @@ class PercentageStackedAreaMarker extends PureComponent {
     }
 }
 
-export default PercentageStackedAreaMarker;
+export default AreaMarker;

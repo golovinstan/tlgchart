@@ -12,13 +12,15 @@ export const getLines = ({ columns, types, names: linesName, colors: linesColors
     return ent_names.map( (e,i) => ({ yvalues: yvalues[i], name: names[i], color: colors[i] }) );
 }
 
-export const getPieData = ({markerX1, markerX2, xvalues, lines}) => {
+export const getPieData = ({markerX1, markerX2, xvalues, lines, selectedLabels}) => {
   let indX1 = getMarkerXMinIndex({xvalues, marker: markerX1});
   let indX2 = getMarkerXMinIndex({xvalues, marker: markerX2}) + 1;
   const summ = [];
 
+  const ln = lines.filter( line => selectedLabels.find( lb => lb.name === line.name ) );
+
   let line_sum;
-  lines.forEach( (line,j) => {
+  ln.forEach( (line,j) => {
     line_sum = 0;
     for (let i=indX1; i!=indX2; i++){
       line_sum = line_sum + line.yvalues[i];
@@ -27,7 +29,7 @@ export const getPieData = ({markerX1, markerX2, xvalues, lines}) => {
   } );
   const all_summ = summ.reduce( (a,v) => a+v , 0 );
 
-  return lines.map( (line, i) => ({
+  return ln.map( (line, i) => ({
     name: line.name,
     color: line.color,
     value: summ[i]/all_summ
@@ -80,6 +82,10 @@ export const getPercentageStakedLines = ({xvalues, lines}) => {
       color: line.color
     }
   } );
+}
+
+export const TimeToString = (x) => {
+  
 }
 
 export const monthNames = [

@@ -24,7 +24,7 @@ import {
     ,AXES_LINE_DOT_LINE
   } from '../../../components/axes/constants';
 
-class PercentageStackedAreaChart extends PureComponent {
+class AreaChart extends PureComponent {
     constructor(props){
         super(props);
     }
@@ -115,4 +115,4 @@ class PercentageStackedAreaChart extends PureComponent {
     }
 }
 
-export default PercentageStackedAreaChart;
+export default AreaChart;

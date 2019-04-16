@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
-import PercentageStackedAreaChart from './percentagestackedareachart';
-import PercentageStackedAreaBarMarker from './percentagestackedareabarmarker';
-import PercentageStackedAreaMarker from './percentagestackedareamarker';
-import PieChart from './pieline'
+import AreaChart from './areachart';
+import AreaBarMarker from './areabarmarker';
+import AreaMarker from './areamarker';
+import PieChart from './pieline';
+import ChartLabel from './chartlabel';
+
 
 import data from '../contest/alldata';
 import {getXValues, getLines, monthNames, weekday, getPercentageStakedLines, getMarkerXMinIndex} from '../utils';
@@ -23,7 +25,6 @@ class Chart5 extends PureComponent {
     
         this.xvalues = getXValues({ columns, types });
         this.lines = getLines({ columns, types, names, colors });
-        this.percentageStackedlines = getPercentageStakedLines({xvalues: this.xvalues, lines: this.lines});
 
         const startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/7*2)];
         const startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/7*4)];        
@@ -107,15 +108,50 @@ class Chart5 extends PureComponent {
       this.setState({markerX1, markerX2});
     }
 
+    onchangeSelected = ({name, selected}) => {
+      const { selectedLabels, labels } = this.state;
+      let new_sl;
+      if (selected !== true){
+          new_sl = selectedLabels.filter( l => l.name !== name );
+      }
+      if (selected !== false){
+          new_sl = labels.find( lb => lb.name === name );
+          new_sl = [...selectedLabels, new_sl];
+      }
+      const wmode = labels[labels.length-1];
+      const nmode = labels[labels.length-2];
+
+      if (selected === true){
+          if ( (name === wmode.name)){
+              new_sl = new_sl.filter( sl => sl.name !== nmode.name )
+          }
+          if ( (name === nmode.name)){
+              new_sl = new_sl.filter( sl => sl.name !== wmode.name )
+          }   
+      }
+
+      if (selected === false){
+          if ( (name === nmode.name)){
+              new_sl = [...new_sl, wmode];
+          }
+          if ( (name === wmode.name)){
+              new_sl = [...new_sl, nmode];
+          }   
+      }        
+   
+      this.setState({selectedLabels: new_sl});
+  }
+
     render(){            
       const { charttype, backimage, backimageMarker, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax } = this.state;
       const color = this.getColor();
+      const percentageStackedlines = getPercentageStakedLines({xvalues: this.xvalues, lines: this.lines.filter( line => selectedLabels.find( lb => lb.name === line.name ) ) });
 
-      let Chart = PercentageStackedAreaChart;
-      let Marker = PercentageStackedAreaMarker;      
+      let Chart = AreaChart;
+      let Marker = AreaMarker;      
       if (charttype == 'pie'){
         Chart = PieChart;
-        Marker = PercentageStackedAreaBarMarker;        
+        Marker = AreaBarMarker;        
       }
 
       return (
@@ -135,7 +171,7 @@ class Chart5 extends PureComponent {
             color={color}
             xvalues={this.xvalues}
             lines={this.lines}
-            percentageStackedlines={this.percentageStackedlines}
+            percentageStackedlines={percentageStackedlines}
           />
           <Marker
             ref={ el => this.marker = el }
@@ -153,8 +189,16 @@ class Chart5 extends PureComponent {
             color={color}
             xvalues={this.xvalues}
             lines={this.lines}
-            percentageStackedlines={this.percentageStackedlines}
-          />          
+            percentageStackedlines={percentageStackedlines}
+          />
+          <ChartLabel
+            width={'100%'}
+            height={'50'}
+            color={color}
+            labels={labels}
+            selectedLabels={selectedLabels}
+            onSelect={this.onchangeSelected}
+          />    
         </div>
       )
     }
