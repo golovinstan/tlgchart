@@ -7,7 +7,7 @@ import VericalAxis from '../../../components/axes/verticalaxis';
 import HorizontalAxis from '../../../components/axes/horizontalaxis';
 
 import Lines from '../../../components/lines/lines';
-import BarAreaLine from '../../../components/lines/bararealine';
+import AreaLine from '../../../components/lines/arealine';
 import VerticalLine from '../../../components/lines/verticalline';
 import DotsLine from '../../../components/lines/dotsline';
 
@@ -59,7 +59,7 @@ class PercentageStackedAreaChart extends PureComponent {
               {
                 percentageStackedlines.map( line => {
                   return (
-                    <BarAreaLine 
+                    <AreaLine 
                       xvalues={xvalues} 
                       yvalues1={line.yvalues1}
                       yvalues2={line.yvalues2}

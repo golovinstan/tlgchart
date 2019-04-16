@@ -25,8 +25,8 @@ class Chart5 extends PureComponent {
         this.lines = getLines({ columns, types, names, colors });
         this.percentageStackedlines = getPercentageStakedLines({xvalues: this.xvalues, lines: this.lines});
 
-        const startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/3)];
-        const startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/3)*2];        
+        const startMarkerX1 = this.xvalues[Math.floor(this.xvalues.length/7*2)];
+        const startMarkerX2 = this.xvalues[Math.floor(this.xvalues.length/7*4)];        
 
         const labels = this.lines.map( line => ({name: line.name, color: line.color}) );
 
@@ -40,7 +40,7 @@ class Chart5 extends PureComponent {
         });
 
         this.state = {
-            charttype:'notpie',
+            charttype:'pie',
             backimage: null,
             backimageMarker: null,
             markerX1: startMarkerX1,
@@ -103,6 +103,10 @@ class Chart5 extends PureComponent {
       }
     }
 
+    onChangeMarkers = ({markerX1, markerX2}) => {
+      this.setState({markerX1, markerX2});
+    }
+
     render(){            
       const { charttype, backimage, backimageMarker, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax } = this.state;
       const color = this.getColor();
@@ -135,6 +139,7 @@ class Chart5 extends PureComponent {
           />
           <Marker
             ref={ el => this.marker = el }
+            onChangeMarkers={this.onChangeMarkers}
             onChangeChartType={this.onChangeChartType}
             backimage={backimageMarker}
             markerX1={markerX1}
