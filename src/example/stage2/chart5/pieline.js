@@ -28,9 +28,6 @@ import {
   } from '../../../components/axes/constants';
 
 
-
-
-
 class PieChart extends PureComponent {
     constructor(props){
         super(props);
@@ -78,7 +75,7 @@ class PieChart extends PureComponent {
               yformat={ASES_FORMAT_INDEX}
             >       
               <HorizontalCaptionAxis
-                leftText={'left'}
+                leftText={'area chart'}
                 rightText={'right'}
                 color={color}
                 onDragStart={this.onCaptionDragStart}

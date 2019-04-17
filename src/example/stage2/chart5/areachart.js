@@ -14,6 +14,7 @@ import DotsLine from '../../../components/lines/dotsline';
 import HorizontalCaptionAxis from '../captionaxis';
 
 import { BackgroundAnimateColor, BackgroundAnimateImage } from '../../../components/misc/background';
+import {monthNames, weekday} from '../utils';
 
 import { 
     ASES_FORMAT_INDEX 
@@ -29,8 +30,6 @@ class AreaChart extends PureComponent {
         super(props);
     }
 
-   
-
     onCaptionDragStart = () => {
         const { onChangeChartType } = this.props;
         if (onChangeChartType){
@@ -43,10 +42,42 @@ class AreaChart extends PureComponent {
             return this.view.exportLinesToString();
         }
         return '';
+    }
+
+    getXLabels = ({xleft, xright, xstart, dpi_x}) => {
+      const dx = (xright - xleft)/(5);
+      let step = Math.floor((xstart - xleft)/dx)*dx || xstart;
+  
+      let xlabels = [];
+      while (step < xright){
+        if ((step >= (xleft-dx/2)) && (step <= (xright+dx/2))){
+          xlabels.push(step);
+        }
+        step = step + dx;
+      }
+      this.xlabels = xlabels;
+      return xlabels;
+    }
+
+    getXAxisLabel = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright, color }) => {
+      const d1 = new Date(this.xlabels[0]);
+      const d2 = new Date(this.xlabels[this.xlabels.length-1]);
+      const df = Math.abs(d2 - d1);
+      const dd = new Date(df);
+      const d = new Date(x);    
+  
+      if (dd.getFullYear() > 1970){
+        return <text x={px+axisWidth} y={labelHeight/2+5} key={key} fill={color.text} >{`${monthNames[d.getMonth()]} ${d.getFullYear()}`}</text>
+      } else {
+        return <text x={px+axisWidth} y={labelHeight/2+5} key={key} fill={color.text} >{`${d.getDate()} ${monthNames[d.getMonth()]}`}</text>      
+      }    
     }    
 
     render(){
         const { backimage, markerX1, markerX2, selectedLabels, labels, ymin, ymax, xmin, xmax, color, xvalues, lines, percentageStackedlines } = this.props;              
+
+        const leftDate = new Date(markerX1);
+        const rightDate = new Date(markerX2);
 
         return (
         <View 
@@ -82,8 +113,8 @@ class AreaChart extends PureComponent {
               yformat={ASES_FORMAT_INDEX}
             >       
               <HorizontalCaptionAxis
-                leftText={'left'}
-                rightText={'right'}
+                leftText={'pie chart'}
+                rightText={`${leftDate.getDate()} ${monthNames[leftDate.getMonth()]} - ${rightDate.getDate()} ${monthNames[rightDate.getMonth()]}`}
                 color={color}
                 onDragStart={this.onCaptionDragStart}
               />
@@ -99,7 +130,9 @@ class AreaChart extends PureComponent {
                 color={color}
               />              
               <HorizontalAxis 
-                position={AXES_POSITION_BOTTOM} 
+                position={AXES_POSITION_BOTTOM}
+                getAxisLabel={this.getXAxisLabel}
+                getXLabels={this.getXLabels}                
                 height={20}
                 lineType={AXES_LINE_DOT_LINE}
                 debugMode={false}
