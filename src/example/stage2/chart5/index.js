@@ -14,9 +14,6 @@ import { COLOR_DEFAULT, COLOR_NIGHT } from '../../../components/misc/color';
 const wmode = {name: 'White mode', color: 'white'};
 const dmode = {name: 'Night mode', color: 'black'};
 
-
-
-
 class Chart5 extends PureComponent {
     constructor(props){
         super(props);
