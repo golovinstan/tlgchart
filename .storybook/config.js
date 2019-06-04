@@ -1,10 +1,7 @@
-import { addParameters, configure } from '@storybook/react';
+import { addParameters, configure, addDecorator } from '@storybook/react';
+import { addReadme } from 'storybook-readme';
 
-function loadStories() {
-  require('./stories/examples');
-  require('./stories/misc.js');
-  // You can require as many stories as you need.
-}
+addDecorator(addReadme);
 
 addParameters({
   options: {
@@ -72,5 +69,11 @@ addParameters({
     theme: undefined,
   },
 });
+
+function loadStories() {
+  require('./stories/examples');
+  require('./stories/misc.js');
+  // You can require as many stories as you need.
+}
 
 configure(loadStories, module);
