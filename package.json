@@ -7,7 +7,7 @@
     "lodash": "^4.17.11",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8"
+    "react-scripts": "^3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -16,7 +16,8 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -30,7 +31,9 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@storybook/react": "^5.0.8",
+    "@storybook/storybook-deployer": "^2.8.1",
     "babel-loader": "^8.0.5",
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^2.0.1",
+    "storybook-readme": "^5.0.3"
   }
 }
