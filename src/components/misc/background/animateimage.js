@@ -53,29 +53,6 @@ class BackgroundAnimateImage extends PureComponent {
   }
 }
 
-/*
-
-                <animate attributeName={"opacity"} from={"1"} to={"0"} dur={"0.5s"} repeatCount={"freeze"} />
-                <animate attributeName={"x"} from={"0"} to={"50%"} dur={"0.5s"} repeatCount={"freeze"} />
-                <animate attributeName={"y"} from={"0"} to={"50%"} dur={"0.5s"} repeatCount={"freeze"} />
-                <animate attributeName={"width"} from={"100%"} to={"0"} dur={"0.5s"} repeatCount={"freeze"} />
-                <animate attributeName={"height"} from={"100%"} to={"0"} dur={"0.5s"} repeatCount={"freeze"} />
-
-
-
-                <animateTransform ref={ el => {
-                    if (!el){
-                        return;
-                    }
-                    const rbb = el.parentElement.getBoundingClientRect();
-                    el.setAttribute("from", `0 ${rbb.width/2} ${rbb.height/2}`);
-                    el.setAttribute("to", `90 ${rbb.width/2} ${rbb.height/2}`);                    
-                } } attributeName={"transform"} type={"rotate"} from={"0"} to={"90"} dur="0.5s" repeatCount="freeze" additive="sum" />
-
-*/                
-
-          
-
-      
+     
 
 export default BackgroundAnimateImage;

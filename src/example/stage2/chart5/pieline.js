@@ -75,7 +75,7 @@ class PieChart extends PureComponent {
               yformat={ASES_FORMAT_INDEX}
             >       
               <HorizontalCaptionAxis
-                leftText={'area chart'}
+                leftText={'CLICK ME(change background)'}
                 rightText={'right'}
                 color={color}
                 onDragStart={this.onCaptionDragStart}

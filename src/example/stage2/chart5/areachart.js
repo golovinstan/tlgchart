@@ -113,7 +113,7 @@ class AreaChart extends PureComponent {
               yformat={ASES_FORMAT_INDEX}
             >       
               <HorizontalCaptionAxis
-                leftText={'pie chart'}
+                leftText={'CLICK ME(change background)'}
                 rightText={`${leftDate.getDate()} ${monthNames[leftDate.getMonth()]} - ${rightDate.getDate()} ${monthNames[rightDate.getMonth()]}`}
                 color={color}
                 onDragStart={this.onCaptionDragStart}

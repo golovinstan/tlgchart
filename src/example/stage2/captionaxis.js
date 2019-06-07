@@ -13,7 +13,7 @@ class HorizontalCaptionAxis extends PureComponent{
     getCaptionLabels = ({x, px, labelWidth, labelHeight, key, axisWidth, xleft, xright }) => {
         const {color, leftText, rightText, onDragStart} = this.props;
         if (x === xleft){
-          return <LeftCaptionLabel onDragStart={onDragStart} px={px+150} y={labelHeight/2} xlabel={leftText} color={color.text} key={1} />
+          return <LeftCaptionLabel onDragStart={onDragStart} px={px+250} y={labelHeight/2} xlabel={leftText} color={color.text} key={1} />
         }
         if (x === xright){
           return <RightCaptionLabel px={px-350} y={labelHeight/2} xlabel={rightText} color={color.text} key={2} />
