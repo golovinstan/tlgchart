@@ -72,8 +72,8 @@ addParameters({
 
 function loadStories() {
   require('./stories/examples');
-  require('./stories/misc.js');
-  // You can require as many stories as you need.
+  require('./stories/api');
+  require('./stories/misc');
 }
 
 configure(loadStories, module);
