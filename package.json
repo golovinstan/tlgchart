@@ -5,6 +5,7 @@
   "homepage": "https://golovinstan.github.io/tlgchart/",
   "dependencies": {
     "lodash": "^4.17.11",
+    "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "^3.0.1"

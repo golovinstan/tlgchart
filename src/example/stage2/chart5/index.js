@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
-import AreaChart from './areachart';
+import AreaChart from '../common/areachart';
 import AreaBarMarker from './areabarmarker';
 import AreaMarker from './areamarker';
 import PieChart from './pieline';
 import ChartLabel from './chartlabel';
-
 
 import data from '../contest/alldata';
 import {getXValues, getLines, monthNames, weekday, getPercentageStakedLines, getMarkerXMinIndex} from '../utils';
