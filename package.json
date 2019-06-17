@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://golovinstan.github.io/tlgchart/",
   "dependencies": {
+    "flow-bin": "^0.101.0",
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
@@ -18,7 +19,8 @@
     "storybook": "start-storybook",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
-    "deploy-storybook": "storybook-to-ghpages"
+    "deploy-storybook": "storybook-to-ghpages",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": "react-app"

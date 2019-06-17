@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 
-
 function withDragSVG(WrappedComponent){
 
 
