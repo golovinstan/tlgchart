@@ -15,6 +15,7 @@ import HorizontalCaptionAxis from '../captionaxis';
 
 import { BackgroundAnimateColor, BackgroundAnimateImage } from '../../../components/misc/background';
 import {monthNames, weekday} from '../utils';
+import PropTypes from 'prop-types';
 
 import { 
     ASES_FORMAT_INDEX 
@@ -147,5 +148,36 @@ class AreaChart extends PureComponent {
         )
     }
 }
+
+AreaChart.propTypes = {
+  // Событие клика по заголовку
+  onChangeChartType: PropTypes.func,
+  // Base64 картинка фона, показываемого перед отрисовкой графика
+  backimage: PropTypes.string,
+  // Позиция левого маркера
+  markerX1: PropTypes.number,
+  // Позиция правого маркера
+  markerX2: PropTypes.number,
+  // Список выбранных линий по заголовкам
+  selectedLabels: PropTypes.arrayOf(PropTypes.string),
+  // Заголовки линий
+  labels: PropTypes.arrayOf(PropTypes.string),
+  // У минимальное значение
+  ymin: PropTypes.number,
+  // У масимальное значение
+  ymax: PropTypes.number,
+  // Х минимальное значение
+  xmin: PropTypes.number,
+  // Х масимальное значение
+  xmax: PropTypes.number,
+  // Цвет components/misc/color
+  color: PropTypes.object,
+  // Значения Х в виде DateTime.integer
+  xvalues: PropTypes.arrayOf(PropTypes.number),
+  // линии
+  lines: PropTypes.arrayOf(PropTypes.object),
+  // процентные линии
+  percentageStackedlines: PropTypes.arrayOf(PropTypes.object),
+};
 
 export default AreaChart;

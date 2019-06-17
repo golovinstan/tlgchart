@@ -15,6 +15,8 @@ storiesOf('Api', module)
   .add('View', () =>(<div/>), { readme: { content: viewmd } }  )
   .add('Background', () =>(<Chart5/>), { readme: { content: background } }  )  
 
+  
+
 
 
 
