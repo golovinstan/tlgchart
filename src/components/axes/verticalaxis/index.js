@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 
@@ -212,6 +213,29 @@ class VerticalAxis extends Component {
       </svg>
     );
   }
+}
+
+VerticalAxis.propTypes = {
+  // расположение оси AXES_POSITION_TOP - AXES_POSITION_BOTTOM - AXES_POSITION_LEFT - AXES_POSITION_RIGHT
+  position: PropTypes.object,
+  // ширина оси
+  width: PropTypes.number,
+  // тип линий оси
+  lineTyp: PropTypes.object,
+  // callback для вывода меток на оси
+  getAxisLabel: PropTypes.func,
+  // callback получения значений Х позиций меток на оси Х
+  getXLabels: PropTypes.func,
+  // Режим отладки, при котором отображаются метки Х позиций и вспомогательная информация
+  debugMode: PropTypes.bool,
+  // ТОлщина линии
+  axisWidth: PropTypes.number,
+  // Видимость оси (при этом ось участвует в рассчете позиций)
+  axisVisible: PropTypes.bool,
+  // Ось распологается на графике
+  onchart: PropTypes.bool,
+  // Объект параметров ццветов
+  color: PropTypes.object,
 }
 
 export default VerticalAxis;

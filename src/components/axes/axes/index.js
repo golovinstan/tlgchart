@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Axes extends Component {
   constructor(props){
@@ -61,6 +62,30 @@ class Axes extends Component {
       </svg>
     );
   }
+}
+
+Axes.defaultProps = {
+  xstart: 0,
+  ystart: 0,
+};
+
+Axes.propTypes = {
+  // Левая граница
+  xleft: PropTypes.number,
+  // Правая граница
+  xright: PropTypes.number,
+  // Начало отсчета
+  xstart: PropTypes.number,
+  // верхняя граница оси
+  ytop: PropTypes.number,
+  // нижняя граница оси
+  ybottom: PropTypes.number,
+  // Начало отсчета
+  ystart: PropTypes.number,
+  // форматирование оси ASES_FORMAT_DATETIME/ASES_FORMAT_INDEX
+  xformat: PropTypes.object,
+  // форматирование оси ASES_FORMAT_DATETIME/ASES_FORMAT_INDEX
+  yformat: PropTypes.object,
 }
 
 export default Axes;
