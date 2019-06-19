@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://golovinstan.github.io/tlgchart/",
   "dependencies": {
-    "flow-bin": "^0.101.0",
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
@@ -35,6 +34,7 @@
     "@babel/core": "^7.4.3",
     "@storybook/react": "^5.0.8",
     "@storybook/storybook-deployer": "^2.8.1",
+    "flow-bin": "^0.101.0",
     "babel-loader": "^8.0.5",
     "gh-pages": "^2.0.1",
     "storybook-readme": "^5.0.3"
