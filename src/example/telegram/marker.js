@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
 
-import View from '../../components/view';
+import {View, Lines, SimpleLine, VerticalLine, VerticalBox, Axes} from '../../components';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components';
 
-import Lines from '../../components/lines/lines';
-import SimpleLine from '../../components/lines/simpleline';
-import VerticalLine from '../../components/lines/verticalline';
-import VerticalBox from '../../components/lines/verticalbox';
-
-import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
-
-import Axes from '../../components/axes/axes';
 
 import { 
   ASES_FORMAT_INDEX 
-} from '../../components/axes/constants';
+} from '../../components';
 
 const DRAG_MARKER1 = {};
 const DRAG_MARKER2 = {};

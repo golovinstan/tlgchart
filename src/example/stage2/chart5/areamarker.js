@@ -1,19 +1,9 @@
 import React, { PureComponent } from 'react';
 import data from '../contest/alldata'
 
-import View from '../../../components/view';
-import Axes from '../../../components/axes/axes';
-import VericalAxis from '../../../components/axes/verticalaxis';
-import HorizontalAxis from '../../../components/axes/horizontalaxis';
-
-import Lines from '../../../components/lines/lines';
-import AreaLine from '../../../components/lines/arealine';
-import VerticalLine from '../../../components/lines/verticalline';
-import VerticalBox from '../../../components/lines/verticalbox';
-
+import {View, Axes, VericalAxis, HorizontalAxis, Lines, AreaLine, VerticalLine,VerticalBox }  from '../../../components';
 import HorizontalCaptionAxis from '../captionaxis';
-
-import { BackgroundAnimateColor, BackgroundAnimateImage } from '../../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateImage } from '../../../components';
 
 import { 
     ASES_FORMAT_INDEX 
@@ -22,7 +12,7 @@ import {
     ,AXES_POSITION_TOP
     ,AXES_LINE_LINE
     ,AXES_LINE_DOT_LINE
-  } from '../../../components/axes/constants';
+  } from '../../../components';
 
 const DRAG_MARKER1 = {};
 const DRAG_MARKER2 = {};

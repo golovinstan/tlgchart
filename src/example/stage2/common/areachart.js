@@ -1,19 +1,10 @@
 import React, { PureComponent } from 'react';
 import data from '../contest/alldata'
 
-import View from '../../../components/view';
-import Axes from '../../../components/axes/axes';
-import VericalAxis from '../../../components/axes/verticalaxis';
-import HorizontalAxis from '../../../components/axes/horizontalaxis';
-
-import Lines from '../../../components/lines/lines';
-import AreaLine from '../../../components/lines/arealine';
-import VerticalLine from '../../../components/lines/verticalline';
-import DotsLine from '../../../components/lines/dotsline';
-
+import {View, Axes, VerticalAxis, HorizontAxis, Lines, AreaLine, VerticalLine, DotsLine} from '../../../components';
 import HorizontalCaptionAxis from '../captionaxis';
 
-import { BackgroundAnimateColor, BackgroundAnimateImage } from '../../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateImage } from '../../../components';
 import {monthNames, weekday} from '../utils';
 import PropTypes from 'prop-types';
 
@@ -24,7 +15,7 @@ import {
     ,AXES_POSITION_TOP
     ,AXES_LINE_LINE
     ,AXES_LINE_DOT_LINE
-  } from '../../../components/axes/constants';
+  } from '../../../components';
 
 class AreaChart extends PureComponent {
     constructor(props){
@@ -120,7 +111,7 @@ class AreaChart extends PureComponent {
                 onDragStart={this.onCaptionDragStart}
               />
 
-              <VericalAxis 
+              <VerticalAxis 
                 position={AXES_POSITION_LEFT} 
                 width={120} 
                 lineType={AXES_LINE_LINE}            
@@ -130,7 +121,7 @@ class AreaChart extends PureComponent {
                 onchart={true}
                 color={color}
               />              
-              <HorizontalAxis 
+              <HorizontAxis 
                 position={AXES_POSITION_BOTTOM}
                 getAxisLabel={this.getXAxisLabel}
                 getXLabels={this.getXLabels}                

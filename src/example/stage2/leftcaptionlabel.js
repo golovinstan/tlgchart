@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withDragSVG from '../../components/hoc/withdragsvg';
+import {withDragSVG} from '../../components';
 
 const TextComponent = React.forwardRef((props, ref) => (
     <text {...props} ref={ref} />

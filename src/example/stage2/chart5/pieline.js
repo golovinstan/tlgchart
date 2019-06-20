@@ -2,20 +2,10 @@ import React, { PureComponent } from 'react';
 
 import {getPieData} from '../utils';
 
-import View from '../../../components/view';
-import Axes from '../../../components/axes/axes';
-import VericalAxis from '../../../components/axes/verticalaxis';
-import HorizontalAxis from '../../../components/axes/horizontalaxis';
-
-import Lines from '../../../components/lines/lines';
-import AreaLine from '../../../components/lines/arealine';
-import VerticalLine from '../../../components/lines/verticalline';
-import DotsLine from '../../../components/lines/dotsline';
-import PieLine from '../../../components/lines/pieline';
-
+import {View, Axes, VericalAxis, HorizontalAxis, Lines, AreaLine, VerticalLine, DotsLine, PieLine } from '../../../components';
 import HorizontalCaptionAxis from '../captionaxis';
 
-import { BackgroundAnimateColor, BackgroundAnimateTransparent, BackgroundAnimateImage } from '../../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent, BackgroundAnimateImage } from '../../../components';
 
 
 import { 
@@ -25,7 +15,7 @@ import {
     ,AXES_POSITION_TOP
     ,AXES_LINE_LINE
     ,AXES_LINE_DOT_LINE
-  } from '../../../components/axes/constants';
+  } from '../../../components';
 
 
 class PieChart extends PureComponent {

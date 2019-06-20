@@ -18,7 +18,7 @@ class Axes extends Component {
     instances.view.needUpdate();
   }
 
-  calcScale = ({width_px, height_px}) => {
+  calcScale = ({width_px, height_px}: {width_px: any, height_px: any}) => {
     const { instances, xleft, xright, xstart, ytop, ybottom, ystart } = this.props;
 
     const dpi_x = width_px/(xright-xleft);

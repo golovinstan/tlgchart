@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
-import HorizontalAxis from '../../components/axes/horizontalaxis';
+import {HorizontAxis} from '../../components';
 import LeftCaptionLabel from './leftcaptionlabel';
 import RightCaptionLabel from './rightcaptionlabel';
 
 import { 
     AXES_POSITION_TOP,
     AXES_LINE_DOT_LINE
-  } from '../../components/axes/constants';
+  } from '../../components';
 
 
 class HorizontalCaptionAxis extends PureComponent{
@@ -28,7 +28,7 @@ class HorizontalCaptionAxis extends PureComponent{
           const { color } = this.props;
 
           return (
-              <HorizontalAxis
+              <HorizontAxis
                 {...this.props}
                 position={AXES_POSITION_TOP} 
                 height={40}

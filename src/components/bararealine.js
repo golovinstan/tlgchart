@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { getMarkerXMinIndex } from '../../utils';
+import { getMarkerXMinIndex } from './utils';
 
 class BarAreaLine extends Component {
   constructor(props){

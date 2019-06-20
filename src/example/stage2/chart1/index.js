@@ -6,7 +6,7 @@ import AreaChart from '../common/areachart';
 
 import {getXValues, getLines, monthNames, weekday, getPercentageStakedLines, getMarkerXMinIndex} from '../utils';
 
-import { COLOR_DEFAULT, COLOR_NIGHT } from '../../../components/misc/color';
+import { COLOR_DEFAULT, COLOR_NIGHT } from '../../../components';
 
 const wmode = {name: 'White mode', color: 'white'};
 const dmode = {name: 'Night mode', color: 'black'};

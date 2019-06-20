@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import View from '../../components/view';
+import {View, Lines, SimpleLine, VerticalLine, DotsLine, Axes, VerticalAxis, HorizontAxis}  from '../../components';
 
-import Lines from '../../components/lines/lines';
-import SimpleLine from '../../components/lines/simpleline';
-import VerticalLine from '../../components/lines/verticalline';
-import DotsLine from '../../components/lines/dotsline';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components';
 
-import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
 
-import Axes from '../../components/axes/axes';
-import VericalAxis from '../../components/axes/verticalaxis';
-import HorizontalAxis from '../../components/axes/horizontalaxis';
 import LeftMarkerLabel from './leftlabelmarker';
 import RightMarkerLabel from './rightlabelmarker';
 
@@ -21,7 +14,7 @@ import {
   ,AXES_POSITION_TOP
   ,AXES_LINE_LINE
   ,AXES_LINE_DOT_LINE
-} from '../../components/axes/constants';
+} from '../../components';
 
 const monthNames = [
   "Jan", 
@@ -292,7 +285,7 @@ class DataChart extends Component {
             yformat={ASES_FORMAT_INDEX}
             
           >
-            <HorizontalAxis 
+            <HorizontAxis 
               position={AXES_POSITION_TOP} 
               height={120}
               lineType={AXES_LINE_DOT_LINE}
@@ -304,7 +297,7 @@ class DataChart extends Component {
               onchart={true}
               color={color}
             />            
-            <VericalAxis 
+            <VerticalAxis 
               position={AXES_POSITION_LEFT} 
               width={120} 
               lineType={AXES_LINE_LINE}
@@ -314,7 +307,7 @@ class DataChart extends Component {
               onchart={true}
               color={color}
             />              
-            <HorizontalAxis 
+            <HorizontAxis 
               position={AXES_POSITION_BOTTOM} 
               height={20}
               lineType={AXES_LINE_DOT_LINE}

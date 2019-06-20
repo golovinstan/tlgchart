@@ -4,7 +4,7 @@ import DataChart from './data';
 import ChartLabel from './chartlabel';
 import ChartCaption from './chartcaption';
 
-import { COLOR_DEFAULT, COLOR_NIGHT } from '../../components/misc/color';
+import { COLOR_DEFAULT, COLOR_NIGHT } from '../../components';
 
 
 

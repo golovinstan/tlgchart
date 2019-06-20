@@ -4,9 +4,9 @@ import {
   ,AXES_POSITION_BOTTOM
   ,AXES_POSITION_LEFT
   ,AXES_POSITION_RIGHT
-} from '../axes/constants';
+} from './constants';
 
-import withDragSVG from '../hoc/withdragsvg';
+import withDragSVG from './withdragsvg';
 
 
 const SVGComponent = React.forwardRef((props, ref) => (

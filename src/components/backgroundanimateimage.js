@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { generateUUID } from '../../utils';
+import { generateUUID } from './utils';
 
 
 

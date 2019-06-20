@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withDragSVG from '../../hoc/withdragsvg';
+import withDragSVG from './withdragsvg';
 
 const LineComponent = React.forwardRef((props, ref) => (
   <line {...props} ref={ref} />

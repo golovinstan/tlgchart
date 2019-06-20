@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components/misc/background';
-import withDragSVG from '../../components/hoc/withdragsvg';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../components';
+import {withDragSVG} from '../../components';
 
 const SVGComponent = React.forwardRef((props, ref) => (
     <svg {...props} ref={ref} />

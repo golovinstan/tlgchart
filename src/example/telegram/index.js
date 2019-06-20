@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TestData from './testdata';
 import Chart from './chart';
 import ChartCaption from './chartcaption';
-import { COLOR_DEFAULT } from '../../components/misc/color';
+import { COLOR_DEFAULT } from '../../components';
 
 
 class TelegramContest extends Component {

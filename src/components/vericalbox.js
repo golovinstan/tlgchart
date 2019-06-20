@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withDragSVG from '../../hoc/withdragsvg';
+import withDragSVG from './withdragsvg';
 
 const RectComponent = React.forwardRef((props, ref) => (
   <rect {...props} ref={ref} />

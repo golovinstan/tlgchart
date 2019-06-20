@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../../components/misc/background';
+import { BackgroundAnimateColor, BackgroundAnimateTransparent } from '../../../components';
 
 
 class LabelItem extends Component {
