@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import {
   AXES_POSITION_TOP
   ,AXES_POSITION_BOTTOM
@@ -228,6 +230,15 @@ class View extends Component {
       </DragSVG>
     );
   }
+}
+
+View.propTypes = {
+  // Ширина
+  width: PropTypes.number,
+  // Высота
+  height: PropTypes.number,
+  // Цвет
+  color: PropTypes.object,
 }
 
 export default View;

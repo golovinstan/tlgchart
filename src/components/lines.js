@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Lines extends Component {
   constructor(props){
@@ -131,6 +132,15 @@ class Lines extends Component {
       }      
     </svg>);
   }
+}
+
+Lines.defaultProps = {
+  animtime: "0.01s",
+};
+
+Lines.propTypes = {
+  // Время анимации показа графика
+  animtime: PropTypes.string,
 }
 
 export default Lines;
