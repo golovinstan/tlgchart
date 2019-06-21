@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class AreaLine extends Component {
   constructor(props){
@@ -60,6 +61,21 @@ class AreaLine extends Component {
         <path fill={color}  strokeWidth={width} stroke={`${color}`} d={pathData} />
     );
   }
+}
+
+AreaLine.propTypes = {
+  // Значения Х оси
+  xvalues: PropTypes.array,
+  // Значения У верхней границы
+  yvalues1: PropTypes.array,
+  // Значения У нижней границы
+  yvalues2: PropTypes.array,
+  // цвет
+  color: PropTypes.object,
+  // ширина линии
+  width: PropTypes.number,
+  // видимость
+  visible: PropTypes.bool,
 }
 
 export default AreaLine;

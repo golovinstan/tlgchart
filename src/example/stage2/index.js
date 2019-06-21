@@ -13,7 +13,6 @@ class TelegramContestStage2 extends PureComponent {
 
         return (
             <div>
-                <Chart1/>
                 <Chart5/>
             </div>
         )
