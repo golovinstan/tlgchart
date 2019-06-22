@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/tlgchart/main.105886ac73e07ff0c783.bundle.js",
+    "main.js.map": "/tlgchart/main.105886ac73e07ff0c783.bundle.js.map",
+    "runtime~main.js": "/tlgchart/runtime~main.105886ac73e07ff0c783.bundle.js",
+    "runtime~main.js.map": "/tlgchart/runtime~main.105886ac73e07ff0c783.bundle.js.map",
+    "vendors~main.js": "/tlgchart/vendors~main.105886ac73e07ff0c783.bundle.js",
+    "vendors~main.js.map": "/tlgchart/vendors~main.105886ac73e07ff0c783.bundle.js.map",
+    "iframe.html": "/tlgchart/iframe.html",
+    "precache-manifest.59e420e004061acbc89713a9c14b7cb6.js": "/tlgchart/precache-manifest.59e420e004061acbc89713a9c14b7cb6.js",
+    "service-worker.js": "/tlgchart/service-worker.js"
+  }
+}
