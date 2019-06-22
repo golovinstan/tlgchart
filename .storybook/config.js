@@ -73,7 +73,7 @@ addParameters({
 function loadStories() {
   require('./stories/examples');
   require('./stories/api');
-  require('./stories/misc');
+  //require('./stories/misc');
 }
 
 configure(loadStories, module);
