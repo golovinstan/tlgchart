@@ -94,7 +94,7 @@ class Lines extends Component {
       className={'tlgChartLinesSVG'}
       ref={ el => this.svg = el }
       viewBox={"0 0 1 1"}
-      preserveAspectRatio="none"
+      preserveAspectRatio={"none"}
     >
       <animate ref={ el => this.svg_anim = el } values={""} attributeName={"viewBox"} begin={"0s"} dur={animtime?animtime:"0.5s"} fill={"freeze"}/>
       {childrenWithProps}
@@ -104,9 +104,9 @@ class Lines extends Component {
             <line 
               x1={0} 
               y1={ypx} 
-              x2="100%" 
+              x2={"100%"} 
               y2={ypx} 
-              stroke="gray" 
+              stroke={"gray"} 
               strokeDasharray={lineType.strokeDasharray} 
               fillOpacity={lineType.fillOpacity} 
               strokeOpacity={lineType.strokeOpacity} 
@@ -122,7 +122,7 @@ class Lines extends Component {
               y1={0} 
               x2={xpx} 
               y2={'100%'} 
-              stroke="black" 
+              stroke={"black"} 
               strokeDasharray={lineType.strokeDasharray} 
               fillOpacity={lineType.fillOpacity} 
               strokeOpacity={lineType.strokeOpacity} 
