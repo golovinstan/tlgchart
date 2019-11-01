@@ -1,0 +1,1 @@
+Пример создан для Telegram-contest stage1.
